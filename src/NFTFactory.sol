@@ -14,7 +14,9 @@ contract NFTFactory is Ownable {
         string name,
         string symbol,
         uint256 maxSupply,
+        uint256 maxTime,
         string baseURI,
+        bool mintPerWallet,
         address owner
     );
 
@@ -22,17 +24,21 @@ contract NFTFactory is Ownable {
         string memory name,
         string memory symbol,
         string memory baseURI,
-        uint256 maxSupply) public returns (address) {
+        uint256 maxSupply,
+        uint256 maxTime,
+        bool mintPerWallet) public returns (address) {
         NFTCollection collection = new NFTCollection(
             name,
             symbol,
             maxSupply,
+            maxTime,
             baseURI,
+            mintPerWallet,
             msg.sender
         );
         
         deployedCollections.push(address(collection));
-        emit CollectionCreated(address(collection), name, symbol, maxSupply,baseURI, msg.sender);
+        emit CollectionCreated(address(collection), name, symbol, maxSupply, maxTime, baseURI, mintPerWallet, msg.sender);
         return address(collection);
     }
 
