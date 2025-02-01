@@ -33,11 +33,11 @@ contract NFTCollection is ERC721, Ownable {
         address initialOwner
     ) ERC721(name, symbol) Ownable(initialOwner) {
 
-        maxSupply = _maxSupply == 0 ? type(uint256).max : _maxSupply;
+        maxSupply = _maxSupply;
         baseTokenURI = _baseTokenURI;
         _tokenIdCounter._value = 0;
         revealed = true;
-        maxTime =  block.timestamp + (_maxTime == 0 ? 1 minutes : (_maxTime * 1 minutes));
+        maxTime =  block.timestamp + (_maxTime * 1 hours);
         mintPerWallet = _mintPerWallet;
     }
 

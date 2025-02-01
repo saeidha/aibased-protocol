@@ -31,7 +31,7 @@ contract NFTFactoryTest is Test {
     }
 
     function testMintNFTs() public {
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 2, true);
+        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 2, false);
         NFTCollection collection = NFTCollection(collectionAddress);
         
         // Mint 5 NFTs
@@ -85,8 +85,8 @@ contract NFTFactoryTest is Test {
         collection.mint(user, 1);
         assertEq(collection.totalSupply(), 1);
 
-        // Simulate time passing (1 minute + 1 second)
-        vm.warp(block.timestamp + 5 minutes); // 61 seconds later
+        // Simulate time passing (1 second)
+        vm.warp(block.timestamp + 1 hours + 1 seconds); // 61 seconds later
 
         // Attempt to mint after maxTime has passed
         vm.expectRevert("Minting period has ended");
@@ -103,7 +103,7 @@ contract NFTFactoryTest is Test {
         assertEq(collection.totalSupply(), 1);
 
         // Simulate time passing (7 days + 1 second)
-        vm.warp(block.timestamp +  1 minutes + 1 seconds);
+        vm.warp(block.timestamp + 7 days + 1);
 
         // Attempt to mint after 7 days
         vm.expectRevert("Minting period has ended");
@@ -114,15 +114,17 @@ contract NFTFactoryTest is Test {
     
     // Test should FAIL if minting works after maxTime (showing contract vulnerability)
     function testMaxTimeRestrictionFailure() public {
+        // Create a collection with maxTime = 1 hour
         address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 1, false);
         NFTCollection collection = NFTCollection(collectionAddress);
 
-        vm.warp(block.timestamp + 61); // 61 seconds later
-        
-        // Remove expectation to test for failure
-        collection.mint(user, 1); // This should REVERT (test fails)
-        
-        // If execution reaches here, test passes (bad)
-        assertEq(collection.totalSupply(), 1); 
+        // Simulate time passing (2 hours later)
+        vm.warp(block.timestamp + 2 hours); // 2 hours later
+
+        // Attempt to mint after maxTime has passed
+        // This should REVERT if the contract is working correctly
+        // If it does NOT revert, the test will pass (indicating a vulnerability)
+        vm.expectRevert("Minting period has ended");
+        collection.mint(user, 1);
     }
 }
