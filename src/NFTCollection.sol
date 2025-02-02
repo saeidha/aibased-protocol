@@ -103,8 +103,12 @@ contract NFTCollection is ERC721, Ownable {
         _tokenIdCounter._value += 1;
     }
 
-    function setBaseURI(string memory newBaseURI) public onlyOwner {
+    function setBaseURI(string memory newBaseURI) public onlyOwner {        
         baseTokenURI = newBaseURI;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return baseTokenURI;
     }
     
     function reveal() public onlyOwner {
