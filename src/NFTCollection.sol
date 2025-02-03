@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract NFTCollection is ERC721, Ownable {
        using Strings for uint256;
@@ -16,32 +17,36 @@ contract NFTCollection is ERC721, Ownable {
 
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
-    string public baseTokenURI;
+    string public imageURL;
     bool public revealed;
     string public unrevealedURI;
     uint256 public maxTime;
     bool public mintPerWallet;
     uint256 public mintPrice;
+    string public description;
+
     mapping(address => bool) public hasMinted;
 
     constructor(
         string memory name,
+        string memory _description,
         string memory symbol,
         uint256 _maxSupply,
         uint256 _maxTime,
-        string memory _baseTokenURI,
+        string memory _imageURL,
         bool _mintPerWallet,
         uint256 _mintPrice,
         address initialOwner
     ) ERC721(name, symbol) Ownable(initialOwner) {
 
         maxSupply = _maxSupply;
-        baseTokenURI = _baseTokenURI;
+        imageURL = _imageURL;
         _tokenIdCounter._value = 0;
         revealed = true;
         maxTime =  block.timestamp + (_maxTime * 1 hours);
         mintPerWallet = _mintPerWallet;
         mintPrice = _mintPrice;
+        description = _description;
     }
 
     function mint(address to, uint256 quantity) public onlyOwner {
@@ -103,16 +108,47 @@ contract NFTCollection is ERC721, Ownable {
         _tokenIdCounter._value += 1;
     }
 
-    function setBaseURI(string memory newBaseURI) public onlyOwner {        
-        baseTokenURI = newBaseURI;
-    }
+    // function setBaseURI(string memory newBaseURI) public onlyOwner {        
+    //     baseTokenURI = newBaseURI;
+    // }
 
-    function _baseURI() internal view override returns (string memory) {
-        return baseTokenURI;
-    }
+    // function _baseURI() internal view override returns (string memory) {
+    //     return baseTokenURI;
+    // }
     
     function reveal() public onlyOwner {
         revealed = true;
+    }
+
+    // function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    //     require(exists(tokenId), "Nonexistent token");
+        
+    //     if (!revealed) {
+    //         return unrevealedURI;
+    //     }
+        
+    //     return string(abi.encodePacked(
+    //         baseTokenURI
+    //     ));
+    // }
+
+
+    function contractURI() external view returns (string memory) {
+
+        string memory encodedName = string(abi.encodePacked(name()));
+        string memory imageURI = string(abi.encodePacked(imageURL));
+        string memory _description = string(abi.encodePacked(description));
+
+        bytes memory json = abi.encodePacked(
+            '{"name": "', encodedName, '",',
+            '"description":"', _description, '",',
+            '"image": "', imageURI, '",',
+            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+        );
+        
+        return string(
+            abi.encodePacked("data:application/json;base64,",Base64.encode(json))
+        );
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -122,9 +158,28 @@ contract NFTCollection is ERC721, Ownable {
             return unrevealedURI;
         }
         
-        return string(abi.encodePacked(
-            baseTokenURI
-        ));
+        
+        string memory nameWithTokenId = string(
+            abi.encodePacked(name() ," #", Strings.toString(tokenId))
+        );
+
+        string memory imageURI = string(abi.encodePacked(imageURL));
+        
+        string memory _description = string(abi.encodePacked(description));
+
+        bytes memory json = abi.encodePacked(
+            '{"name": "', nameWithTokenId, '",',
+            '"description":"', _description, '",',
+            '"image": "', imageURI, '",',
+            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+        );
+
+        return string(
+            abi.encodePacked(
+                "data:application/json;base64,",
+                Base64.encode(json)
+            )
+        );
     }
 
     // Custom existence check using owner lookup

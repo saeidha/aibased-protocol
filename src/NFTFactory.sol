@@ -12,10 +12,11 @@ contract NFTFactory is Ownable {
     event CollectionCreated(
         address indexed collection,
         string name,
+        string description,
         string symbol,
         uint256 maxSupply,
         uint256 maxTime,
-        string baseURI,
+        string imageURL,
         bool mintPerWallet,
         uint256 mintPrice,
         address owner
@@ -26,7 +27,7 @@ contract NFTFactory is Ownable {
         address collectionAddress;
         uint256 tokenIdCounter;
         uint256 maxSupply;
-        string baseTokenURI;
+        string baseImageURI;
         bool revealed;
         string unrevealedURI;
         uint256 maxTime;
@@ -36,58 +37,63 @@ contract NFTFactory is Ownable {
 
     function createCollection(
         string memory name,
+        string memory description,
         string memory symbol,
-        string memory baseURI,
+        string memory imageURL,
         uint256 maxSupply,
         uint256 maxTime,
         bool mintPerWallet,
         uint256 mintPrice) public returns (address) {
         NFTCollection collection = new NFTCollection(
             name,
+            description,
             symbol,
             maxSupply,
             maxTime,
-            baseURI,
+            imageURL,
             mintPerWallet,
             mintPrice,
             msg.sender
         );
         
         deployedCollections.push(address(collection));
-        emit CollectionCreated(address(collection), name, symbol, maxSupply, maxTime, baseURI, mintPerWallet, mintPrice, msg.sender);
+        emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, mintPerWallet, mintPrice, msg.sender);
         return address(collection);
     }
 
     function createWithDefaultCollectionWithDefaultTime(
         string memory name,
+        string memory description,
         string memory symbol,
-        string memory baseURI,
+        string memory imageURL,
         uint256 maxSupply,
         bool mintPerWallet,
         uint256 mintPrice) public returns (address) {
         
         /// @dev Default maxTime is 168 hours equal to 1 week 
         uint256 maxTime=  168;
-        return createCollection(name, symbol, baseURI, maxSupply, maxTime, mintPerWallet, mintPrice);
+        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
     }
 
     function createWithDefaultCollectionWithMaxSupply(
         string memory name,
+        string memory description,
         string memory symbol,
-        string memory baseURI,
+        string memory imageURL,
         uint256 maxTime,
         bool mintPerWallet,
         uint256 mintPrice) public returns (address) {
         
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply=  type(uint256).max;
-        return createCollection(name, symbol, baseURI, maxSupply, maxTime, mintPerWallet, mintPrice);
+        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
         }
 
         function createWithDefaultCollectionWithMaxSupplyAndDefaultTime(
             string memory name,
+            string memory description,
             string memory symbol,
-            string memory baseURI,
+            string memory imageURL,
             bool mintPerWallet,
         uint256 mintPrice) public returns (address) {
             
@@ -95,7 +101,7 @@ contract NFTFactory is Ownable {
             uint256 maxTime=  168;
             /// @dev Default maxSupply is max uint256
             uint256 maxSupply=  type(uint256).max;
-            return createCollection(name, symbol, baseURI, maxSupply, maxTime, mintPerWallet, mintPrice);
+            return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
             }
 
     function getCollections() public view returns (address[] memory) {
@@ -116,7 +122,7 @@ contract NFTFactory is Ownable {
                 collectionAddress: collectionAddress,
                 tokenIdCounter: collection.totalSupply(),
                 maxSupply: collection.maxSupply(),
-                baseTokenURI: collection.baseTokenURI(),
+                baseImageURI: collection.imageURL(),
                 revealed: collection.revealed(),
                 unrevealedURI: collection.unrevealedURI(),
                 maxTime: collection.maxTime(),

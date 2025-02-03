@@ -20,7 +20,7 @@ contract NFTFactoryTest is Test {
 
     function testCreateCollection() public {
         vm.startPrank(owner);
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 1000, 1, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 1000, 1, false, 0);
         
         // Verify collection creation
         assertTrue(collectionAddress != address(0));
@@ -35,7 +35,7 @@ contract NFTFactoryTest is Test {
     }
 
     function testMintNFTs() public {
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 2, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, 2, false, 0);
         NFTCollection collection = NFTCollection(collectionAddress);
         
         // Mint 5 NFTs
@@ -50,7 +50,7 @@ contract NFTFactoryTest is Test {
     }
 
     function testMetadata() public {
-    address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
+    address collectionAddress = factory.createCollection("Test", "TST", "Test Description", "ipfs://QmTestHash/", 10, 1, false, 0);
     NFTCollection collection = NFTCollection(collectionAddress);
     
     // 1. Set base URI
@@ -63,11 +63,11 @@ contract NFTFactoryTest is Test {
     collection.mint(user, 1);
     
     // 4. Verify URI
-    assertEq(collection.tokenURI(1), "ipfs://QmTestHash/");
+    assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjogIlRlc3QgIzEiLCJkZXNjcmlwdGlvbiI6IlRTVCIsImltYWdlIjogImlwZnM6Ly9iYWZ5YmVpYzVtcmIydnB6YmhnbTdmcHpiczd6ZHhlbHJzd3d6bDVvM2tkZ3l4Nnd5Nm81cGVnYWF6cS8xLnBuZyIsImF0dHJpYnV0ZXMiOiBbeyAidHJhaXRfdHlwZSI6ICJSYXJpdHkiLCAidmFsdWUiOiAiTGVnZW5kYXJ5IiB9XX0=");
 }
 
     function testNonOwnerMint() public {
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
         NFTCollection collection = NFTCollection(collectionAddress);
         
         vm.startPrank(user);
@@ -82,7 +82,7 @@ contract NFTFactoryTest is Test {
 
     function testMaxTimeRestriction() public {
         // Create a collection with maxTime = 1 minute
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
         NFTCollection collection = NFTCollection(collectionAddress);
 
         // Mint within the allowed time
@@ -99,7 +99,7 @@ contract NFTFactoryTest is Test {
 
     function testDefaultMaxTime() public {
         // Create a collection with maxTime = 0 (defaults to 7 days)
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 0, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, 0, false, 0);
         NFTCollection collection = NFTCollection(collectionAddress);
 
         // Mint within the default 7-day period
@@ -119,7 +119,7 @@ contract NFTFactoryTest is Test {
     // Test should FAIL if minting works after maxTime (showing contract vulnerability)
     function testMaxTimeRestrictionFailure() public {
         // Create a collection with maxTime = 1 hour
-        address collectionAddress = factory.createCollection("Test", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
+        address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, 1, false, 0);
         NFTCollection collection = NFTCollection(collectionAddress);
 
         // Simulate time passing (2 hours later)
@@ -144,7 +144,7 @@ contract NFTFactoryTest is Test {
     // Create collection as owner
     vm.prank(owner1);
     address collectionAddress = factory.createCollection(
-        "Paid", "PAID", "ipfs://paid/", 
+        "Paid", "Test Description", "PAID", "ipfs://paid/", 
         10,       // maxSupply
         1,        // maxTime (1 hour)
         false,    // mintPerWallet
@@ -167,7 +167,7 @@ contract NFTFactoryTest is Test {
 
     function testMintWithoutPayment() public {
         address collectionAddress = factory.createCollection(
-            "Paid", "PAID", "ipfs://paid/", 
+            "Paid", "Test Description", "PAID", "ipfs://paid/", 
             10, 1, false, 0.01 ether
         );
         NFTCollection collection = NFTCollection(collectionAddress);
@@ -179,7 +179,7 @@ contract NFTFactoryTest is Test {
     function testInsufficientPayment() public {
         // Create a paid collection
         address collectionAddress = factory.createCollection(
-            "Paid", "PAID", "ipfs://paid/", 
+            "Paid", "Test Description", "PAID", "ipfs://paid/", 
             10, 1, false, 0.01 ether // mintPrice = 0.01 ETH
         );
         NFTCollection collection = NFTCollection(collectionAddress);
@@ -193,7 +193,7 @@ contract NFTFactoryTest is Test {
     function testWalletRestriction() public {
         // Create a collection with wallet restriction
         address collectionAddress = factory.createCollection(
-            "Restricted", "RST", "ipfs://restricted/", 
+            "Restricted", "Test Description", "RST", "ipfs://restricted/", 
             10, 1, true, 0 // mintPerWallet = true
         );
         NFTCollection collection = NFTCollection(collectionAddress);
