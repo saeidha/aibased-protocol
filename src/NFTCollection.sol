@@ -132,6 +132,10 @@ contract NFTCollection is ERC721, Ownable {
     //     ));
     // }
 
+    function _baseURI() internal pure override returns (string memory) {
+        return "data:application/json;base64,";
+    }
+
 
     function contractURI() external view returns (string memory) {
 
@@ -139,16 +143,20 @@ contract NFTCollection is ERC721, Ownable {
         string memory imageURI = string(abi.encodePacked(imageURL));
         string memory _description = string(abi.encodePacked(description));
 
-        bytes memory json = abi.encodePacked(
-            '{"name": "', encodedName, '",',
-            '"description":"', _description, '",',
-            '"image": "', imageURI, '",',
-            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                        abi.encodePacked(
+                            '{"name": "', encodedName, '",',
+                            '"description":"', _description, '",',
+                            '"image": "', imageURI, '",',
+                            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+                    )
+                )
+            )
         );
         
-        return string(
-            abi.encodePacked("data:application/json;base64,",Base64.encode(json))
-        );
+        return string(abi.encodePacked(_baseURI(), json));
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -167,19 +175,20 @@ contract NFTCollection is ERC721, Ownable {
         
         string memory _description = string(abi.encodePacked(description));
 
-        bytes memory json = abi.encodePacked(
-            '{"name": "', nameWithTokenId, '",',
-            '"description":"', _description, '",',
-            '"image": "', imageURI, '",',
-            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
-        );
-
-        return string(
-            abi.encodePacked(
-                "data:application/json;base64,",
-                Base64.encode(json)
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                        abi.encodePacked(
+                            '{"name": "', nameWithTokenId, '",',
+                            '"description":"', _description, '",',
+                            '"image": "', imageURI, '",',
+                            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+                        )
+                )
             )
         );
+
+        return string(abi.encodePacked(_baseURI(), json));
     }
 
     // Custom existence check using owner lookup
