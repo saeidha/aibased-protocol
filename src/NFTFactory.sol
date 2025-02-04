@@ -255,9 +255,10 @@ contract NFTFactory is Ownable {
         return details;
     }
 
-    function payGenerateFee() public payable {
+    function payGenerateFee() public payable returns (bool) {
 
         require(msg.value >= generateFee, "Payable: msg.value must be equal to amount");
+        return true;
         
     }
 
