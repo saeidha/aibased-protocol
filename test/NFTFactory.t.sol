@@ -288,40 +288,47 @@ function testAdminWithdraw() public {
 
 
 
-// function testAdminFunctionsAccessControl() public {
+function testAdminFunctionsAccessControl() public {
     
-//     address collectionAddress = factory.createCollection(
-//         "AdminTest", "Desc", "ADM", "ipfs://admin", 
-//         100, defaultMaxTime, false, 0.001 ether
-//     );
-//     NFTCollection collection = NFTCollection(collectionAddress);
+    uint nftFee = 0.001 ether;
+    address collectionAddress = factory.createCollection(
+        "AdminTest", "Desc", "ADM", "ipfs://admin", 
+        100, defaultMaxTime, false, nftFee
+    );
+    NFTCollection collection = NFTCollection(collectionAddress);
     
-//     // Test admin-only functions with non-admin
-//     vm.startPrank(user);
+    // Test admin-only functions with non-admin
+    vm.deal(user, 1 ether);
+    vm.startPrank(user);
     
-//     vm.expectRevert("Only admin");
-//     collection.setMaxSupply(200);
+    vm.expectRevert("Only admin");
+    collection.setMaxSupply(200);
     
-//     vm.expectRevert("Only admin");
-//     collection.setMaxTime(200);
+    vm.expectRevert("Only admin");
+    collection.setMaxTime(200);
     
-//     vm.expectRevert("Only admin");
-//     collection.changePlatformFee(0.0002 ether);
+    vm.expectRevert("Only admin");
+    collection.changePlatformFee(0.0002 ether);
     
-//     // Test with admin (factory owner)
-//     vm.stopPrank();
-//     vm.startPrank(factory.owner());
+    // Test with admin (factory owner)
+    vm.stopPrank();
+    vm.startPrank(factory.owner());
     
-//     collection.setMaxSupply(200);
-//     assertEq(collection.maxSupply(), 200, "Max supply not updated");
+    collection.setMaxSupply(200);
+    assertEq(collection.maxSupply(), 200, "Max supply not updated");
     
-//     collection.setMaxTime(200);
-//     assertEq(collection.maxTime(), 200, "Max time not updated");
+    collection.setMaxTime(200);
+    assertEq(collection.maxTime(), 200, "Max time not updated");
     
-//     collection.changePlatformFee(0.0002 ether);
-//     // Verify fee change through mint price calculation
-//     collection.mintNFT{value: 0.0012 ether}(owner, 1);
-// }
+    uint changeFee = 0.0002 ether;
+    collection.changePlatformFee(changeFee);
+
+    vm.stopPrank();
+    vm.startPrank(user);
+    
+    // Verify fee change through mint price calculation
+    collection.mintNFT{value: nftFee + changeFee}(user, 1);
+}
 
 // function testIsDisabledConditions() public {
 //     // Create restricted collection
