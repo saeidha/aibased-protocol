@@ -497,7 +497,13 @@
     "type": "function",
     "name": "payGenerateFee",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
     "stateMutability": "payable"
   },
   {
