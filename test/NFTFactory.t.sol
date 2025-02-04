@@ -155,14 +155,31 @@ contract NFTFactoryTest is Test {
 }
 
     function testMintWithoutPayment() public {
+        vm.deal(user, 1 ether);
+        vm.prank(user);
         address collectionAddress = factory.createCollection(
             "Paid", "Test Description", "PAID", "ipfs://paid/", 
             10, defaultMaxTime, false, 0.01 ether
         );
         NFTCollection collection = NFTCollection(collectionAddress);
-        vm.deal(user, 1 ether);
         vm.expectRevert("Insufficient ETH sent");
-        collection.mintNFT{value: 0.0001 ether}(user, 1); // No ETH sent
+        collection.mintNFT{value: 0.000005 ether}(user, 1); // No ETH sent
+    }
+
+
+    function testMintByCreatorPayment() public {
+        vm.deal(user, 1 ether);
+        vm.prank(user);
+        address collectionAddress = factory.createCollection(
+            "Paid", "Test Description", "PAID", "ipfs://paid/", 
+            10, defaultMaxTime, false, 0.2 ether
+        );
+        NFTCollection collection = NFTCollection(collectionAddress);
+        
+        // vm.expectRevert("Insufficient ETH sent");
+        // collection.mintNFT{value: 0.00005 ether}(user, 1); // No ETH sent
+
+        collection.mintNFT{value: 0.01 ether}(user, 1); // No ETH sent
     }
 
     function testInsufficientPayment() public {
@@ -377,26 +394,4 @@ function testAdminFunctionsAccessControl() public {
 //     // assertFalse(restrictedCollection.isDisabled(user2), "Should allow other wallets");
 // }
 
-// function testCreateAndMintWithDefaults() public {
-
-//         vm.deal(user, 1 ether);
-//         vm.prank(user);
-        
-//         factory.createAndMint{value: 0.0002 ether}(
-//             "DefaultTest",
-//             "Test Description",
-//             "DEF",
-//             "ipfs://default.png",
-//             true,
-//             0 ether
-//         );
-        
-//         address[] memory collections = factory.getCollections();
-//         NFTCollection collection = NFTCollection(collections[0]);
-        
-//         // Verify default parameters
-//         assertEq(collection.maxSupply(), type(uint256).max, "Default maxSupply not set");
-//         assertEq(collection.maxTime(), block.timestamp + 60 + 168, "Default maxTime not set"); // Original test uses block.timestamp + 60 in constructor
-//         assertTrue(collection.mintPerWallet(), "MintPerWallet not set");
-//     }
 }

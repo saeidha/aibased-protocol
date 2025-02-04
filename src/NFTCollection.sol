@@ -68,12 +68,24 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
     // }
     function mintNFT(address to, uint256 quantity) public payable {
 
+        require(quantity > 0, "Quantity must be greater than zero");
+
         uint256 ownerPayment = initialPrice * quantity;
         uint256 platformPayment = platformFee * quantity;
-         /// @dev Check if minting is free or paid 
+
+        // If the caller is the owner, set ownerPayment to 0
+        if (to == owner()) {
+            ownerPayment = 0 ether;
+        }
+
+        // Total payment required
+        uint256 totalPayment = ownerPayment + platformPayment;
+
+        /// @dev Check if minting is free or paid 
         if (mintPrice != 0) {
+
             /// @dev Check if the amount of ETH sent is enough to mint the NFT
-            require(msg.value >= platformPayment + ownerPayment, "Insufficient ETH sent");
+            require(msg.value >= totalPayment, "Insufficient ETH sent");
         }
 
         
