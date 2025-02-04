@@ -113,21 +113,21 @@ contract NFTFactory is Ownable {
             string memory symbol,
             string memory imageURL) public payable {
             
-            /// @dev Default maxTime is 168 hours equal to 1 week 
-            uint256 maxTime=  168;
-            /// @dev Default maxSupply is max uint256
-            uint256 maxSupply=  type(uint256).max;
+            /// @dev Default maxTime is 1 hours
+            uint256 maxTime=  block.timestamp + 60 * 60;
+            /// @dev Default maxSupply is 1
+            uint256 maxSupply=  1;
 
 
             NFTCollection collection = new NFTCollection(
                         name,
                         description,
                         symbol,
-                        1,
-                        block.timestamp + 60,
+                        maxSupply,
+                        maxTime,
                         imageURL,
                         true,
-                        0.0001 ether,
+                        0,
                         owner(),
                         msg.sender
                     );
