@@ -94,6 +94,19 @@
   },
   {
     "type": "function",
+    "name": "canShow",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "changePlatformFee",
     "inputs": [
       {

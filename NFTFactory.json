@@ -27,16 +27,6 @@
         "name": "imageURL",
         "type": "string",
         "internalType": "string"
-      },
-      {
-        "name": "mintPerWallet",
-        "type": "bool",
-        "internalType": "bool"
-      },
-      {
-        "name": "mintPrice",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -259,7 +249,78 @@
   },
   {
     "type": "function",
-    "name": "getAllCollectionsDetails",
+    "name": "getAllCollectionsForDetails",
+    "inputs": [
+      {
+        "name": "sender",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct NFTFactory.CollectionDetails[]",
+        "components": [
+          {
+            "name": "collectionAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "tokenIdCounter",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "maxSupply",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "baseImageURI",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "revealed",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "unrevealedURI",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "maxTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "mintPerWallet",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "mintPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isDisable",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getAvailableCollectionsDetails",
     "inputs": [],
     "outputs": [
       {
@@ -324,7 +385,7 @@
   },
   {
     "type": "function",
-    "name": "getAllCollectionsDetails",
+    "name": "getAvailableCollectionsDetails",
     "inputs": [
       {
         "name": "sender",
