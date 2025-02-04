@@ -144,54 +144,114 @@ contract NFTFactory is Ownable {
     }
 
      // function to retrieve all collection details with sender
-    function getAllCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
-        uint256 length = deployedCollections.length;
-        CollectionDetails[] memory details = new CollectionDetails[](length);
-        
+    function getAvailableCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
+         uint256 length = deployedCollections.length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
+        uint256 count = 0;
+
         for (uint256 i = 0; i < length; i++) {
-            address collectionAddress = deployedCollections[i];
-            NFTCollection collection = NFTCollection(collectionAddress);
-            
-            details[i] = CollectionDetails({
-                collectionAddress: collectionAddress,
-                tokenIdCounter: collection.totalSupply(),
-                maxSupply: collection.maxSupply(),
-                baseImageURI: collection.imageURL(),
-                revealed: collection.revealed(),
-                unrevealedURI: collection.unrevealedURI(),
-                maxTime: collection.maxTime(),
-                mintPerWallet: collection.mintPerWallet(),
-                mintPrice: collection.mintPrice(),
-                isDisable: collection.isDisabled(sender)
-            });
+            NFTCollection collection = NFTCollection(deployedCollections[i]);
+
+            if (collection.canShow()) {
+                tempDetails[count] = CollectionDetails({
+                    collectionAddress: deployedCollections[i],
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    revealed: collection.revealed(),
+                    unrevealedURI: collection.unrevealedURI(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: collection.isDisabled(sender)
+                });
+                count++;
+            }
         }
-        
+
+        // Create the final fixed-size array with the exact count
+        CollectionDetails[] memory details = new CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            details[i] = tempDetails[i];
+        }
+
         return details;
     }
 
       // function to retrieve all collection details
-    function getAllCollectionsDetails() public view returns (CollectionDetails[] memory) {
-        uint256 length = deployedCollections.length;
-        CollectionDetails[] memory details = new CollectionDetails[](length);
-        
+    function getAvailableCollectionsDetails() public view returns (CollectionDetails[] memory) {
+         uint256 length = deployedCollections.length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
+        uint256 count = 0;
+
         for (uint256 i = 0; i < length; i++) {
-            address collectionAddress = deployedCollections[i];
-            NFTCollection collection = NFTCollection(collectionAddress);
-            
-            details[i] = CollectionDetails({
-                collectionAddress: collectionAddress,
-                tokenIdCounter: collection.totalSupply(),
-                maxSupply: collection.maxSupply(),
-                baseImageURI: collection.imageURL(),
-                revealed: collection.revealed(),
-                unrevealedURI: collection.unrevealedURI(),
-                maxTime: collection.maxTime(),
-                mintPerWallet: collection.mintPerWallet(),
-                mintPrice: collection.mintPrice(),
-                isDisable: true
-            });
+            NFTCollection collection = NFTCollection(deployedCollections[i]);
+
+            if (collection.canShow()) {
+                tempDetails[count] = CollectionDetails({
+                    collectionAddress: deployedCollections[i],
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    revealed: collection.revealed(),
+                    unrevealedURI: collection.unrevealedURI(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: true
+                });
+                count++;
+            }
         }
-        
+
+        // Create the final fixed-size array with the exact count
+        CollectionDetails[] memory details = new CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            details[i] = tempDetails[i];
+        }
+
+        return details;
+    }
+
+
+    /// get all collection for a address
+    function getAllCollectionsForDetails(address sender) public view returns (CollectionDetails[] memory) {
+         uint256 length = deployedCollections.length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < length; i++) {
+            NFTCollection collection = NFTCollection(deployedCollections[i]);
+
+            if (collection.owner() == sender) {
+                tempDetails[count] = CollectionDetails({
+                    collectionAddress: deployedCollections[i],
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    revealed: collection.revealed(),
+                    unrevealedURI: collection.unrevealedURI(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: collection.isDisabled(sender)
+                });
+                count++;
+            }
+        }
+
+        // Create the final fixed-size array with the exact count
+        CollectionDetails[] memory details = new CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            details[i] = tempDetails[i];
+        }
+
         return details;
     }
 }

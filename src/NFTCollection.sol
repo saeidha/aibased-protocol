@@ -224,10 +224,14 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         }
     }
 
-    function isDisabled(address sender) public view returns (bool) {
-        return block.timestamp > maxTime ||             // Time expired
-            _tokenIdCounter._value >= maxSupply ||   // Supply reached
+    function isDisabled(address sender) external view returns (bool) {
+        return  canShow() ||   // Supply reached
             (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
+    }
+
+    function canShow() public view returns (bool) {
+        return block.timestamp > maxTime ||             // Time expired
+            _tokenIdCounter._value >= maxSupply;   // Supply reached
     }
 
     /////-------- ADMIN ------------
