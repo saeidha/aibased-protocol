@@ -26,6 +26,7 @@ contract NFTCollection is ERC721, Ownable {
     string public description;
     uint256 private platformFee;
     address private immutable admin; 
+    uint256 private initialPrice;
 
     mapping(address => bool) public hasMinted;
 
@@ -58,19 +59,24 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         description = _description;
         mintPrice = calculatePlatformFee(_initialPrice) + _initialPrice;
         admin = _admin;
+        initialPrice = _initialPrice;
     }
 
-    function mint(address to, uint256 quantity) public onlyOwner {
+    // function mint(address to, uint256 quantity) public onlyOwner {
 
-        require(msg.sender == admin, "Only admin");
-    }
+    //     require(msg.sender == admin, "Only admin");
+    // }
     function mintNFT(address to, uint256 quantity) public payable {
 
+        uint256 ownerPayment = initialPrice * quantity;
+        uint256 platformPayment = platformFee * quantity;
          /// @dev Check if minting is free or paid 
         if (mintPrice != 0) {
             /// @dev Check if the amount of ETH sent is enough to mint the NFT
-            require(msg.value >= mintPrice * quantity, "Insufficient ETH sent");
+            require(msg.value >= platformPayment + ownerPayment, "Insufficient ETH sent");
         }
+
+        
         // Existing checks
         require(block.timestamp <= maxTime, "Minting period has ended");
         require(_tokenIdCounter._value + quantity <= maxSupply, "Exceeds max supply");
@@ -87,7 +93,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
         if (mintPrice != 0) {
             // Send payment to owner
-            payable(owner()).transfer(msg.value);
+            payable(owner()).transfer(ownerPayment);
         }
 
         // Mint tokens
@@ -205,6 +211,20 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         }
     }
 
+    function isDisabled(address sender) public view returns (bool) {
+        return block.timestamp > maxTime ||             // Time expired
+            _tokenIdCounter._value >= maxSupply ||   // Supply reached
+            (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
+    }
+
+    /////-------- ADMIN ------------
+    /// witdraw
+    function withdraw() external {
+
+        require(msg.sender == admin, "Only admin");
+        payable(admin).transfer(address(this).balance);
+    }
+
     function setMaxSupply(uint256 _newMaxSupply) public { 
 
         require(msg.sender == admin, "Only admin");
@@ -223,11 +243,4 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         platformFee = _newPlatformFee;
     }
 
-    function isDisabled(address sender) public view returns (bool) {
-        return block.timestamp > maxTime ||             // Time expired
-            _tokenIdCounter._value >= maxSupply ||   // Supply reached
-            (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
-    }
-
-    /// witdraw
 }

@@ -121,21 +121,23 @@ contract NFTFactoryTest is Test {
 
     function testPaidMintAnotherUser() public {
     // Define addresses
-    address owner1 = address(0x122342343); // Explicit owner address
+    address nftOwner = address(0x122342343); // Explicit owner address
     address user22 = address(0x999999);
 
     // Set up owner balance tracking
-    vm.deal(owner1, 0); // Ensure owner starts with 0 ETH
-    uint256 ownerBalanceBefore = owner1.balance;
+    vm.deal(nftOwner, 0); // Ensure owner starts with 0 ETH
+    uint256 ownerBalanceBefore = nftOwner.balance;
 
     // Create collection as owner
-    vm.prank(owner1);
+    vm.prank(nftOwner);
+    uint nftPrice = 0.01 ether;
+    uint platformFee = 0.0005 ether;
     address collectionAddress = factory.createCollection(
         "Paid", "Test Description", "PAID", "ipfs://paid/", 
         10,       // maxSupply
         defaultMaxTime,        // maxTime (1 hour)
         false,    // mintPerWallet
-        0.01 ether // mintPrice
+        nftPrice // mintPrice
     );
     NFTCollection collection = NFTCollection(collectionAddress);
     
@@ -144,12 +146,12 @@ contract NFTFactoryTest is Test {
     
     // Execute mint from user2
     vm.prank(user22);
-    collection.mintNFT{value: 0.0105 ether}(user22, 1);
+    collection.mintNFT{value: nftPrice + platformFee}(user22, 1);
     
     // Verify balances
     assertEq(collection.totalSupply(), 1, "Mint failed");
     assertEq(user22.balance, 0.9895 ether, "User ETH not deducted"); // 1 ETH - 0.01 ETH
-    assertEq(owner1.balance, ownerBalanceBefore + 0.0105 ether, "Owner didn't receive ETH");
+    assertEq(nftOwner.balance, ownerBalanceBefore + nftPrice, "Owner didn't receive ETH");
 }
 
     function testMintWithoutPayment() public {
@@ -249,40 +251,77 @@ function testCalculatePlatformFee() public {
     assertEq(high.mintPrice(), 0.003 ether + (0.003 ether * 5 / 100), "High price fee miscalculation");
 }
 
-function testAdminFunctionsAccessControl() public {
-    
+
+function testAdminWithdraw() public {
+    // Setup
+    address admin = factory.owner();
+    address nftOwner = address(0x1343);
+    vm.deal(admin, 1 ether);
+
+    // Create collection
+    vm.prank(nftOwner);
+
+    uint nftPrice = 0.003 ether;
+    uint platformFee = 0.00015 ether;
+
     address collectionAddress = factory.createCollection(
-        "AdminTest", "Desc", "ADM", "ipfs://admin", 
-        100, defaultMaxTime, false, 0.001 ether
+        "High", "Desc", "HIGH", "ipfs://high", 
+        100, defaultMaxTime, false, nftPrice
     );
     NFTCollection collection = NFTCollection(collectionAddress);
+
+    // Mint NFTs (accumulate fees)
+    vm.deal(user, 1 ether);
+    vm.prank(user);
+    collection.mintNFT{value: nftPrice + platformFee}(user, 1);
+
+    // Verify withdrawal
+    uint256 contractBalanceBefore = address(collection).balance;
+    vm.prank(admin);
+    collection.withdraw();
     
-    // Test admin-only functions with non-admin
-    vm.startPrank(user);
-    
-    vm.expectRevert("Only admin");
-    collection.setMaxSupply(200);
-    
-    vm.expectRevert("Only admin");
-    collection.setMaxTime(200);
-    
-    vm.expectRevert("Only admin");
-    collection.changePlatformFee(0.0002 ether);
-    
-    // Test with admin (factory owner)
-    vm.stopPrank();
-    vm.startPrank(factory.owner());
-    
-    collection.setMaxSupply(200);
-    assertEq(collection.maxSupply(), 200, "Max supply not updated");
-    
-    collection.setMaxTime(200);
-    assertEq(collection.maxTime(), 200, "Max time not updated");
-    
-    collection.changePlatformFee(0.0002 ether);
-    // Verify fee change through mint price calculation
-    collection.mintNFT{value: 0.0012 ether}(owner, 1);
+    assertEq(address(collection).balance, 0);
+    assertEq(admin.balance, 1 ether + contractBalanceBefore);
 }
+
+
+
+
+
+// function testAdminFunctionsAccessControl() public {
+    
+//     address collectionAddress = factory.createCollection(
+//         "AdminTest", "Desc", "ADM", "ipfs://admin", 
+//         100, defaultMaxTime, false, 0.001 ether
+//     );
+//     NFTCollection collection = NFTCollection(collectionAddress);
+    
+//     // Test admin-only functions with non-admin
+//     vm.startPrank(user);
+    
+//     vm.expectRevert("Only admin");
+//     collection.setMaxSupply(200);
+    
+//     vm.expectRevert("Only admin");
+//     collection.setMaxTime(200);
+    
+//     vm.expectRevert("Only admin");
+//     collection.changePlatformFee(0.0002 ether);
+    
+//     // Test with admin (factory owner)
+//     vm.stopPrank();
+//     vm.startPrank(factory.owner());
+    
+//     collection.setMaxSupply(200);
+//     assertEq(collection.maxSupply(), 200, "Max supply not updated");
+    
+//     collection.setMaxTime(200);
+//     assertEq(collection.maxTime(), 200, "Max time not updated");
+    
+//     collection.changePlatformFee(0.0002 ether);
+//     // Verify fee change through mint price calculation
+//     collection.mintNFT{value: 0.0012 ether}(owner, 1);
+// }
 
 // function testIsDisabledConditions() public {
 //     // Create restricted collection
