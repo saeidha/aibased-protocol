@@ -111,9 +111,7 @@ contract NFTFactory is Ownable {
             string memory name,
             string memory description,
             string memory symbol,
-            string memory imageURL,
-            bool mintPerWallet,
-            uint256 mintPrice) public payable {
+            string memory imageURL) public payable {
             
             /// @dev Default maxTime is 168 hours equal to 1 week 
             uint256 maxTime=  168;
@@ -134,7 +132,7 @@ contract NFTFactory is Ownable {
                         msg.sender
                     );
         
-        emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, mintPerWallet, mintPrice, msg.sender);
+        emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, true, 0, msg.sender);
         collection.mintNFT{value: msg.value}(msg.sender, 1);
     }
 

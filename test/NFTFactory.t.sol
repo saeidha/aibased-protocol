@@ -231,9 +231,7 @@ function testCreateAndMintFunction() public {
         "TestCollection",
         "Test Description",
         "TST",
-        "ipfs://test.png",
-        true,
-        initialPrice
+        "ipfs://test.png"
     );
     
     // Verify collection creation
@@ -341,54 +339,54 @@ function testAdminFunctionsAccessControl() public {
     collection.mintNFT{value: nftFee + changeFee}(user, 1);
 }
 
-function testIsDisabledConditions() public {
+    function testIsDisabledConditions() public {
 
-    vm.deal(userOwner, 1 ether);
-    vm.startPrank(userOwner);
-    // Create restricted collection
-    address collectionAddress = factory.createCollection(
-        "DisabledTest", "Desc", "DIS", "ipfs://disabled", 
-        1, // maxSupply = 1
-        block.timestamp + 60, // 1 minute duration
-        true, // mintPerWallet
-        0.001 ether
-    );
-    NFTCollection collection = NFTCollection(collectionAddress);
-    
-    // Initial state should be enabled
-    assertFalse(collection.isDisabled(userOwner), "Should not be disabled initially");
-    
-    // Test supply limit
-    collection.mintNFT{value: 0.0011 ether}(userOwner, 1);
-    assertTrue(collection.isDisabled(userOwner), "Should disable after max supply");
-    
-    // Create time-based test collection
-    address timeCollectionAddress = factory.createCollection(
-        "TimeTest", "Desc", "TIME", "ipfs://time", 
-        10, 
-        block.timestamp + 60, 
-        false, 
-        0.001 ether
-    );
-    NFTCollection timeCollection = NFTCollection(timeCollectionAddress);
-    
-    // Advance past maxTime
-    vm.warp(block.timestamp + 61);
-    assertTrue(timeCollection.isDisabled(userOwner), "Should disable after maxTime");
-    
-    // Test wallet restriction
-    address restrictedCollectionAddress = factory.createCollection(
-        "WalletTest", "Desc", "WALL", "ipfs://wallet", 
-        10, 
-        block.timestamp + 1000, 
-        true, // mintPerWallet
-        0.001 ether
-    );
-    NFTCollection restrictedCollection = NFTCollection(restrictedCollectionAddress);
-    
-    restrictedCollection.mintNFT{value: 0.0011 ether}(user, 1);
-    assertTrue(restrictedCollection.isDisabled(user), "Should disable after wallet mint");
-    assertFalse(restrictedCollection.isDisabled(user2), "Should allow other wallets");
-}
+        vm.deal(userOwner, 1 ether);
+        vm.startPrank(userOwner);
+        // Create restricted collection
+        address collectionAddress = factory.createCollection(
+            "DisabledTest", "Desc", "DIS", "ipfs://disabled", 
+            1, // maxSupply = 1
+            block.timestamp + 60, // 1 minute duration
+            true, // mintPerWallet
+            0.001 ether
+        );
+        NFTCollection collection = NFTCollection(collectionAddress);
+        
+        // Initial state should be enabled
+        assertFalse(collection.isDisabled(userOwner), "Should not be disabled initially");
+        
+        // Test supply limit
+        collection.mintNFT{value: 0.0011 ether}(userOwner, 1);
+        assertTrue(collection.isDisabled(userOwner), "Should disable after max supply");
+        
+        // Create time-based test collection
+        address timeCollectionAddress = factory.createCollection(
+            "TimeTest", "Desc", "TIME", "ipfs://time", 
+            10, 
+            block.timestamp + 60, 
+            false, 
+            0.001 ether
+        );
+        NFTCollection timeCollection = NFTCollection(timeCollectionAddress);
+        
+        // Advance past maxTime
+        vm.warp(block.timestamp + 61);
+        assertTrue(timeCollection.isDisabled(userOwner), "Should disable after maxTime");
+        
+        // Test wallet restriction
+        address restrictedCollectionAddress = factory.createCollection(
+            "WalletTest", "Desc", "WALL", "ipfs://wallet", 
+            10, 
+            block.timestamp + 1000, 
+            true, // mintPerWallet
+            0.001 ether
+        );
+        NFTCollection restrictedCollection = NFTCollection(restrictedCollectionAddress);
+        
+        restrictedCollection.mintNFT{value: 0.0011 ether}(user, 1);
+        assertTrue(restrictedCollection.isDisabled(user), "Should disable after wallet mint");
+        assertFalse(restrictedCollection.isDisabled(user2), "Should allow other wallets");
+    }
 
 }
