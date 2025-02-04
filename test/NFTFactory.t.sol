@@ -14,6 +14,7 @@ contract NFTFactoryTest is Test {
     address owner = address(this);
 
     uint256 defaultMaxTime = block.timestamp + 120;
+    uint256 defaultGenerateFee = 0.0001 ether;
 
     receive() external payable {} 
 
@@ -387,6 +388,138 @@ function testAdminFunctionsAccessControl() public {
         restrictedCollection.mintNFT{value: 0.0011 ether}(user, 1);
         assertTrue(restrictedCollection.isDisabled(user), "Should disable after wallet mint");
         assertFalse(restrictedCollection.isDisabled(user2), "Should allow other wallets");
+    }
+
+    // Test payGenerateFee with sufficient ETH
+    function testPayGenerateFeeSuccess() public {
+        uint256 fee = defaultGenerateFee;
+        vm.deal(user, fee);
+        
+        vm.prank(user);
+        factory.payGenerateFee{value: fee}();
+
+        assertEq(address(factory).balance, fee, "Contract should have received fee");
+    }
+
+    // Test payGenerateFee with insufficient ETH
+    function testPayGenerateFeeInsufficient() public {
+        vm.startPrank(userOwner);
+        uint256 newFee = 0.0001 ether;
+        factory.setGenerateFee(newFee);
+        uint256 fee = defaultGenerateFee;
+        
+        
+        vm.stopPrank();
+        vm.deal(user, fee - 1);
+        vm.startPrank(user);
+        vm.expectRevert("Payable: msg.value must be equal to amount");
+        factory.payGenerateFee{value: fee - 1}();
+    }
+
+    // Test owner withdrawal
+    function testWithdrawAsOwner() public {
+        
+        uint256 fee = defaultGenerateFee;
+        vm.startPrank(userOwner);
+        factory.setGenerateFee(fee);
+        vm.stopPrank();
+
+
+        vm.deal(user, fee);
+        
+        // Fund contract
+        vm.prank(user);
+        factory.payGenerateFee{value: fee}();
+
+        uint256 contractBalanceBefore = address(factory).balance;
+        uint256 ownerBalanceBefore = userOwner.balance;
+
+        vm.prank(userOwner);
+        factory.withdraw();
+
+        assertEq(address(factory).balance, 0, "Contract balance should be 0");
+        assertEq(
+            userOwner.balance,
+            ownerBalanceBefore + contractBalanceBefore,
+            "Owner should receive contract balance"
+        );
+    }
+
+    // Test non-owner withdrawal attempt
+    function testWithdrawAsNonOwner() public {
+        vm.prank(user);
+        vm.expectRevert("Only admin");
+        factory.withdraw();
+    }
+
+    // Test fee update by owner
+    function testSetGenerateFeeAsOwner() public {
+        vm.startPrank(userOwner);
+        uint256 newFee = 0.2 ether;
+        factory.setGenerateFee(newFee);
+        assertEq(factory.getFee(), newFee, "Fee should update");
+    }
+
+ // Test fee payment functionality
+    function testPayGenerateFee() public {
+        uint256 fee = 0.001 ether;
+        
+        // Set fee by owner
+        vm.prank(userOwner);
+        factory.setGenerateFee(fee);
+
+        // Test successful payment
+        vm.deal(user, fee);
+        vm.prank(user);
+        factory.payGenerateFee{value: fee}();
+        assertEq(address(factory).balance, fee, "Fee not received");
+
+        // Test insufficient payment
+        vm.deal(user2, fee - 1);
+        vm.prank(user2);
+        vm.expectRevert("Payable: msg.value must be equal to amount");
+        factory.payGenerateFee{value: fee - 1}();
+    }
+
+    // Test withdrawal functionality
+    function testWithdraw() public {
+        uint256 fee = 0.001 ether;
+        
+        // Setup
+        vm.prank(userOwner);
+        factory.setGenerateFee(fee);
+        
+        vm.deal(user, fee);
+        vm.prank(user);
+        factory.payGenerateFee{value: fee}();
+
+        // Test owner withdrawal
+        uint256 initialBalance = userOwner.balance;
+        vm.prank(userOwner);
+        factory.withdraw();
+        
+        assertEq(address(factory).balance, 0, "Funds not withdrawn");
+        assertEq(userOwner.balance, initialBalance + fee, "Funds not received");
+
+        // Test non-owner withdrawal attempt
+        vm.prank(user);
+        vm.expectRevert("Only admin");
+        factory.withdraw();
+    }
+
+    // Test fee management
+    function testFeeManagement() public {
+        uint256 newFee = 0.002 ether;
+        
+        // Test owner sets fee
+        vm.startPrank(userOwner);
+        factory.setGenerateFee(newFee);
+        assertEq(factory.getFee(), newFee, "Fee not updated");
+        vm.stopPrank();
+        // Test non-owner sets fee
+        vm.startPrank(user);
+        vm.expectRevert("Only admin");
+        factory.setGenerateFee(newFee);
     }
 
 }

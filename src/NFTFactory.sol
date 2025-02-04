@@ -7,6 +7,8 @@ import "./NFTCollection.sol";
 contract NFTFactory is Ownable {
     address[] public deployedCollections;
     
+    uint256 private generateFee = 0 ether;
+
     constructor() Ownable(msg.sender) {} 
     
     event CollectionCreated(
@@ -251,5 +253,33 @@ contract NFTFactory is Ownable {
         }
 
         return details;
+    }
+
+    function payGenerateFee() public payable {
+
+        require(msg.value >= generateFee, "Payable: msg.value must be equal to amount");
+        
+    }
+
+    /////-------- ADMIN --------------/////
+    /// function
+    function withdraw() public {
+
+        require(msg.sender == owner(), "Only admin");
+        payable(owner()).transfer(address(this).balance);
+    }
+
+    function setGenerateFee(uint256 _newFee) public { 
+
+        require(msg.sender == owner(), "Only admin");
+        generateFee = _newFee;
+    }
+
+
+    function getFee() public view returns (uint256) {
+
+        require(msg.sender == owner(), "Only admin");
+        
+        return generateFee;
     }
 }
