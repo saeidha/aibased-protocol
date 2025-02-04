@@ -24,6 +24,8 @@ contract NFTCollection is ERC721, Ownable {
     bool public mintPerWallet;
     uint256 public mintPrice;
     string public description;
+    uint256 private platformFee;
+    address private immutable admin; 
 
     mapping(address => bool) public hasMinted;
 
@@ -35,42 +37,34 @@ contract NFTCollection is ERC721, Ownable {
         uint256 _maxTime,
         string memory _imageURL,
         bool _mintPerWallet,
-        uint256 _mintPrice,
+        uint256 _initialPrice,
+        address _admin,
         address initialOwner
     ) ERC721(name, symbol) Ownable(initialOwner) {
+
+
+require(_initialPrice >= 0, "Mint Price Should be grather than or equal to zero ");
+
+require(_maxTime >= block.timestamp + 60, "Max time should be end up next minutes");
+
+require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
         maxSupply = _maxSupply;
         imageURL = _imageURL;
         _tokenIdCounter._value = 0;
         revealed = true;
-        maxTime =  block.timestamp + (_maxTime * 1 hours);
+        maxTime =  _maxTime;
         mintPerWallet = _mintPerWallet;
-        mintPrice = _mintPrice;
         description = _description;
+        mintPrice = calculatePlatformFee(_initialPrice) + _initialPrice;
+        admin = _admin;
     }
 
     function mint(address to, uint256 quantity) public onlyOwner {
-        require(block.timestamp <= maxTime, "Minting period has ended");
-        require(
-            _tokenIdCounter._value + quantity <= maxSupply,
-            "Exceeds max supply"
-        );
-        if (mintPerWallet) {
-            if (quantity > 1) {
-                revert("Only one NFT per wallet");
-            }
-            require(!hasMinted[to], "Wallet already minted");
-            hasMinted[to] = true;
-        }
 
-        for (uint256 i = 0; i < quantity; i++) {
-            _tokenIdCounter._value++;  // Access struct value
-            _safeMint(to, _tokenIdCounter._value);
-            emit TokenMinted(_tokenIdCounter._value, to);  // Fix here
-        }
+        require(msg.sender == admin, "Only admin");
     }
-
-    function mintNotOwner(address to, uint256 quantity) public payable {
+    function mintNFT(address to, uint256 quantity) public payable {
 
          /// @dev Check if minting is free or paid 
         if (mintPrice != 0) {
@@ -98,27 +92,27 @@ contract NFTCollection is ERC721, Ownable {
 
         // Mint tokens
         for (uint256 i = 0; i < quantity; i++) {
-            _tokenIdCounter._value++;
+            _increment();
             _safeMint(to, _tokenIdCounter._value);
         }
     }
 
 
-    function _increment() internal {
+    function _increment() private {
         _tokenIdCounter._value += 1;
     }
 
-    // function setBaseURI(string memory newBaseURI) public onlyOwner {        
+    function reveal() public onlyOwner {
+        revealed = true;
+    }
+
+        // function setBaseURI(string memory newBaseURI) public onlyOwner {        
     //     baseTokenURI = newBaseURI;
     // }
 
     // function _baseURI() internal view override returns (string memory) {
     //     return baseTokenURI;
     // }
-    
-    function reveal() public onlyOwner {
-        revealed = true;
-    }
 
     // function tokenURI(uint256 tokenId) public view override returns (string memory) {
     //     require(exists(tokenId), "Nonexistent token");
@@ -199,4 +193,41 @@ contract NFTCollection is ERC721, Ownable {
     function totalSupply() public view returns (uint256) {
         return _tokenIdCounter._value;
     }
+
+    function calculatePlatformFee(uint256 mint_price) pure private returns (uint256) {
+
+        if (mint_price > 0.002 ether) {
+
+            return mint_price * 5 / 100;
+        }else{
+
+            return 0.0001 ether;
+        }
+    }
+
+    function setMaxSupply(uint256 _newMaxSupply) public { 
+
+        require(msg.sender == admin, "Only admin");
+        maxSupply = _newMaxSupply;
+    }
+
+    function setMaxTime(uint256 _newMaxTime) public { 
+
+        require(msg.sender == admin, "Only admin");
+        maxTime = _newMaxTime;
+    }
+
+    function changePlatformFee(uint256 _newPlatformFee) public { 
+
+        require(msg.sender == admin, "Only admin");
+        platformFee = _newPlatformFee;
+    }
+
+    function isDisabled(address sender) public view returns (bool) {
+        return block.timestamp > maxTime ||             // Time expired
+            _tokenIdCounter._value >= maxSupply ||   // Supply reached
+            (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
+    }
+
+    /// witdraw
 }
