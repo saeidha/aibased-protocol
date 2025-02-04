@@ -57,7 +57,8 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         maxTime =  _maxTime;
         mintPerWallet = _mintPerWallet;
         description = _description;
-        mintPrice = calculatePlatformFee(_initialPrice) + _initialPrice;
+        platformFee = calculatePlatformFee(_initialPrice) ;
+        mintPrice = platformFee + _initialPrice;
         admin = _admin;
         initialPrice = _initialPrice;
     }

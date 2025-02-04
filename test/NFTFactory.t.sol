@@ -217,12 +217,6 @@ contract NFTFactoryTest is Test {
 
 
 
-
-
-
-
-
-
 function testCreateAndMintFunction() public {
     address user = address(0x123); // Define an EOA
     vm.deal(user, 1 ether); // Fund the user
