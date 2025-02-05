@@ -36,6 +36,8 @@ contract NFTFactory is Ownable {
         bool mintPerWallet;
         uint256 mintPrice;
         bool isDisable;
+        bool isUltimateMintTime;
+        bool isUltimateMintQuantity;
     }
 
     function createCollection(
@@ -46,13 +48,16 @@ contract NFTFactory is Ownable {
         uint256 maxSupply,
         uint256 maxTime,
         bool mintPerWallet,
-        uint256 mintPrice) public returns (address) {
+        uint256 mintPrice,
+        bool isUltimateMintTime,
+        bool isUltimateMintQuantity) public returns (address) {
+            
         NFTCollection collection = new NFTCollection(
             name,
             description,
             symbol,
-            maxSupply,
-            maxTime,
+            isUltimateMintQuantity ? type(uint256).max : maxSupply,
+            isUltimateMintTime ? type(uint256).max : maxTime,
             imageURL,
             mintPerWallet,
             mintPrice,
@@ -61,7 +66,16 @@ contract NFTFactory is Ownable {
         );
         
         deployedCollections.push(address(collection));
-        emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, mintPerWallet, mintPrice, msg.sender);
+        emit CollectionCreated(address(collection),
+            name,
+            description, 
+            symbol, 
+            isUltimateMintQuantity ? type(uint256).max : maxSupply,
+            isUltimateMintTime ? type(uint256).max : maxTime,
+            imageURL, 
+            mintPerWallet, 
+            mintPrice, 
+            msg.sender);
         return address(collection);
     }
 
@@ -72,11 +86,12 @@ contract NFTFactory is Ownable {
         string memory imageURL,
         uint256 maxSupply,
         bool mintPerWallet,
-        uint256 mintPrice) public returns (address) {
+        uint256 mintPrice,
+        bool isUltimateMintQuantity) public returns (address) {
         
         /// @dev Default maxTime is 168 hours equal to 1 week 
         uint256 maxTime=  block.timestamp + (60*60*24*7);
-        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
+        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice, false, isUltimateMintQuantity);
     }
 
     function createWithDefaultCollectionWithMaxSupply(
@@ -86,11 +101,12 @@ contract NFTFactory is Ownable {
         string memory imageURL,
         uint256 maxTime,
         bool mintPerWallet,
-        uint256 mintPrice) public returns (address) {
+        uint256 mintPrice,
+        bool isUltimateMintTime) public returns (address) {
         
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply=  type(uint256).max;
-        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
+        return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice, isUltimateMintTime, true);
         }
 
         function createWithDefaultCollectionWithMaxSupplyAndDefaultTime(
@@ -99,13 +115,13 @@ contract NFTFactory is Ownable {
             string memory symbol,
             string memory imageURL,
             bool mintPerWallet,
-        uint256 mintPrice) public returns (address) {
+            uint256 mintPrice) public returns (address) {
             
             /// @dev Default maxTime is 168 hours equal to 1 week 
             uint256 maxTime=  block.timestamp + (60*60*24*7);
             /// @dev Default maxSupply is max uint256
             uint256 maxSupply=  type(uint256).max;
-            return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice);
+            return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice, false, true);
         }
 
 
@@ -165,7 +181,9 @@ contract NFTFactory is Ownable {
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
-                    isDisable: collection.isDisabled(sender)
+                    isDisable: collection.isDisabled(sender),
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
                 });
                 count++;
             }
@@ -202,7 +220,9 @@ contract NFTFactory is Ownable {
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
-                    isDisable: true
+                    isDisable: true,
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
                 });
                 count++;
             }
@@ -240,7 +260,9 @@ contract NFTFactory is Ownable {
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
-                    isDisable: collection.isDisabled(sender)
+                    isDisable: collection.isDisabled(sender),
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
                 });
                 count++;
             }

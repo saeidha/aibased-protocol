@@ -27,6 +27,8 @@ contract NFTCollection is ERC721, Ownable {
     uint256 private platformFee;
     address private immutable admin; 
     uint256 private initialPrice;
+    bool public isUltimateMintTime;
+    bool public isUltimateMintQuantity;
 
     mapping(address => bool) public hasMinted;
 
@@ -61,6 +63,8 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         mintPrice = platformFee + _initialPrice;
         admin = _admin;
         initialPrice = _initialPrice;
+        isUltimateMintTime = _maxTime == type(uint256).max;
+        isUltimateMintQuantity = _maxSupply == type(uint256).max;
     }
 
     // function mint(address to, uint256 quantity) public onlyOwner {
@@ -162,8 +166,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
                         abi.encodePacked(
                             '{"name": "', encodedName, '",',
                             '"description":"', _description, '",',
-                            '"image": "', imageURI, '",',
-                            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+                            '"image": "', imageURI, '"}'
                     )
                 )
             )
@@ -194,8 +197,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
                         abi.encodePacked(
                             '{"name": "', nameWithTokenId, '",',
                             '"description":"', _description, '",',
-                            '"image": "', imageURI, '",',
-                            '"attributes": [{ "trait_type": "Rarity", "value": "Legendary" }]}'
+                            '"image": "', imageURI, '"}'
                         )
                 )
             )
@@ -246,12 +248,14 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
         require(msg.sender == admin, "Only admin");
         maxSupply = _newMaxSupply;
+        isUltimateMintQuantity = _newMaxSupply == type(uint256).max;
     }
 
     function setMaxTime(uint256 _newMaxTime) public { 
 
         require(msg.sender == admin, "Only admin");
         maxTime = _newMaxTime;
+        isUltimateMintTime = _newMaxTime == type(uint256).max;
     }
 
     function changePlatformFee(uint256 _newPlatformFee) public { 
