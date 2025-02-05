@@ -87,7 +87,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         uint256 totalPayment = ownerPayment + platformPayment;
 
         /// @dev Check if minting is free or paid 
-        if (mintPrice != 0) {
+        if (totalPayment != 0) {
 
             /// @dev Check if the amount of ETH sent is enough to mint the NFT
             require(msg.value >= totalPayment, "Insufficient ETH sent");
@@ -108,7 +108,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
             hasMinted[to] = true;
         }
 
-        if (mintPrice != 0) {
+        if (ownerPayment > 0) {
             // Send payment to owner
             payable(owner()).transfer(ownerPayment);
         }
