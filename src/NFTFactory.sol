@@ -30,8 +30,6 @@ contract NFTFactory is Ownable {
         uint256 tokenIdCounter;
         uint256 maxSupply;
         string baseImageURI;
-        bool revealed;
-        string unrevealedURI;
         uint256 maxTime;
         bool mintPerWallet;
         uint256 mintPrice;
@@ -176,8 +174,6 @@ contract NFTFactory is Ownable {
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
-                    revealed: collection.revealed(),
-                    unrevealedURI: collection.unrevealedURI(),
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
@@ -215,8 +211,6 @@ contract NFTFactory is Ownable {
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
-                    revealed: collection.revealed(),
-                    unrevealedURI: collection.unrevealedURI(),
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
@@ -255,8 +249,6 @@ contract NFTFactory is Ownable {
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
-                    revealed: collection.revealed(),
-                    unrevealedURI: collection.unrevealedURI(),
                     maxTime: collection.maxTime(),
                     mintPerWallet: collection.mintPerWallet(),
                     mintPrice: collection.mintPrice(),
