@@ -250,7 +250,7 @@ contract NFTFactory is Ownable {
         for (uint256 i = 0; i < length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
-            if (collection.canShow()) {
+            if (!collection.canNotToShow()) {
                 tempDetails[count] = CollectionDetails({
                     collectionAddress: deployedCollections[i],
                     tokenIdCounter: collection.totalSupply(),
@@ -287,7 +287,7 @@ contract NFTFactory is Ownable {
         for (uint256 i = 0; i < length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
-            if (collection.canShow()) {
+            if (!collection.canNotToShow()) {
                 tempDetails[count] = CollectionDetails({
                     collectionAddress: deployedCollections[i],
                     tokenIdCounter: collection.totalSupply(),

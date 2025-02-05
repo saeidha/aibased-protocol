@@ -227,11 +227,11 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
     }
 
     function isDisabled(address sender) external view returns (bool) {
-        return  canShow() ||   // Supply reached
+        return  canNotToShow() ||   // Supply reached
             (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
     }
 
-    function canShow() public view returns (bool) {
+    function canNotToShow() public view returns (bool) {
         return block.timestamp > maxTime ||             // Time expired
             _tokenIdCounter._value >= maxSupply;   // Supply reached
     }

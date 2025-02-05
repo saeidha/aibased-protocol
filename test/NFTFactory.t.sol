@@ -628,124 +628,135 @@ function testAdminFunctionsAccessControl() public {
     }
 
 
-    // function testCreateCollectionCGETSollection() public {
-    //     string memory name = "Test Collection";
-    //     string memory description = "A test NFT collection";
-    //     string memory symbol = "TEST";
-    //     string memory imageURL = "https://example.com/image.png";
-    //     uint256 maxSupply = 100;
-    //     uint256 maxTime = block.timestamp + 365 days;
-    //     bool mintPerWallet = true;
-    //     uint256 mintPrice = 0.01 ether;
-    //     bool isUltimateMintTime = false;
-    //     bool isUltimateMintQuantity = false;
+    function testCreateCollectionCGETSollection() public {
+        string memory name = "Test Collection";
+        string memory description = "A test NFT collection";
+        string memory symbol = "TEST";
+        string memory imageURL = "https://example.com/image.png";
+        uint256 maxSupply = 100;
+        uint256 maxTime = block.timestamp + 10 days;
+        bool mintPerWallet = true;
+        uint256 mintPrice = 0.01 ether;
+        bool isUltimateMintTime = false;
+        bool isUltimateMintQuantity = false;
+        uint256 mintPriceWithFee = 0.0105 ether;
+        // Create a new collection
+        address collectionAddress = factory.createCollection(
+            name,
+            description,
+            symbol,
+            imageURL,
+            maxSupply,
+            maxTime,
+            mintPerWallet,
+            mintPrice,
+            isUltimateMintTime,
+            isUltimateMintQuantity
+        );
 
-    //     // Create a new collection
-    //     address collectionAddress = factory.createCollection(
-    //         name,
-    //         description,
-    //         symbol,
-    //         imageURL,
-    //         maxSupply,
-    //         maxTime,
-    //         mintPerWallet,
-    //         mintPrice,
-    //         isUltimateMintTime,
-    //         isUltimateMintQuantity
-    //     );
+        // Verify the collection was deployed
+        NFTCollection collection = NFTCollection(collectionAddress);
+        assertEq(collection.name(), name);
+        assertEq(collection.symbol(), symbol);
+        assertEq(collection.imageURL(), imageURL);
+        assertEq(collection.maxSupply(), maxSupply);
+        assertEq(collection.maxTime(), maxTime);
+        assertEq(collection.mintPerWallet(), mintPerWallet);
+        assertEq(collection.mintPrice(), mintPriceWithFee);
 
-    //     // Verify the collection was deployed
-    //     NFTCollection collection = NFTCollection(collectionAddress);
-    //     assertEq(collection.name(), name);
-    //     assertEq(collection.symbol(), symbol);
-    //     assertEq(collection.imageURL(), imageURL);
-    //     assertEq(collection.maxSupply(), maxSupply);
-    //     assertEq(collection.maxTime(), maxTime);
-    //     assertEq(collection.mintPerWallet(), mintPerWallet);
-    //     assertEq(collection.mintPrice(), mintPrice);
+        // Verify the collection is added to deployedCollections
+        address[] memory collections = factory.getCollections();
 
-    //     // Verify the collection is added to deployedCollections
-    //     address[] memory collections = factory.getCollections();
-    //     assertEq(collections.length, 1);
-    //     assertEq(collections[0], collectionAddress);
-    // }
+        assertEq(collections.length, 1);
+        assertEq(collections[0], collectionAddress);
 
-    // function testCreateWithDefaultCollectionWithDefaultTime() public {
-    //     string memory name = "Default Time Collection";
-    //     string memory description = "A test collection with default time";
-    //     string memory symbol = "DFLT";
-    //     string memory imageURL = "https://example.com/default-time.png";
-    //     uint256 maxSupply = 50;
-    //     bool mintPerWallet = true;
-    //     uint256 mintPrice = 0.005 ether;
+        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
+        assertEq(avaiableColloctions.length, 1);
+        assertEq(avaiableColloctions[0].collectionAddress, collectionAddress);
+    }
 
-    //     // Create a collection with default time
-    //     address collectionAddress = factory.createWithDefaultCollectionWithDefaultTime(
-    //         name,
-    //         description,
-    //         symbol,
-    //         imageURL,
-    //         maxSupply,
-    //         mintPerWallet,
-    //         mintPrice,
-    //         false
-    //     );
+    function testCreateWithDefaultCollectionWithDefaultTime() public {
+        string memory name = "Default Time Collection";
+        string memory description = "A test collection with default time";
+        string memory symbol = "DFLT";
+        string memory imageURL = "https://example.com/default-time.png";
+        uint256 maxSupply = 50;
+        bool mintPerWallet = true;
+        uint256 mintPrice = 0.005 ether;
 
-    //     // Verify the collection was deployed with default maxTime
-    //     NFTCollection collection = NFTCollection(collectionAddress);
-    //     uint256 expectedMaxTime = block.timestamp + (60 * 60 * 24 * 7); // 1 week
-    //     assertEq(collection.maxTime(), expectedMaxTime);
-    // }
+        // Create a collection with default time
+        address collectionAddress = factory.createWithDefaultCollectionWithDefaultTime(
+            name,
+            description,
+            symbol,
+            imageURL,
+            maxSupply,
+            mintPerWallet,
+            mintPrice,
+            false
+        );
 
-    // function testGetAvailableCollectionsDetails() public {
-    //     // Create two collections
-    //     address collection1 = factory.createCollection(
-    //         "Collection 1",
-    //         "Description 1",
-    //         "COL1",
-    //         "https://example.com/image1.png",
-    //         100,
-    //         block.timestamp + 365 days,
-    //         true,
-    //         0.01 ether,
-    //         false,
-    //         false
-    //     );
+        // Verify the collection was deployed with default maxTime
+        NFTCollection collection = NFTCollection(collectionAddress);
+        uint256 expectedMaxTime = block.timestamp + (60 * 60 * 24 * 7); // 1 week
+        assertEq(collection.maxTime(), expectedMaxTime);
+    }
 
-    //     address collection2 = factory.createCollection(
-    //         "Collection 2",
-    //         "Description 2",
-    //         "COL2",
-    //         "https://example.com/image2.png",
-    //         200,
-    //         block.timestamp + 730 days,
-    //         true,
-    //         0.02 ether,
-    //         false,
-    //         false
-    //     );
+    function testGetAvailableCollectionsDetails() public {
+        // Create two collections
+        address collection1 = factory.createCollection(
+            "Collection 1",
+            "Description 1",
+            "COL1",
+            "https://example.com/image1.png",
+            100,
+            block.timestamp + 365 days,
+            true,
+            0.01 ether,
+            false,
+            false
+        );
 
-    //     // Set both collections to visible
-    //     // NFTCollection(collection1).setCanShow(true);
-    //     // NFTCollection(collection2).setCanShow(true);
+        address collection2 = factory.createCollection(
+            "Collection 2",
+            "Description 2",
+            "COL2",
+            "https://example.com/image2.png",
+            200,
+            block.timestamp + 730 days,
+            true,
+            0.02 ether,
+            false,
+            false
+        );
 
-    //     // Get available collection details
-    //     NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsDetails();
+        // Set both collections to visible
+        // NFTCollection(collection1).setCanShow(true);
+        // NFTCollection(collection2).setCanShow(true);
 
-    //     // Verify details of the first collection
-    //     assertEq(details.length, 2);
-    //     assertEq(details[0].collectionAddress, collection1);
-    //     assertEq(details[0].tokenIdCounter, 0);
-    //     assertEq(details[0].maxSupply, 100);
-    //     assertEq(details[0].baseImageURI, "https://example.com/image1.png");
-    //     assertEq(details[0].maxTime, block.timestamp + 365 days);
+        // Get available collection details
+        NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsDetails();
 
-    //     // Verify details of the second collection
-    //     assertEq(details[1].collectionAddress, collection2);
-    //     assertEq(details[1].tokenIdCounter, 0);
-    //     assertEq(details[1].maxSupply, 200);
-    //     assertEq(details[1].baseImageURI, "https://example.com/image2.png");
-    //     assertEq(details[1].maxTime, block.timestamp + 730 days);
-    // }
+        // Verify details of the first collection
+        assertEq(details.length, 2);
+        assertEq(details[0].collectionAddress, collection1);
+        assertEq(details[0].tokenIdCounter, 0);
+        assertEq(details[0].maxSupply, 100);
+        assertEq(details[0].baseImageURI, "https://example.com/image1.png");
+        assertEq(details[0].maxTime, block.timestamp + 365 days);
+
+        // Verify details of the second collection
+        assertEq(details[1].collectionAddress, collection2);
+        assertEq(details[1].tokenIdCounter, 0);
+        assertEq(details[1].maxSupply, 200);
+        assertEq(details[1].baseImageURI, "https://example.com/image2.png");
+        assertEq(details[1].maxTime, block.timestamp + 730 days);
+
+    vm.warp(block.timestamp + 366 days); 
+
+        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
+        assertEq(avaiableColloctions.length, 1);
+        assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
+    }
 
 }
