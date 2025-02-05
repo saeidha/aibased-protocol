@@ -75,6 +75,16 @@
         "name": "mintPrice",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "isUltimateMintTime",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "isUltimateMintQuantity",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "outputs": [
@@ -124,6 +134,11 @@
         "name": "mintPrice",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "isUltimateMintQuantity",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "outputs": [
@@ -173,6 +188,11 @@
         "name": "mintPrice",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "isUltimateMintTime",
+        "type": "bool",
+        "internalType": "bool"
       }
     ],
     "outputs": [
@@ -312,6 +332,16 @@
             "name": "isDisable",
             "type": "bool",
             "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintTime",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintQuantity",
+            "type": "bool",
+            "internalType": "bool"
           }
         ]
       }
@@ -375,6 +405,16 @@
           },
           {
             "name": "isDisable",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintTime",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintQuantity",
             "type": "bool",
             "internalType": "bool"
           }
@@ -446,6 +486,16 @@
           },
           {
             "name": "isDisable",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintTime",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "isUltimateMintQuantity",
             "type": "bool",
             "internalType": "bool"
           }
