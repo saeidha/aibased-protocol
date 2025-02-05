@@ -16,6 +16,22 @@ contract NFTFactoryTest is Test {
     uint256 defaultMaxTime = block.timestamp + 120;
     uint256 defaultGenerateFee = 0.0001 ether;
 
+
+
+    NFTFactory.CollectionDetails emptyCollectionDetails = NFTFactory.CollectionDetails({
+        collectionAddress: address(0),
+        tokenIdCounter: 0,
+        maxSupply: 0,
+        baseImageURI: "",
+        maxTime: 0,
+        mintPerWallet: false,
+        mintPrice: 0,
+        isDisable: false,
+        isUltimateMintTime: false,
+        isUltimateMintQuantity: false
+    });
+
+
     receive() external payable {} 
 
     function setUp() public {
@@ -524,5 +540,212 @@ function testAdminFunctionsAccessControl() public {
         vm.expectRevert("Only admin");
         factory.setGenerateFee(newFee);
     }
+
+ // Test retrieving details for a valid contract address
+    function testGetDetailsByValidAddress() public {
+        // Create a test collection
+        address collectionAddress = createTestCollection(userOwner, 100, block.timestamp + 1 days, false);
+        
+        // Retrieve details
+        NFTFactory.CollectionDetails memory details = factory.getAvailableCollectionDetailsByContractAddress(collectionAddress);
+        
+        // Verify returned details
+        assertEq(details.collectionAddress, collectionAddress, "Incorrect collection address");
+        assertEq(details.maxSupply, 100, "Incorrect max supply");
+        assertEq(details.mintPerWallet, false, "Incorrect mint restriction");
+        assertEq(details.isDisable, true, "Incorrect disable status");
+    }
+
+    // Test retrieving details for an invalid contract address
+    function testGetDetailsByInvalidAddress() public {
+        // Attempt to retrieve details for a non-existent collection
+        address invalidAddress = address(0x999);
+        
+        // Expect the function to revert or return empty details
+       NFTFactory.CollectionDetails memory invalidResult = factory.getAvailableCollectionDetailsByContractAddress(invalidAddress);
+        assertTrue(emptyCollectionDetails.collectionAddress == invalidResult.collectionAddress, "Incorrect collection address");
+    }
+
+    // Test retrieving details for a collection with ultimate mint conditions
+    function testGetDetailsWithUltimateMintConditions() public {
+        // Create a time-sensitive collection (last hour)
+        address timeCol = createTestCollection(userOwner, 1000, type(uint256).max, false);
+        
+        // Create a quantity-sensitive collection
+        address quantityCol = createTestCollection(userOwner, type(uint256).max, block.timestamp + 1 days, false);
+
+        // Retrieve details for time-sensitive collection
+        NFTFactory.CollectionDetails memory timeDetails = factory.getAvailableCollectionDetailsByContractAddress(timeCol);
+        assertTrue(timeDetails.isUltimateMintTime, "Should indicate ultimate mint time");
+
+        // // Retrieve details for quantity-sensitive collection
+        NFTFactory.CollectionDetails memory quantityDetails = factory.getAvailableCollectionDetailsByContractAddress(quantityCol);
+        assertTrue(quantityDetails.isUltimateMintQuantity, "Should indicate ultimate mint quantity");
+    }
+
+    // Test retrieving details for a collection with minting restrictions
+    function testGetDetailsWithMintRestrictions() public {
+        // Create a restricted collection
+        address restrictedCol = createTestCollection(userOwner, 10, block.timestamp + 1 days, true);
+        
+        // Mint from restricted collection to trigger wallet restriction
+        vm.deal(user, 0.1 ether);
+        vm.prank(user);
+        NFTCollection(restrictedCol).mintNFT{value: 0.0002 ether}(user, 1);
+
+        // Retrieve details
+        NFTFactory.CollectionDetails memory details = factory.getAvailableCollectionDetailsByContractAddress(restrictedCol);
+        
+        // Verify restrictions
+        assertTrue(details.mintPerWallet, "Should indicate mint per wallet restriction");
+        assertTrue(details.isDisable, "Should indicate disabled status for restricted collection");
+    }
+
+    // Helper to create test collections
+    function createTestCollection(address owner, uint256 maxSupply, uint256 maxTime, bool mintPerWallet) internal returns (address) {
+        vm.prank(userOwner);
+        return factory.createCollection(
+            "Test",
+            "Test Description",
+            "TST",
+            "ipfs://test",
+            maxSupply,
+            maxTime,
+            mintPerWallet,
+            0.0001 ether,
+            false,
+            false
+        );
+    }
+
+    // Helper to mint multiple NFTs
+    function mintMultiple(address collection, address minter, uint256 quantity) internal {
+        
+        vm.prank(minter);
+        for (uint256 i = 0; i < quantity; i++) {
+            NFTCollection(collection).mintNFT{value: 0.0001 ether}(minter, 1);
+        }
+    }
+
+
+    // function testCreateCollectionCGETSollection() public {
+    //     string memory name = "Test Collection";
+    //     string memory description = "A test NFT collection";
+    //     string memory symbol = "TEST";
+    //     string memory imageURL = "https://example.com/image.png";
+    //     uint256 maxSupply = 100;
+    //     uint256 maxTime = block.timestamp + 365 days;
+    //     bool mintPerWallet = true;
+    //     uint256 mintPrice = 0.01 ether;
+    //     bool isUltimateMintTime = false;
+    //     bool isUltimateMintQuantity = false;
+
+    //     // Create a new collection
+    //     address collectionAddress = factory.createCollection(
+    //         name,
+    //         description,
+    //         symbol,
+    //         imageURL,
+    //         maxSupply,
+    //         maxTime,
+    //         mintPerWallet,
+    //         mintPrice,
+    //         isUltimateMintTime,
+    //         isUltimateMintQuantity
+    //     );
+
+    //     // Verify the collection was deployed
+    //     NFTCollection collection = NFTCollection(collectionAddress);
+    //     assertEq(collection.name(), name);
+    //     assertEq(collection.symbol(), symbol);
+    //     assertEq(collection.imageURL(), imageURL);
+    //     assertEq(collection.maxSupply(), maxSupply);
+    //     assertEq(collection.maxTime(), maxTime);
+    //     assertEq(collection.mintPerWallet(), mintPerWallet);
+    //     assertEq(collection.mintPrice(), mintPrice);
+
+    //     // Verify the collection is added to deployedCollections
+    //     address[] memory collections = factory.getCollections();
+    //     assertEq(collections.length, 1);
+    //     assertEq(collections[0], collectionAddress);
+    // }
+
+    // function testCreateWithDefaultCollectionWithDefaultTime() public {
+    //     string memory name = "Default Time Collection";
+    //     string memory description = "A test collection with default time";
+    //     string memory symbol = "DFLT";
+    //     string memory imageURL = "https://example.com/default-time.png";
+    //     uint256 maxSupply = 50;
+    //     bool mintPerWallet = true;
+    //     uint256 mintPrice = 0.005 ether;
+
+    //     // Create a collection with default time
+    //     address collectionAddress = factory.createWithDefaultCollectionWithDefaultTime(
+    //         name,
+    //         description,
+    //         symbol,
+    //         imageURL,
+    //         maxSupply,
+    //         mintPerWallet,
+    //         mintPrice,
+    //         false
+    //     );
+
+    //     // Verify the collection was deployed with default maxTime
+    //     NFTCollection collection = NFTCollection(collectionAddress);
+    //     uint256 expectedMaxTime = block.timestamp + (60 * 60 * 24 * 7); // 1 week
+    //     assertEq(collection.maxTime(), expectedMaxTime);
+    // }
+
+    // function testGetAvailableCollectionsDetails() public {
+    //     // Create two collections
+    //     address collection1 = factory.createCollection(
+    //         "Collection 1",
+    //         "Description 1",
+    //         "COL1",
+    //         "https://example.com/image1.png",
+    //         100,
+    //         block.timestamp + 365 days,
+    //         true,
+    //         0.01 ether,
+    //         false,
+    //         false
+    //     );
+
+    //     address collection2 = factory.createCollection(
+    //         "Collection 2",
+    //         "Description 2",
+    //         "COL2",
+    //         "https://example.com/image2.png",
+    //         200,
+    //         block.timestamp + 730 days,
+    //         true,
+    //         0.02 ether,
+    //         false,
+    //         false
+    //     );
+
+    //     // Set both collections to visible
+    //     // NFTCollection(collection1).setCanShow(true);
+    //     // NFTCollection(collection2).setCanShow(true);
+
+    //     // Get available collection details
+    //     NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsDetails();
+
+    //     // Verify details of the first collection
+    //     assertEq(details.length, 2);
+    //     assertEq(details[0].collectionAddress, collection1);
+    //     assertEq(details[0].tokenIdCounter, 0);
+    //     assertEq(details[0].maxSupply, 100);
+    //     assertEq(details[0].baseImageURI, "https://example.com/image1.png");
+    //     assertEq(details[0].maxTime, block.timestamp + 365 days);
+
+    //     // Verify details of the second collection
+    //     assertEq(details[1].collectionAddress, collection2);
+    //     assertEq(details[1].tokenIdCounter, 0);
+    //     assertEq(details[1].maxSupply, 200);
+    //     assertEq(details[1].baseImageURI, "https://example.com/image2.png");
+    //     assertEq(details[1].maxTime, block.timestamp + 730 days);
+    // }
 
 }

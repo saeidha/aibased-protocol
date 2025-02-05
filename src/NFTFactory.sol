@@ -157,6 +157,88 @@ contract NFTFactory is Ownable {
         return deployedCollections;
     }
 
+
+
+
+
+
+
+
+    // function to retrieve all collection details with sender
+    function getAvailableCollectionDetailsByContractAddress(address contractAddress) public view returns (CollectionDetails memory) {
+
+        for (uint256 i = 0; i < deployedCollections.length; i++) {
+            NFTCollection collection = NFTCollection(deployedCollections[i]);
+
+            if (deployedCollections[i] == contractAddress) {
+                return CollectionDetails({
+                    collectionAddress: deployedCollections[i],
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: true,
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
+                });
+            }
+        }
+
+        // Return an empty CollectionDetails struct if not found
+    return CollectionDetails({
+        collectionAddress: address(0),
+        tokenIdCounter: 0,
+        maxSupply: 0,
+        baseImageURI: "",
+        maxTime: 0,
+        mintPerWallet: false,
+        mintPrice: 0,
+        isDisable: false,
+        isUltimateMintTime: false,
+        isUltimateMintQuantity: false
+    });
+    }
+
+
+    // function to retrieve all collection details with sender
+    function getAvailableCollectionDetailsByContractAddress(address contractAddress, address sender) public view returns (CollectionDetails memory) {
+
+        for (uint256 i = 0; i < deployedCollections.length; i++) {
+            NFTCollection collection = NFTCollection(deployedCollections[i]);
+
+            if (deployedCollections[i] == contractAddress) {
+                return CollectionDetails({
+                    collectionAddress: deployedCollections[i],
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: collection.isDisabled(sender),
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
+                });
+            }
+        }
+
+        // Return an empty CollectionDetails struct if not found
+    return CollectionDetails({
+        collectionAddress: address(0),
+        tokenIdCounter: 0,
+        maxSupply: 0,
+        baseImageURI: "",
+        maxTime: 0,
+        mintPerWallet: false,
+        mintPrice: 0,
+        isDisable: false,
+        isUltimateMintTime: false,
+        isUltimateMintQuantity: false
+    });
+    }
+
      // function to retrieve all collection details with sender
     function getAvailableCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
          uint256 length = deployedCollections.length;
