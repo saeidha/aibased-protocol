@@ -27,6 +27,8 @@ contract NFTFactory is Ownable {
      // Struct to hold collection details
     struct CollectionDetails {
         address collectionAddress;
+        string name;
+        string description;
         uint256 tokenIdCounter;
         uint256 maxSupply;
         string baseImageURI;
@@ -173,6 +175,8 @@ contract NFTFactory is Ownable {
             if (deployedCollections[i] == contractAddress) {
                 return CollectionDetails({
                     collectionAddress: deployedCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
@@ -189,6 +193,8 @@ contract NFTFactory is Ownable {
         // Return an empty CollectionDetails struct if not found
     return CollectionDetails({
         collectionAddress: address(0),
+        name: "",
+        description: "",
         tokenIdCounter: 0,
         maxSupply: 0,
         baseImageURI: "",
@@ -211,6 +217,8 @@ contract NFTFactory is Ownable {
             if (deployedCollections[i] == contractAddress) {
                 return CollectionDetails({
                     collectionAddress: deployedCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
@@ -227,6 +235,8 @@ contract NFTFactory is Ownable {
         // Return an empty CollectionDetails struct if not found
     return CollectionDetails({
         collectionAddress: address(0),
+        name: "",
+        description: "",
         tokenIdCounter: 0,
         maxSupply: 0,
         baseImageURI: "",
@@ -253,6 +263,8 @@ contract NFTFactory is Ownable {
             if (!collection.canNotToShow()) {
                 tempDetails[count] = CollectionDetails({
                     collectionAddress: deployedCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
@@ -290,6 +302,8 @@ contract NFTFactory is Ownable {
             if (!collection.canNotToShow()) {
                 tempDetails[count] = CollectionDetails({
                     collectionAddress: deployedCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),
@@ -328,6 +342,8 @@ contract NFTFactory is Ownable {
             if (collection.owner() == sender) {
                 tempDetails[count] = CollectionDetails({
                     collectionAddress: deployedCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
                     tokenIdCounter: collection.totalSupply(),
                     maxSupply: collection.maxSupply(),
                     baseImageURI: collection.imageURL(),

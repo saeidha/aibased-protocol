@@ -20,6 +20,8 @@ contract NFTFactoryTest is Test {
 
     NFTFactory.CollectionDetails emptyCollectionDetails = NFTFactory.CollectionDetails({
         collectionAddress: address(0),
+        name: "",
+        description: "",
         tokenIdCounter: 0,
         maxSupply: 0,
         baseImageURI: "",
