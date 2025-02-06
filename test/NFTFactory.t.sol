@@ -7,7 +7,6 @@ import "../src/NFTCollection.sol";
 
 contract NFTFactoryTest is Test {
     NFTFactory factory;
-    address userOwner = address(0x12323);
     address user = address(0x123);
     address user2 = address(0x124);
 
@@ -37,7 +36,7 @@ contract NFTFactoryTest is Test {
     receive() external payable {} 
 
     function setUp() public {
-        vm.prank(userOwner);
+        vm.prank(owner);
         factory = new NFTFactory();
     }
 
@@ -126,7 +125,7 @@ contract NFTFactoryTest is Test {
     function testMaxTimeRestrictionFailure() public {
         // Create a collection with maxTime = 1 hour
         address collectionAddress = factory.createCollection("Test", "Test Description", "TST", "ipfs://QmTestHash/", 10, defaultMaxTime, false, 0, false, false);
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
 
         // Simulate time passing (2 hours later)
         vm.warp(block.timestamp + 2 hours); // 2 hours later
@@ -140,15 +139,14 @@ contract NFTFactoryTest is Test {
 
     function testPaidMintAnotherUser() public {
     // Define addresses
-    address nftOwner = address(0x122342343); // Explicit owner address
     address user22 = address(0x999999);
 
     // Set up owner balance tracking
-    vm.deal(nftOwner, 0); // Ensure owner starts with 0 ETH
-    uint256 ownerBalanceBefore = nftOwner.balance;
+    vm.deal(owner, 0); // Ensure owner starts with 0 ETH
+    uint256 ownerBalanceBefore = owner.balance;
 
     // Create collection as owner
-    vm.prank(nftOwner);
+    vm.prank(owner);
     uint nftPrice = 0.01 ether;
     uint platformFee = 0.0005 ether;
     address collectionAddress = factory.createCollection(
@@ -171,7 +169,7 @@ contract NFTFactoryTest is Test {
     // Verify balances
     assertEq(collection.totalSupply(), 1, "Mint failed");
     assertEq(user22.balance, 0.9895 ether, "User ETH not deducted"); // 1 ETH - 0.01 ETH
-    assertEq(nftOwner.balance, ownerBalanceBefore + nftPrice, "Owner didn't receive ETH");
+    assertEq(owner.balance, ownerBalanceBefore + nftPrice, "Owner didn't receive ETH");
 }
 
     function testMintWithoutPayment() public {
@@ -181,7 +179,7 @@ contract NFTFactoryTest is Test {
             "Paid", "Test Description", "PAID", "ipfs://paid/", 
             10, defaultMaxTime, false, 0.01 ether, false, false
         );
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
         vm.expectRevert("Insufficient ETH sent");
         factory.mintNFT{value: 0.000005 ether}(collectionAddress, user, 1); // No ETH sent
     }
@@ -194,7 +192,7 @@ contract NFTFactoryTest is Test {
             "Paid", "Test Description", "PAID", "ipfs://paid/", 
             10, defaultMaxTime, false, 0.2 ether, false, false
         );
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
         
         // vm.expectRevert("Insufficient ETH sent");
         // factory.mintNFT{value: 0.00005 ether}(user, 1); // No ETH sent
@@ -209,7 +207,7 @@ contract NFTFactoryTest is Test {
             10, defaultMaxTime, false, 0.01 ether // mintPrice = 0.01 ETH
             , false, false
         );
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
         vm.deal(user, 1 ether);
         // Attempt to mint with insufficient payment
         vm.prank(user);
@@ -224,7 +222,7 @@ contract NFTFactoryTest is Test {
             10, defaultMaxTime, true, 0 // mintPerWallet = true
             , false, false
         );
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
         
         vm.deal(user, 1 ether);
         // Mint as user
@@ -240,7 +238,7 @@ contract NFTFactoryTest is Test {
 
 
 function testCreateAndMintFunction() public {
-    address user = address(0x123); // Define an EOA
+    // address user = address(0x123); // Define an EOA
     vm.deal(user, 1 ether); // Fund the user
 
     vm.startPrank(user); // 👈 Execute as user, not test contract
@@ -289,11 +287,10 @@ function testCalculatePlatformFee() public {
 function testAdminWithdraw() public {
     // Setup
     address admin = factory.owner();
-    address nftOwner = address(0x1343);
     vm.deal(admin, 1 ether);
 
     // Create collection
-    vm.prank(nftOwner);
+    vm.prank(owner);
 
     uint nftPrice = 0.003 ether;
     uint platformFee = 0.00015 ether;
@@ -315,7 +312,7 @@ function testAdminWithdraw() public {
     collection.withdraw();
     
     assertEq(address(collection).balance, 0);
-    assertEq(admin.balance, 1 ether + contractBalanceBefore);
+    assertEq(admin.balance, 1 ether + contractBalanceBefore + nftPrice);
 }
 
 
@@ -366,8 +363,7 @@ function testAdminFunctionsAccessControl() public {
 
     function testIsDisabledConditions() public {
 
-        vm.deal(userOwner, 1 ether);
-        vm.startPrank(userOwner);
+        vm.deal(owner, 1 ether);
         // Create restricted collection
         address collectionAddress = factory.createCollection(
             "DisabledTest", "Desc", "DIS", "ipfs://disabled", 
@@ -379,11 +375,11 @@ function testAdminFunctionsAccessControl() public {
         NFTCollection collection = NFTCollection(collectionAddress);
         
         // Initial state should be enabled
-        assertFalse(collection.isDisabled(userOwner), "Should not be disabled initially");
+        assertFalse(collection.isDisabled(user), "Should not be disabled initially");
         
-        // Test supply limit
-        factory.mintNFT{value: 0.0011 ether}(collectionAddress, userOwner, 1);
-        assertTrue(collection.isDisabled(userOwner), "Should disable after max supply");
+        factory.mintNFT{value: 0.0012 ether}(collectionAddress, user, 1);
+    
+        assertTrue(collection.isDisabled(user), "Should disable after max supply");
         
         // Create time-based test collection
         address timeCollectionAddress = factory.createCollection(
@@ -397,7 +393,7 @@ function testAdminFunctionsAccessControl() public {
         
         // Advance past maxTime
         vm.warp(block.timestamp + 61);
-        assertTrue(timeCollection.isDisabled(userOwner), "Should disable after maxTime");
+        assertTrue(timeCollection.isDisabled(user), "Should disable after maxTime");
         
         // Test wallet restriction
         address restrictedCollectionAddress = factory.createCollection(
@@ -427,7 +423,7 @@ function testAdminFunctionsAccessControl() public {
 
     // Test payGenerateFee with insufficient ETH
     function testPayGenerateFeeInsufficient() public {
-        vm.startPrank(userOwner);
+        vm.startPrank(owner);
         uint256 newFee = 0.0001 ether;
         factory.setGenerateFee(newFee);
         uint256 fee = defaultGenerateFee;
@@ -444,7 +440,7 @@ function testAdminFunctionsAccessControl() public {
     function testWithdrawAsOwner() public {
         
         uint256 fee = defaultGenerateFee;
-        vm.startPrank(userOwner);
+        vm.startPrank(owner);
         factory.setGenerateFee(fee);
         vm.stopPrank();
 
@@ -456,14 +452,14 @@ function testAdminFunctionsAccessControl() public {
         factory.payGenerateFee{value: fee}();
 
         uint256 contractBalanceBefore = address(factory).balance;
-        uint256 ownerBalanceBefore = userOwner.balance;
+        uint256 ownerBalanceBefore = owner.balance;
 
-        vm.prank(userOwner);
+        vm.prank(owner);
         factory.withdraw();
 
         assertEq(address(factory).balance, 0, "Contract balance should be 0");
         assertEq(
-            userOwner.balance,
+            owner.balance,
             ownerBalanceBefore + contractBalanceBefore,
             "Owner should receive contract balance"
         );
@@ -478,7 +474,7 @@ function testAdminFunctionsAccessControl() public {
 
     // Test fee update by owner
     function testSetGenerateFeeAsOwner() public {
-        vm.startPrank(userOwner);
+        vm.startPrank(owner);
         uint256 newFee = 0.2 ether;
         factory.setGenerateFee(newFee);
         assertEq(factory.getFee(), newFee, "Fee should update");
@@ -489,7 +485,7 @@ function testAdminFunctionsAccessControl() public {
         uint256 fee = 0.001 ether;
         
         // Set fee by owner
-        vm.prank(userOwner);
+        vm.prank(owner);
         factory.setGenerateFee(fee);
 
         // Test successful payment
@@ -510,7 +506,7 @@ function testAdminFunctionsAccessControl() public {
         uint256 fee = 0.001 ether;
         
         // Setup
-        vm.prank(userOwner);
+        vm.prank(owner);
         factory.setGenerateFee(fee);
         
         vm.deal(user, fee);
@@ -518,12 +514,12 @@ function testAdminFunctionsAccessControl() public {
         factory.payGenerateFee{value: fee}();
 
         // Test owner withdrawal
-        uint256 initialBalance = userOwner.balance;
-        vm.prank(userOwner);
+        uint256 initialBalance = owner.balance;
+        vm.prank(owner);
         factory.withdraw();
         
         assertEq(address(factory).balance, 0, "Funds not withdrawn");
-        assertEq(userOwner.balance, initialBalance + fee, "Funds not received");
+        assertEq(owner.balance, initialBalance + fee, "Funds not received");
 
         // Test non-owner withdrawal attempt
         vm.prank(user);
@@ -536,7 +532,7 @@ function testAdminFunctionsAccessControl() public {
         uint256 newFee = 0.002 ether;
         
         // Test owner sets fee
-        vm.startPrank(userOwner);
+        vm.startPrank(owner);
         factory.setGenerateFee(newFee);
         assertEq(factory.getFee(), newFee, "Fee not updated");
         vm.stopPrank();
@@ -549,7 +545,7 @@ function testAdminFunctionsAccessControl() public {
  // Test retrieving details for a valid contract address
     function testGetDetailsByValidAddress() public {
         // Create a test collection
-        address collectionAddress = createTestCollection(userOwner, 100, block.timestamp + 1 days, false);
+        address collectionAddress = createTestCollection(owner, 100, block.timestamp + 1 days, false);
         
         // Retrieve details
         NFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(collectionAddress);
@@ -562,7 +558,7 @@ function testAdminFunctionsAccessControl() public {
     }
 
     // Test retrieving details for an invalid contract address
-    function testGetDetailsByInvalidAddress() public {
+    function testGetDetailsByInvalidAddress() view public {
         // Attempt to retrieve details for a non-existent collection
         address invalidAddress = address(0x999);
         
@@ -574,10 +570,10 @@ function testAdminFunctionsAccessControl() public {
     // Test retrieving details for a collection with ultimate mint conditions
     function testGetDetailsWithUltimateMintConditions() public {
         // Create a time-sensitive collection (last hour)
-        address timeCol = createTestCollection(userOwner, 1000, type(uint256).max, false);
+        address timeCol = createTestCollection(owner, 1000, type(uint256).max, false);
         
         // Create a quantity-sensitive collection
-        address quantityCol = createTestCollection(userOwner, type(uint256).max, block.timestamp + 1 days, false);
+        address quantityCol = createTestCollection(owner, type(uint256).max, block.timestamp + 1 days, false);
 
         // Retrieve details for time-sensitive collection
         NFTFactory.CollectionDetails memory timeDetails = factory.getCollectionDetailsByContractAddress(timeCol);
@@ -591,7 +587,7 @@ function testAdminFunctionsAccessControl() public {
     // Test retrieving details for a collection with minting restrictions
     function testGetDetailsWithMintRestrictions() public {
         // Create a restricted collection
-        address restrictedCol = createTestCollection(userOwner, 10, block.timestamp + 1 days, true);
+        address restrictedCol = createTestCollection(owner, 10, block.timestamp + 1 days, true);
         
         // Mint from restricted collection to trigger wallet restriction
         vm.deal(user, 0.1 ether);
@@ -607,9 +603,9 @@ function testAdminFunctionsAccessControl() public {
     }
 
     // Helper to create test collections
-    function createTestCollection(address owner, uint256 maxSupply, uint256 maxTime, bool mintPerWallet) internal returns (address) {
-        vm.prank(userOwner);
-        return factory.createCollection(
+    function createTestCollection(address creator, uint256 maxSupply, uint256 maxTime, bool mintPerWallet) internal returns (address) {
+        vm.startPrank(creator);
+        address collectionAddress = factory.createCollection(
             "Test",
             "Test Description",
             "TST",
@@ -621,6 +617,9 @@ function testAdminFunctionsAccessControl() public {
             false,
             false
         );
+        vm.stopPrank();
+
+        return collectionAddress;
     }
 
     // Helper to mint multiple NFTs
@@ -772,12 +771,63 @@ function testAdminFunctionsAccessControl() public {
         uint256 length = 10_000;
         for (uint256 i = 0; i < length; i++) {
             // Create a time-sensitive collection (last hour)
-            createTestCollection(userOwner, 1000, type(uint256).max, false);
+            createTestCollection(owner, 1000, type(uint256).max, false);
         }
         // vm.resumeGasMetering();
         address[] memory details = factory.getCollections();
         NFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsToMintDetails();
         assertEq(details.length, length);
         assertEq(detailsCollectios.length, length);
+    }
+
+
+    
+    function testMintFeeToCreatorAccount() public {
+        address creatorUser = address(0x2000);
+        vm.deal(creatorUser, 0.1 ether);
+        uint256 creatorUserBalanceBefore = creatorUser.balance;
+
+        address minterUser = address(0x2100);
+        vm.deal(minterUser, 0.3 ether);
+        uint256 minterUserBalanceBefore = minterUser.balance;
+
+        uint256 nftPrice = 0.002 ether;
+        uint256 nftFee = 0.0001 ether;
+
+        uint256 ownerBalanceBefore = owner.balance;
+
+        vm.startPrank(creatorUser);
+        // Create a  collection
+        address collection = factory.createWithDefaultCollectionWithDefaultTime("Restricted Collection", 
+        "A restricted collection", 
+        "RCOL", 
+        "https://example.com/restricted.png", 
+        10, 
+        false, 
+        nftPrice, 
+        false);
+
+        vm.stopPrank();
+        
+        // Mint from restricted collection to trigger wallet restriction
+        uint256 mintPrice = nftPrice + nftFee;
+        uint256 totalNFTValue = mintPrice * 3;
+        vm.startPrank(minterUser);
+        factory.mintNFT{value: totalNFTValue}(collection, minterUser, 3);
+
+        NFTCollection nftCollection = NFTCollection(collection);
+        // Verify balances
+        assertEq(nftCollection.totalSupply(), 3, "Mint failed");
+        assertEq(nftCollection.maxSupply(), 10, "Mint failed");
+        assertEq(minterUser.balance, minterUserBalanceBefore - totalNFTValue, "User ETH not deducted");
+        assertEq(collection.balance, (nftFee * 3), "User ETH not deducted");
+        assertEq(creatorUser.balance, creatorUserBalanceBefore + (nftPrice * 3), "Owner didn't receive ETH");
+        vm.stopPrank();
+
+        vm.startPrank(owner);
+        nftCollection.withdraw();
+        
+        assertEq(owner.balance, ownerBalanceBefore + (nftFee * 3), "Owner should receive contract balance");
+        assertEq(collection.balance, 0, "User ETH not deducted");
     }
 }
