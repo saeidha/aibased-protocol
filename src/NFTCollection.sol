@@ -105,7 +105,6 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
                 revert("Only one NFT per wallet");
             }
             require(!hasMinted[to], "Wallet already minted");
-            hasMinted[to] = true;
         }
 
         if (ownerPayment > 0) {
@@ -115,6 +114,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
         // Mint tokens
         for (uint256 i = 0; i < quantity; i++) {
+            hasMinted[to] = true;
             _increment();
             _safeMint(to, _tokenIdCounter._value);
         }

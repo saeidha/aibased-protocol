@@ -97,8 +97,8 @@ contract NFTFactory is Ownable {
         uint256 mintPrice,
         bool isUltimateMintQuantity
     ) public returns (address) {
-        /// @dev Default maxTime is 168 hours equal to 1 week
-        uint256 maxTime = block.timestamp + (60 * 60 * 24 * 7);
+        /// @dev Default maxTime is 1 week
+        uint256 maxTime = block.timestamp + 7 days;
         return
             createCollection(
                 name,
@@ -150,7 +150,7 @@ contract NFTFactory is Ownable {
         uint256 mintPrice
     ) public returns (address) {
         /// @dev Default maxTime is 168 hours equal to 1 week
-        uint256 maxTime = block.timestamp + (60 * 60 * 24 * 7);
+        uint256 maxTime = block.timestamp + 7 days;
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply = type(uint256).max;
         return
@@ -175,7 +175,7 @@ contract NFTFactory is Ownable {
         string memory imageURL
     ) public payable {
         /// @dev Default maxTime is 1 hours
-        uint256 maxTime = block.timestamp + 60 * 60;
+        uint256 maxTime = block.timestamp + 1 hours;
         /// @dev Default maxSupply is 1
         uint256 maxSupply = 1;
 
@@ -220,20 +220,10 @@ contract NFTFactory is Ownable {
         uint256 quantity
     ) public payable {
         NFTCollection collection = NFTCollection(collectionAddress);
+        bool mintedBefore = collection.hasMinted(to);
         collection.mintNFT{value: msg.value}(to, quantity);
 
-        bool isExist = false;
-        uint256 length = getUserCollectionsCount(to);
-        address[] memory usersCollection = _usersCollections[to];
-
-        for (uint256 i = 0; i < length; i++) {
-            if (collectionAddress == usersCollection[i]) {
-                addUsersMints(to, collectionAddress);
-                isExist = true;
-                return;
-            }
-        }
-        if (!isExist) {
+        if (!mintedBefore) {
             addUsersMints(to, collectionAddress);
         }
     }
@@ -522,15 +512,11 @@ contract NFTFactory is Ownable {
         _usersCollections[user].push(collection);
     }
 
-    function getUserCollectionsCount(
-        address user
-    ) public view returns (uint256) {
+    function getUserCollectionsCount(address user) public view returns (uint256) {
         return _usersCollections[user].length;
     }
 
-    function getUserCollections(
-        address user
-    ) public view returns (address[] memory) {
+    function getUserCollections(address user) public view returns (address[] memory) {
         return _usersCollections[user];
     }
 }
