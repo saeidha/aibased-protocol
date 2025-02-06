@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.24;
 
 import "./NFTCollection.sol";
 
@@ -8,6 +8,9 @@ contract NFTFactory is Ownable {
     
     address[] public deployedCollections;
     address[] public mintPadCollections;
+
+    mapping(address => address[]) private _usersCollections;
+    mapping(address => address[]) private _usersMint;
 
     uint256 private generateFee = 0 ether;
 
@@ -42,6 +45,10 @@ contract NFTFactory is Ownable {
         bool isUltimateMintQuantity;
     }
 
+
+
+
+//// ------------------------------CREATE COLLECTION------------------------------ ////
     function createCollection(
         string memory name,
         string memory description,
@@ -69,6 +76,7 @@ contract NFTFactory is Ownable {
         
         deployedCollections.push(address(collection));
         mintPadCollections.push(address(collection));
+        addUsersCollections(msg.sender, address(collection));
         emit CollectionCreated(address(collection),
             name,
             description, 
@@ -110,9 +118,9 @@ contract NFTFactory is Ownable {
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply=  type(uint256).max;
         return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice, isUltimateMintTime, true);
-        }
+    }
 
-        function createWithDefaultCollectionWithMaxSupplyAndDefaultTime(
+    function createWithDefaultCollectionWithMaxSupplyAndDefaultTime(
             string memory name,
             string memory description,
             string memory symbol,
@@ -125,8 +133,7 @@ contract NFTFactory is Ownable {
             /// @dev Default maxSupply is max uint256
             uint256 maxSupply=  type(uint256).max;
             return createCollection(name, description, symbol, imageURL, maxSupply, maxTime, mintPerWallet, mintPrice, false, true);
-        }
-
+    }
 
     function createAndMint(
             string memory name,
@@ -153,11 +160,47 @@ contract NFTFactory is Ownable {
                         msg.sender
                     );
 
-        deployedCollections.push(address(collection));
-        emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, true, 0, msg.sender);
+        address collectionAddress = address(collection);
+        deployedCollections.push(collectionAddress);
+        addUsersMints(msg.sender, collectionAddress);
+        emit CollectionCreated(collectionAddress, name, description, symbol, maxSupply, maxTime, imageURL, true, 0, msg.sender);
         collection.mintNFT{value: msg.value}(msg.sender, 1);
     }
+//// ------------------------------------------------------------ ////
 
+
+
+//// ---------------------------MINT--------------------------- ////
+
+    function mintNFT(address collectionAddress, address to, uint256 quantity) public payable {
+
+        NFTCollection collection = NFTCollection(collectionAddress); 
+        collection.mintNFT{value: msg.value}(to, quantity);
+        
+        bool isExist = false;
+        uint256 length = getUserCollectionsCount(to);
+        address[] memory usersCollection = _usersCollections[to];
+
+        for (uint256 i = 0; i < length; i++) {
+
+            if (collectionAddress == usersCollection[i]) {
+
+                addUsersMints(to, collectionAddress);
+                isExist = true;
+                return;
+            }
+        }
+        if (!isExist) {
+
+            addUsersMints(to, collectionAddress);
+        }
+    }
+
+//// ------------------------------------------------------------ ////
+
+
+
+///// --------------------------- Collection GETTERS --------------------------- ////
     function getCollections() public view returns (address[] memory) {
 
         return deployedCollections;
@@ -168,14 +211,124 @@ contract NFTFactory is Ownable {
         return mintPadCollections;
     }
 
+    ///// --------------- RETRIEVE ALL AVAILABLE COLLECTION DETAILS --------- ////
+    // function to retrieve all available collection details
+    function getAvailableCollectionsToMintDetails() public view returns (CollectionDetails[] memory) {
+         uint256 length = mintPadCollections.length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < length; i++) {
+            NFTCollection collection = NFTCollection(mintPadCollections[i]);
+
+            if (!collection.canNotToShow()) {
+                tempDetails[count] = CollectionDetails({
+                    collectionAddress: mintPadCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: true,
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
+                });
+                count++;
+            }
+        }
+
+        // Create the final fixed-size array with the exact count
+        CollectionDetails[] memory details = new CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            details[i] = tempDetails[i];
+        }
+
+        return details;
+    }
+
+    // function to retrieve all available collection details with sender address
+    function getAvailableCollectionsToMintDetails(address sender) public view returns (CollectionDetails[] memory) {
+         uint256 length = mintPadCollections.length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
+        uint256 count = 0;
+
+        for (uint256 i = 0; i < length; i++) {
+            NFTCollection collection = NFTCollection(mintPadCollections[i]);
+
+            if (!collection.canNotToShow()) {
+                tempDetails[count] = CollectionDetails({
+                    collectionAddress: mintPadCollections[i],
+                    name: collection.name(),
+                    description:collection.description(),
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: collection.isDisabled(sender),
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
+                });
+                count++;
+            }
+        }
+
+        // Create the final fixed-size array with the exact count
+        CollectionDetails[] memory details = new CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            details[i] = tempDetails[i];
+        }
+
+        return details;
+    }
+    ///// -------------------------------------------------------------------------- ////
+
+    ///// --------------- RETRIEVE USER COLLECTION DETAILS --------- ////
+    // function to retrieve user collection details with sender address
+    function getUserCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
+         uint256 length = _usersCollections[sender].length;
+
+        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
+        CollectionDetails[] memory details = new CollectionDetails[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            NFTCollection collection = NFTCollection(_usersCollections[sender][i]);
+
+            if (collection.owner() == sender) {
+                details[i] = CollectionDetails({
+                    collectionAddress: _usersCollections[sender][i],
+                    name: collection.name(),
+                    description:collection.description(),
+                    tokenIdCounter: collection.totalSupply(),
+                    maxSupply: collection.maxSupply(),
+                    baseImageURI: collection.imageURL(),
+                    maxTime: collection.maxTime(),
+                    mintPerWallet: collection.mintPerWallet(),
+                    mintPrice: collection.mintPrice(),
+                    isDisable: collection.isDisabled(sender),
+                    isUltimateMintTime: collection.isUltimateMintTime(),
+                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
+                });
+            }
+        }
+
+        return details;
+    }
+    ///// -------------------------------------------------------------------------- ////
 
 
 
-
-
-
-    // function to retrieve all collection details with sender
-    function getAvailableCollectionDetailsByContractAddress(address contractAddress) public view returns (CollectionDetails memory) {
+    ///// --------------- RETRIEVE SPECIFIC COLLECTION DETAILS BY CONTRACT ADDRESS --------- ////
+    /// function to retrieve specefic available collection details by contract address
+    function getCollectionDetailsByContractAddress(address contractAddress) public view returns (CollectionDetails memory) {
 
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
@@ -199,25 +352,24 @@ contract NFTFactory is Ownable {
         }
 
         // Return an empty CollectionDetails struct if not found
-    return CollectionDetails({
-        collectionAddress: address(0),
-        name: "",
-        description: "",
-        tokenIdCounter: 0,
-        maxSupply: 0,
-        baseImageURI: "",
-        maxTime: 0,
-        mintPerWallet: false,
-        mintPrice: 0,
-        isDisable: false,
-        isUltimateMintTime: false,
-        isUltimateMintQuantity: false
-    });
+        return CollectionDetails({
+            collectionAddress: address(0),
+            name: "",
+            description: "",
+            tokenIdCounter: 0,
+            maxSupply: 0,
+            baseImageURI: "",
+            maxTime: 0,
+            mintPerWallet: false,
+            mintPrice: 0,
+            isDisable: false,
+            isUltimateMintTime: false,
+            isUltimateMintQuantity: false
+        });
     }
 
-
-    // function to retrieve all collection details with sender
-    function getAvailableCollectionDetailsByContractAddress(address contractAddress, address sender) public view returns (CollectionDetails memory) {
+    /// function to retrieve specefic available collection details by contract address
+    function getCollectionDetailsByContractAddress(address contractAddress, address sender) public view returns (CollectionDetails memory) {
 
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
@@ -256,133 +408,22 @@ contract NFTFactory is Ownable {
                 isUltimateMintQuantity: false
             });
     }
-
-     // function to retrieve all collection details with sender
-    function getAvailableCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
-         uint256 length = deployedCollections.length;
-
-        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
-        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
-        uint256 count = 0;
-
-        for (uint256 i = 0; i < length; i++) {
-            NFTCollection collection = NFTCollection(deployedCollections[i]);
-
-            if (!collection.canNotToShow()) {
-                tempDetails[count] = CollectionDetails({
-                    collectionAddress: deployedCollections[i],
-                    name: collection.name(),
-                    description:collection.description(),
-                    tokenIdCounter: collection.totalSupply(),
-                    maxSupply: collection.maxSupply(),
-                    baseImageURI: collection.imageURL(),
-                    maxTime: collection.maxTime(),
-                    mintPerWallet: collection.mintPerWallet(),
-                    mintPrice: collection.mintPrice(),
-                    isDisable: collection.isDisabled(sender),
-                    isUltimateMintTime: collection.isUltimateMintTime(),
-                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
-                });
-                count++;
-            }
-        }
-
-        // Create the final fixed-size array with the exact count
-        CollectionDetails[] memory details = new CollectionDetails[](count);
-        for (uint256 i = 0; i < count; i++) {
-            details[i] = tempDetails[i];
-        }
-
-        return details;
-    }
-
-      // function to retrieve all collection details
-    function getAvailableCollectionsDetails() public view returns (CollectionDetails[] memory) {
-         uint256 length = deployedCollections.length;
-
-        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
-        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
-        uint256 count = 0;
-
-        for (uint256 i = 0; i < length; i++) {
-            NFTCollection collection = NFTCollection(deployedCollections[i]);
-
-            if (!collection.canNotToShow()) {
-                tempDetails[count] = CollectionDetails({
-                    collectionAddress: deployedCollections[i],
-                    name: collection.name(),
-                    description:collection.description(),
-                    tokenIdCounter: collection.totalSupply(),
-                    maxSupply: collection.maxSupply(),
-                    baseImageURI: collection.imageURL(),
-                    maxTime: collection.maxTime(),
-                    mintPerWallet: collection.mintPerWallet(),
-                    mintPrice: collection.mintPrice(),
-                    isDisable: true,
-                    isUltimateMintTime: collection.isUltimateMintTime(),
-                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
-                });
-                count++;
-            }
-        }
-
-        // Create the final fixed-size array with the exact count
-        CollectionDetails[] memory details = new CollectionDetails[](count);
-        for (uint256 i = 0; i < count; i++) {
-            details[i] = tempDetails[i];
-        }
-
-        return details;
-    }
+    ///// -------------------------------------------------------------------------- ////
 
 
-    /// get all collection for a address
-    function getAllCollectionsForDetails(address sender) public view returns (CollectionDetails[] memory) {
-         uint256 length = deployedCollections.length;
 
-        // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
-        CollectionDetails[] memory tempDetails = new CollectionDetails[](length);
-        uint256 count = 0;
-
-        for (uint256 i = 0; i < length; i++) {
-            NFTCollection collection = NFTCollection(deployedCollections[i]);
-
-            if (collection.owner() == sender) {
-                tempDetails[count] = CollectionDetails({
-                    collectionAddress: deployedCollections[i],
-                    name: collection.name(),
-                    description:collection.description(),
-                    tokenIdCounter: collection.totalSupply(),
-                    maxSupply: collection.maxSupply(),
-                    baseImageURI: collection.imageURL(),
-                    maxTime: collection.maxTime(),
-                    mintPerWallet: collection.mintPerWallet(),
-                    mintPrice: collection.mintPrice(),
-                    isDisable: collection.isDisabled(sender),
-                    isUltimateMintTime: collection.isUltimateMintTime(),
-                    isUltimateMintQuantity: collection.isUltimateMintQuantity()
-                });
-                count++;
-            }
-        }
-
-        // Create the final fixed-size array with the exact count
-        CollectionDetails[] memory details = new CollectionDetails[](count);
-        for (uint256 i = 0; i < count; i++) {
-            details[i] = tempDetails[i];
-        }
-
-        return details;
-    }
-
+/// --------------------------- Generate Fee --------------------------- ////
     function payGenerateFee() public payable returns (bool) {
 
         require(msg.value >= generateFee, "Payable: msg.value must be equal to amount");
         return true;
         
     }
+///// -------------------------------------------------------------------------- ////
 
-    /////-------- ADMIN --------------/////
+
+
+///// ---------------------------- ADMIN ---------------------------------------- ////
     /// function
     function withdraw() public {
 
@@ -402,5 +443,42 @@ contract NFTFactory is Ownable {
         require(msg.sender == owner(), "Only admin");
         
         return generateFee;
+    }
+///// -------------------------------------------------------------------------- ////
+
+
+
+//// ------------------------------ Users MINT ---------------------------------- ////
+    function addUsersMints(address user, address collection) private {
+
+        _usersMint[user].push(collection);
+    }
+
+    function getUserMints(address user) public view returns (address[] memory) {
+
+         return _usersMint[user];
+    }
+
+    function getUserMintCount(address user) public view returns (uint256) {
+        
+         return _usersMint[user].length;
+    }
+
+//// ------------------------------ Users Collecions ----------------------------------////
+
+    function addUsersCollections(address user, address collection) private {
+
+        _usersCollections[user].push(collection);
+    }
+
+    function getUserCollectionsCount(address user) public view returns (uint256) {
+
+        
+        return _usersCollections[user].length;
+    }
+
+    function getUserCollections(address user) public view returns (address[] memory) {
+
+         return _usersCollections[user];
     }
 }

@@ -65,14 +65,14 @@ contract NFTFactoryTest is Test {
         // Mint as user
         vm.prank(user);
         // Mint 5 NFTs
-        collection.mintNFT{value: 0.0006 ether}(user, 5);
+        factory.mintNFT{value: 0.0006 ether}(collectionAddress, user, 5);
         assertEq(collection.totalSupply(), 5);
         assertEq(collection.ownerOf(1), user);
         assertEq(collection.ownerOf(5), user);
         
         // Test max supply limit
         vm.expectRevert("Exceeds max supply");
-        collection.mintNFT{value: 0.0006 ether}(user, 6);
+        factory.mintNFT{value: 0.0006 ether}(collectionAddress, user, 6);
     }
 
     function testMetadata() public {
@@ -80,7 +80,7 @@ contract NFTFactoryTest is Test {
     NFTCollection collection = NFTCollection(collectionAddress);
     
     // 3. Mint NFT
-    collection.mintNFT{value: 0.0001 ether}(user, 1);
+    factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
     
     // 4. Verify URI
     assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjogIlRlc3QgIzEiLCJkZXNjcmlwdGlvbiI6IlRTVCIsImltYWdlIjogImlwZnM6Ly9RbVRlc3RIYXNoLyJ9");
@@ -92,7 +92,7 @@ contract NFTFactoryTest is Test {
         NFTCollection collection = NFTCollection(collectionAddress);
 
         // Mint within the allowed time
-        collection.mintNFT{value: 0.0001 ether}(user, 1);
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
         assertEq(collection.totalSupply(), 1);
 
         // Simulate time passing (1 second)
@@ -100,7 +100,7 @@ contract NFTFactoryTest is Test {
         vm.deal(user, 1 ether);
         // Attempt to mint after maxTime has passed
         vm.expectRevert("Minting period has ended");
-        collection.mintNFT{value: 0.0001 ether}(user, 1);
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
     }
 
     function testDefaultMaxTime() public {
@@ -109,7 +109,7 @@ contract NFTFactoryTest is Test {
         NFTCollection collection = NFTCollection(collectionAddress);
 
         // Mint within the default 7-day period
-        collection.mintNFT{value: 0.0001 ether}(user, 1);
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
         assertEq(collection.totalSupply(), 1);
 
         // Simulate time passing (7 days + 1 second)
@@ -117,7 +117,7 @@ contract NFTFactoryTest is Test {
         vm.deal(user, 1 ether);
         // Attempt to mint after 7 days
         vm.expectRevert("Minting period has ended");
-        collection.mintNFT{value: 0.0001 ether}(user, 1);
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
     }
 
 
@@ -135,7 +135,7 @@ contract NFTFactoryTest is Test {
         // This should REVERT if the contract is working correctly
         // If it does NOT revert, the test will pass (indicating a vulnerability)
         vm.expectRevert("Minting period has ended");
-        collection.mintNFT{value: 0.0001 ether}(user, 1);
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
     }
 
     function testPaidMintAnotherUser() public {
@@ -166,7 +166,7 @@ contract NFTFactoryTest is Test {
     
     // Execute mint from user2
     vm.prank(user22);
-    collection.mintNFT{value: nftPrice + platformFee}(user22, 1);
+    factory.mintNFT{value: nftPrice + platformFee}(collectionAddress, user22, 1);
     
     // Verify balances
     assertEq(collection.totalSupply(), 1, "Mint failed");
@@ -183,7 +183,7 @@ contract NFTFactoryTest is Test {
         );
         NFTCollection collection = NFTCollection(collectionAddress);
         vm.expectRevert("Insufficient ETH sent");
-        collection.mintNFT{value: 0.000005 ether}(user, 1); // No ETH sent
+        factory.mintNFT{value: 0.000005 ether}(collectionAddress, user, 1); // No ETH sent
     }
 
 
@@ -197,9 +197,9 @@ contract NFTFactoryTest is Test {
         NFTCollection collection = NFTCollection(collectionAddress);
         
         // vm.expectRevert("Insufficient ETH sent");
-        // collection.mintNFT{value: 0.00005 ether}(user, 1); // No ETH sent
+        // factory.mintNFT{value: 0.00005 ether}(user, 1); // No ETH sent
 
-        collection.mintNFT{value: 0.01 ether}(user, 1); // No ETH sent
+        factory.mintNFT{value: 0.01 ether}(collectionAddress, user, 1); // No ETH sent
     }
 
     function testInsufficientPayment() public {
@@ -214,7 +214,7 @@ contract NFTFactoryTest is Test {
         // Attempt to mint with insufficient payment
         vm.prank(user);
         vm.expectRevert("Insufficient ETH sent");
-        collection.mintNFT{value: 0.0001 ether}(user, 1); // Send 0.005 ETH
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1); // Send 0.005 ETH
     }
 
     function testWalletRestriction() public {
@@ -229,12 +229,12 @@ contract NFTFactoryTest is Test {
         vm.deal(user, 1 ether);
         // Mint as user
         vm.prank(user);
-        collection.mintNFT{value: 0.0001 ether}(user, 1); // Mint 1 NFT
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1); // Mint 1 NFT
         
         // Attempt to mint again
         vm.prank(user);
         vm.expectRevert("Wallet already minted");
-        collection.mintNFT{value: 0.0001 ether}(user, 1); // Should fail
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1); // Should fail
     }
 
 
@@ -307,7 +307,7 @@ function testAdminWithdraw() public {
     // Mint NFTs (accumulate fees)
     vm.deal(user, 1 ether);
     vm.prank(user);
-    collection.mintNFT{value: nftPrice + platformFee}(user, 1);
+    factory.mintNFT{value: nftPrice + platformFee}(collectionAddress, user, 1);
 
     // Verify withdrawal
     uint256 contractBalanceBefore = address(collection).balance;
@@ -361,7 +361,7 @@ function testAdminFunctionsAccessControl() public {
     vm.startPrank(user);
     
     // Verify fee change through mint price calculation
-    collection.mintNFT{value: nftFee + changeFee}(user, 1);
+    factory.mintNFT{value: nftFee + changeFee}(collectionAddress, user, 1);
 }
 
     function testIsDisabledConditions() public {
@@ -382,7 +382,7 @@ function testAdminFunctionsAccessControl() public {
         assertFalse(collection.isDisabled(userOwner), "Should not be disabled initially");
         
         // Test supply limit
-        collection.mintNFT{value: 0.0011 ether}(userOwner, 1);
+        factory.mintNFT{value: 0.0011 ether}(collectionAddress, userOwner, 1);
         assertTrue(collection.isDisabled(userOwner), "Should disable after max supply");
         
         // Create time-based test collection
@@ -409,7 +409,7 @@ function testAdminFunctionsAccessControl() public {
         );
         NFTCollection restrictedCollection = NFTCollection(restrictedCollectionAddress);
         
-        restrictedCollection.mintNFT{value: 0.0011 ether}(user, 1);
+        factory.mintNFT{value: 0.0011 ether}(restrictedCollectionAddress, user, 1);
         assertTrue(restrictedCollection.isDisabled(user), "Should disable after wallet mint");
         assertFalse(restrictedCollection.isDisabled(user2), "Should allow other wallets");
     }
@@ -552,7 +552,7 @@ function testAdminFunctionsAccessControl() public {
         address collectionAddress = createTestCollection(userOwner, 100, block.timestamp + 1 days, false);
         
         // Retrieve details
-        NFTFactory.CollectionDetails memory details = factory.getAvailableCollectionDetailsByContractAddress(collectionAddress);
+        NFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(collectionAddress);
         
         // Verify returned details
         assertEq(details.collectionAddress, collectionAddress, "Incorrect collection address");
@@ -567,7 +567,7 @@ function testAdminFunctionsAccessControl() public {
         address invalidAddress = address(0x999);
         
         // Expect the function to revert or return empty details
-       NFTFactory.CollectionDetails memory invalidResult = factory.getAvailableCollectionDetailsByContractAddress(invalidAddress);
+       NFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
         assertTrue(emptyCollectionDetails.collectionAddress == invalidResult.collectionAddress, "Incorrect collection address");
     }
 
@@ -580,11 +580,11 @@ function testAdminFunctionsAccessControl() public {
         address quantityCol = createTestCollection(userOwner, type(uint256).max, block.timestamp + 1 days, false);
 
         // Retrieve details for time-sensitive collection
-        NFTFactory.CollectionDetails memory timeDetails = factory.getAvailableCollectionDetailsByContractAddress(timeCol);
+        NFTFactory.CollectionDetails memory timeDetails = factory.getCollectionDetailsByContractAddress(timeCol);
         assertTrue(timeDetails.isUltimateMintTime, "Should indicate ultimate mint time");
 
         // // Retrieve details for quantity-sensitive collection
-        NFTFactory.CollectionDetails memory quantityDetails = factory.getAvailableCollectionDetailsByContractAddress(quantityCol);
+        NFTFactory.CollectionDetails memory quantityDetails = factory.getCollectionDetailsByContractAddress(quantityCol);
         assertTrue(quantityDetails.isUltimateMintQuantity, "Should indicate ultimate mint quantity");
     }
 
@@ -596,10 +596,10 @@ function testAdminFunctionsAccessControl() public {
         // Mint from restricted collection to trigger wallet restriction
         vm.deal(user, 0.1 ether);
         vm.prank(user);
-        NFTCollection(restrictedCol).mintNFT{value: 0.0002 ether}(user, 1);
+        factory.mintNFT{value: 0.0002 ether}(restrictedCol, user, 1);
 
         // Retrieve details
-        NFTFactory.CollectionDetails memory details = factory.getAvailableCollectionDetailsByContractAddress(restrictedCol);
+        NFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(restrictedCol);
         
         // Verify restrictions
         assertTrue(details.mintPerWallet, "Should indicate mint per wallet restriction");
@@ -628,7 +628,7 @@ function testAdminFunctionsAccessControl() public {
         
         vm.prank(minter);
         for (uint256 i = 0; i < quantity; i++) {
-            NFTCollection(collection).mintNFT{value: 0.0001 ether}(minter, 1);
+            factory.mintNFT{value: 0.0001 ether}(collection, minter, 1);
         }
     }
 
@@ -675,7 +675,7 @@ function testAdminFunctionsAccessControl() public {
         assertEq(collections.length, 1);
         assertEq(collections[0], collectionAddress);
 
-        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
+        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
         assertEq(avaiableColloctions.length, 1);
         assertEq(avaiableColloctions[0].collectionAddress, collectionAddress);
     }
@@ -740,7 +740,7 @@ function testAdminFunctionsAccessControl() public {
         // NFTCollection(collection2).setCanShow(true);
 
         // Get available collection details
-        NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsDetails();
+        NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsToMintDetails();
 
         // Verify details of the first collection
         assertEq(details.length, 2);
@@ -759,7 +759,7 @@ function testAdminFunctionsAccessControl() public {
 
         vm.warp(block.timestamp + 366 days); 
 
-            NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
+            NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
             assertEq(avaiableColloctions.length, 1);
             assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
     }
@@ -776,7 +776,7 @@ function testAdminFunctionsAccessControl() public {
         }
         // vm.resumeGasMetering();
         address[] memory details = factory.getCollections();
-        NFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsDetails();
+        NFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsToMintDetails();
         assertEq(details.length, length);
         assertEq(detailsCollectios.length, length);
     }
