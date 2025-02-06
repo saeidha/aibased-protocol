@@ -757,11 +757,27 @@ function testAdminFunctionsAccessControl() public {
         assertEq(details[1].baseImageURI, "https://example.com/image2.png");
         assertEq(details[1].maxTime, block.timestamp + 730 days);
 
-    vm.warp(block.timestamp + 366 days); 
+        vm.warp(block.timestamp + 366 days); 
 
-        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
-        assertEq(avaiableColloctions.length, 1);
-        assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
+            NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsDetails();
+            assertEq(avaiableColloctions.length, 1);
+            assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
     }
 
+
+
+    // Test retrieving details for a collection with ultimate mint conditions
+    function testGetDetailsWithMillionsOFCollections() public {
+        vm.pauseGasMetering();
+        uint256 length = 10_000;
+        for (uint256 i = 0; i < length; i++) {
+            // Create a time-sensitive collection (last hour)
+            createTestCollection(userOwner, 1000, type(uint256).max, false);
+        }
+        // vm.resumeGasMetering();
+        address[] memory details = factory.getCollections();
+        NFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsDetails();
+        assertEq(details.length, length);
+        assertEq(detailsCollectios.length, length);
+    }
 }
