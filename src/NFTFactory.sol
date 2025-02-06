@@ -5,8 +5,10 @@ import "./NFTCollection.sol";
 
 
 contract NFTFactory is Ownable {
-    address[] public deployedCollections;
     
+    address[] public deployedCollections;
+    address[] public mintPadCollections;
+
     uint256 private generateFee = 0 ether;
 
     constructor() Ownable(msg.sender) {} 
@@ -66,6 +68,7 @@ contract NFTFactory is Ownable {
         );
         
         deployedCollections.push(address(collection));
+        mintPadCollections.push(address(collection));
         emit CollectionCreated(address(collection),
             name,
             description, 
@@ -149,7 +152,8 @@ contract NFTFactory is Ownable {
                         owner(),
                         msg.sender
                     );
-        
+
+        deployedCollections.push(address(collection));
         emit CollectionCreated(address(collection), name, description, symbol, maxSupply, maxTime, imageURL, true, 0, msg.sender);
         collection.mintNFT{value: msg.value}(msg.sender, 1);
     }
@@ -159,6 +163,10 @@ contract NFTFactory is Ownable {
         return deployedCollections;
     }
 
+    function getMintPadCollections() public view returns (address[] memory) {
+
+        return mintPadCollections;
+    }
 
 
 
@@ -233,20 +241,20 @@ contract NFTFactory is Ownable {
         }
 
         // Return an empty CollectionDetails struct if not found
-    return CollectionDetails({
-        collectionAddress: address(0),
-        name: "",
-        description: "",
-        tokenIdCounter: 0,
-        maxSupply: 0,
-        baseImageURI: "",
-        maxTime: 0,
-        mintPerWallet: false,
-        mintPrice: 0,
-        isDisable: false,
-        isUltimateMintTime: false,
-        isUltimateMintQuantity: false
-    });
+            return CollectionDetails({
+                collectionAddress: address(0),
+                name: "",
+                description: "",
+                tokenIdCounter: 0,
+                maxSupply: 0,
+                baseImageURI: "",
+                maxTime: 0,
+                mintPerWallet: false,
+                mintPrice: 0,
+                isDisable: false,
+                isUltimateMintTime: false,
+                isUltimateMintQuantity: false
+            });
     }
 
      // function to retrieve all collection details with sender

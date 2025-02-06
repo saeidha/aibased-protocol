@@ -258,7 +258,10 @@ function testCreateAndMintFunction() public {
     
     // Verify collection creation
     address[] memory collections = factory.getCollections();
-    assertEq(collections.length, 0, "Collection not created");
+    address[] memory mintpadCollections = factory.getMintPadCollections();
+    assertEq(collections.length, 1, "Collection not created");
+
+    assertEq(mintpadCollections.length, 0, "Mintpad Collection not created");
 }
 
 function testCalculatePlatformFee() public {
