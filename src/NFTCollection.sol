@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity 0.8.24;
+
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -18,8 +19,6 @@ contract NFTCollection is ERC721, Ownable {
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
     string public imageURL;
-    bool public revealed;
-    string public unrevealedURI;
     uint256 public maxTime;
     bool public mintPerWallet;
     uint256 public mintPrice;
@@ -46,7 +45,6 @@ contract NFTCollection is ERC721, Ownable {
     ) ERC721(name, symbol) Ownable(initialOwner) {
 
 
-require(_initialPrice >= 0, "Mint Price Should be grather than or equal to zero ");
 
 require(_maxTime >= block.timestamp + 60, "Max time should be end up next minutes");
 
@@ -55,7 +53,6 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         maxSupply = _maxSupply;
         imageURL = _imageURL;
         _tokenIdCounter._value = 0;
-        revealed = true;
         maxTime =  _maxTime;
         mintPerWallet = _mintPerWallet;
         description = _description;
@@ -125,85 +122,54 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         _tokenIdCounter._value += 1;
     }
 
-    function reveal() public onlyOwner {
-        revealed = true;
-    }
-
-        // function setBaseURI(string memory newBaseURI) public onlyOwner {        
-    //     baseTokenURI = newBaseURI;
-    // }
-
-    // function _baseURI() internal view override returns (string memory) {
-    //     return baseTokenURI;
-    // }
-
-    // function tokenURI(uint256 tokenId) public view override returns (string memory) {
-    //     require(exists(tokenId), "Nonexistent token");
-        
-    //     if (!revealed) {
-    //         return unrevealedURI;
-    //     }
-        
-    //     return string(abi.encodePacked(
-    //         baseTokenURI
-    //     ));
-    // }
-
     function _baseURI() internal pure override returns (string memory) {
         return "data:application/json;base64,";
     }
 
 
     function contractURI() external view returns (string memory) {
-
-        string memory encodedName = string(abi.encodePacked(name()));
-        string memory imageURI = string(abi.encodePacked(imageURL));
-        string memory _description = string(abi.encodePacked(description));
+        string memory encodedName = string(abi.encode(name()));
+        string memory imageURI = string(abi.encode(imageURL));
+        string memory _description = string(abi.encode(description));
 
         string memory json = Base64.encode(
             bytes(
                 string(
-                        abi.encodePacked(
-                            '{"name": "', encodedName, '",',
-                            '"description":"', _description, '",',
-                            '"image": "', imageURI, '"}'
+                    abi.encode(
+                        '{"name": "', encodedName, '",',
+                        '"description":"', _description, '",',
+                        '"image": "', imageURI, '"}'
                     )
                 )
             )
         );
-        
-        return string(abi.encodePacked(_baseURI(), json));
+
+        return string(abi.encode(_baseURI(), json));
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(exists(tokenId), "Nonexistent token");
-        
-        if (!revealed) {
-            return unrevealedURI;
-        }
-        
-        
+
         string memory nameWithTokenId = string(
-            abi.encodePacked(name() ," #", Strings.toString(tokenId))
+            abi.encode(name(), " #", Strings.toString(tokenId))
         );
 
-        string memory imageURI = string(abi.encodePacked(imageURL));
-        
-        string memory _description = string(abi.encodePacked(description));
+        string memory imageURI = string(abi.encode(imageURL));
+        string memory _description = string(abi.encode(description));
 
         string memory json = Base64.encode(
             bytes(
                 string(
-                        abi.encodePacked(
-                            '{"name": "', nameWithTokenId, '",',
-                            '"description":"', _description, '",',
-                            '"image": "', imageURI, '"}'
-                        )
+                    abi.encode(
+                        '{"name": "', nameWithTokenId, '",',
+                        '"description":"', _description, '",',
+                        '"image": "', imageURI, '"}'
+                    )
                 )
             )
         );
 
-        return string(abi.encodePacked(_baseURI(), json));
+        return string(abi.encode(_baseURI(), json));
     }
 
     // Custom existence check using owner lookup
