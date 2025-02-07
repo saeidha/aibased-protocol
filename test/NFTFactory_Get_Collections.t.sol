@@ -251,7 +251,7 @@ contract NFTFactoryTest is Test {
         
 
         // Verify user collections
-        assertEq(factory.getUserCollectionsCount(user1), 3, "Should track all creations");
+        assertEq(factory.getUserCollectionsCount(user1), 5, "Should track all creations");
         assertEq(factory.getUserMintCount(user1), 2, "Just mint user");
         assertEq(factory.getMintPadCollections().length, 3, "Should exclude createAndMint");
 
@@ -280,7 +280,7 @@ contract NFTFactoryTest is Test {
         
 
         // Verify user collections
-        assertEq(factory.getUserCollectionsCount(user2), 3, "Should track all creations");
+        assertEq(factory.getUserCollectionsCount(user2), 5, "Should track all creations");
         assertEq(factory.getUserMintCount(user2), 2, "Just mint user");
         assertEq(factory.getMintPadCollections().length,6, "Should exclude createAndMint");
     }

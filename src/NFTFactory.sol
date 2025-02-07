@@ -190,6 +190,7 @@ contract NFTFactory is Ownable {
         address collectionAddress = address(collection);
         deployedCollections.push(collectionAddress);
         addUsersMints(msg.sender, collectionAddress);
+        addUsersCollections(msg.sender, collectionAddress);
         emit CollectionCreated(
             collectionAddress,
             name,
@@ -318,19 +319,20 @@ contract NFTFactory is Ownable {
     ///// --------------- RETRIEVE USER COLLECTION DETAILS --------- ////
     // function to retrieve user collection details with sender address
     function getUserCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
-        uint256 length = _usersCollections[sender].length;
+        address[] memory usersCollections = getUserCollections(sender);
+        uint256 length = usersCollections.length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
         CollectionDetails[] memory details = new CollectionDetails[](length);
 
         for (uint256 i = 0; i < length; i++) {
             NFTCollection collection = NFTCollection(
-                _usersCollections[sender][i]
+                usersCollections[i]
             );
 
             if (collection.owner() == sender) {
                 details[i] = CollectionDetails({
-                    collectionAddress: _usersCollections[sender][i],
+                    collectionAddress: address(collection),
                     name: collection.name(),
                     description: collection.description(),
                     tokenIdCounter: collection.totalSupply(),
