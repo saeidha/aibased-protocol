@@ -128,19 +128,14 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
 
     function contractURI() external view returns (string memory) {
-        string memory encodedName = string(abi.encode(name()));
-        string memory imageURI = string(abi.encode(imageURL));
-        string memory _description = string(abi.encode(description));
 
         string memory json = Base64.encode(
             bytes(
-                string(
-                    abi.encode(
-                        '{"name": "', encodedName, '",',
-                        '"description":"', _description, '",',
-                        '"image": "', imageURI, '"}'
-                    )
-                )
+                string.concat(
+                '{"name": "', name(), '",',
+                '"description":"', description, '",',
+                '"image": "', imageURL, '"}'
+            )
             )
         );
 
@@ -148,29 +143,25 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(exists(tokenId), "Nonexistent token");
+    require(exists(tokenId), "Nonexistent token");
 
-        string memory nameWithTokenId = string(
-            abi.encode(name(), " #", Strings.toString(tokenId))
-        );
+    // Construct the name with the token ID
+    string memory nameWithTokenId = string.concat(name(), " #", Strings.toString(tokenId));
 
-        string memory imageURI = string(abi.encode(imageURL));
-        string memory _description = string(abi.encode(description));
-
-        string memory json = Base64.encode(
-            bytes(
-                string(
-                    abi.encode(
-                        '{"name": "', nameWithTokenId, '",',
-                        '"description":"', _description, '",',
-                        '"image": "', imageURI, '"}'
-                    )
-                )
+    // Construct the JSON metadata using string.concat
+    string memory json = Base64.encode(
+        bytes(
+            string.concat(
+                '{"name": "', nameWithTokenId, '",',
+                '"description":"', description, '",',
+                '"image": "', imageURL, '"}'
             )
-        );
+        )
+    );
 
-        return string(abi.encode(_baseURI(), json));
-    }
+    // Return the full token URI
+    return string.concat(_baseURI(), json);
+}
 
     // Custom existence check using owner lookup
     function exists(uint256 tokenId) public view returns (bool) {
