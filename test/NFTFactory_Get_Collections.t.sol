@@ -6,7 +6,7 @@ import "../src/NFTFactory.sol";
 import "../src/NFTCollection.sol";
 
 contract NFTFactoryTest is Test {
-    NFTFactory factory;
+    AIBasedNFTFactory factory;
     address owner = address(0x123);
     address user1 = address(0x456);
     address user2 = address(0x789);
@@ -15,7 +15,7 @@ contract NFTFactoryTest is Test {
         vm.deal(owner, 100 ether);
         vm.deal(user1, 100 ether);
         vm.deal(user2, 100 ether);
-        factory = new NFTFactory();
+        factory = new AIBasedNFTFactory();
     }
 
     // ERC721 receiver support for test contract

@@ -9,7 +9,7 @@ contract DeployScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         
-        NFTFactory factory = new NFTFactory();
+        AIBasedNFTFactory factory = new AIBasedNFTFactory();
         
         vm.stopBroadcast();
 

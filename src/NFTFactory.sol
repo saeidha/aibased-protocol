@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "./NFTCollection.sol";
 
-contract NFTFactory is Ownable {
+contract AIBasedNFTFactory is Ownable {
     address[] public deployedCollections;
     address[] public mintPadCollections;
 

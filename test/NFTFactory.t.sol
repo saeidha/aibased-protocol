@@ -6,7 +6,7 @@ import "../src/NFTFactory.sol";
 import "../src/NFTCollection.sol";
 
 contract NFTFactoryTest is Test {
-    NFTFactory factory;
+    AIBasedNFTFactory factory;
     address user = address(0x123);
     address user2 = address(0x124);
 
@@ -17,7 +17,7 @@ contract NFTFactoryTest is Test {
 
 
 
-    NFTFactory.CollectionDetails emptyCollectionDetails = NFTFactory.CollectionDetails({
+    AIBasedNFTFactory.CollectionDetails emptyCollectionDetails = AIBasedNFTFactory.CollectionDetails({
         collectionAddress: address(0),
         name: "",
         description: "",
@@ -37,7 +37,7 @@ contract NFTFactoryTest is Test {
 
     function setUp() public {
         vm.prank(owner);
-        factory = new NFTFactory();
+        factory = new AIBasedNFTFactory();
     }
 
     function testCreateCollection() public {
@@ -548,7 +548,7 @@ function testAdminFunctionsAccessControl() public {
         address collectionAddress = createTestCollection(owner, 100, block.timestamp + 1 days, false);
         
         // Retrieve details
-        NFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(collectionAddress);
+        AIBasedNFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(collectionAddress);
         
         // Verify returned details
         assertEq(details.collectionAddress, collectionAddress, "Incorrect collection address");
@@ -563,7 +563,7 @@ function testAdminFunctionsAccessControl() public {
         address invalidAddress = address(0x999);
         
         // Expect the function to revert or return empty details
-       NFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
+       AIBasedNFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
         assertTrue(emptyCollectionDetails.collectionAddress == invalidResult.collectionAddress, "Incorrect collection address");
     }
 
@@ -576,11 +576,11 @@ function testAdminFunctionsAccessControl() public {
         address quantityCol = createTestCollection(owner, type(uint256).max, block.timestamp + 1 days, false);
 
         // Retrieve details for time-sensitive collection
-        NFTFactory.CollectionDetails memory timeDetails = factory.getCollectionDetailsByContractAddress(timeCol);
+        AIBasedNFTFactory.CollectionDetails memory timeDetails = factory.getCollectionDetailsByContractAddress(timeCol);
         assertTrue(timeDetails.isUltimateMintTime, "Should indicate ultimate mint time");
 
         // // Retrieve details for quantity-sensitive collection
-        NFTFactory.CollectionDetails memory quantityDetails = factory.getCollectionDetailsByContractAddress(quantityCol);
+        AIBasedNFTFactory.CollectionDetails memory quantityDetails = factory.getCollectionDetailsByContractAddress(quantityCol);
         assertTrue(quantityDetails.isUltimateMintQuantity, "Should indicate ultimate mint quantity");
     }
 
@@ -595,7 +595,7 @@ function testAdminFunctionsAccessControl() public {
         factory.mintNFT{value: 0.0002 ether}(restrictedCol, user, 1);
 
         // Retrieve details
-        NFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(restrictedCol);
+        AIBasedNFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(restrictedCol);
         
         // Verify restrictions
         assertTrue(details.mintPerWallet, "Should indicate mint per wallet restriction");
@@ -674,7 +674,7 @@ function testAdminFunctionsAccessControl() public {
         assertEq(collections.length, 1);
         assertEq(collections[0], collectionAddress);
 
-        NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
         assertEq(avaiableColloctions.length, 1);
         assertEq(avaiableColloctions[0].collectionAddress, collectionAddress);
     }
@@ -739,7 +739,7 @@ function testAdminFunctionsAccessControl() public {
         // NFTCollection(collection2).setCanShow(true);
 
         // Get available collection details
-        NFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsToMintDetails();
 
         // Verify details of the first collection
         assertEq(details.length, 2);
@@ -758,7 +758,7 @@ function testAdminFunctionsAccessControl() public {
 
         vm.warp(block.timestamp + 366 days); 
 
-            NFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
+            AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
             assertEq(avaiableColloctions.length, 1);
             assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
     }
@@ -775,7 +775,7 @@ function testAdminFunctionsAccessControl() public {
         }
         // vm.resumeGasMetering();
         address[] memory details = factory.getCollections();
-        NFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsToMintDetails();
         assertEq(details.length, length);
         assertEq(detailsCollectios.length, length);
     }
