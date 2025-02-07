@@ -449,15 +449,6 @@ contract NFTFactory is Ownable {
         return true;
     }
 
-    ///// -------------------------------------------------------------------------- ////
-
-    ///// ---------------------------- ADMIN ---------------------------------------- ////
-    /// function
-    function withdraw() public {
-        require(msg.sender == owner(), "Only admin");
-        payable(owner()).transfer(address(this).balance);
-    }
-
     function setGenerateFee(uint256 _newFee) public {
         require(msg.sender == owner(), "Only admin");
         generateFee = _newFee;
@@ -467,6 +458,14 @@ contract NFTFactory is Ownable {
         require(msg.sender == owner(), "Only admin");
 
         return generateFee;
+    }
+    ///// -------------------------------------------------------------------------- ////
+
+    ///// ---------------------------- ADMIN ---------------------------------------- ////
+    function withdraw() public {
+
+        require(msg.sender == owner(), "Only admin");
+        payable(owner()).transfer(address(this).balance);
     }
 
     ///// -------------------------------------------------------------------------- ////
