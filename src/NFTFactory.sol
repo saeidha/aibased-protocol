@@ -54,8 +54,7 @@ contract NFTFactory is Ownable {
         bool mintPerWallet,
         uint256 mintPrice,
         bool isUltimateMintTime,
-        bool isUltimateMintQuantity
-    ) public returns (address) {
+        bool isUltimateMintQuantity) public returns (address) {
         NFTCollection collection = new NFTCollection(
             name,
             description,
@@ -95,8 +94,7 @@ contract NFTFactory is Ownable {
         uint256 maxSupply,
         bool mintPerWallet,
         uint256 mintPrice,
-        bool isUltimateMintQuantity
-    ) public returns (address) {
+        bool isUltimateMintQuantity) public returns (address) {
         /// @dev Default maxTime is 1 week
         uint256 maxTime = block.timestamp + 7 days;
         return
@@ -122,8 +120,7 @@ contract NFTFactory is Ownable {
         uint256 maxTime,
         bool mintPerWallet,
         uint256 mintPrice,
-        bool isUltimateMintTime
-    ) public returns (address) {
+        bool isUltimateMintTime) public returns (address) {
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply = type(uint256).max;
         return
@@ -147,8 +144,7 @@ contract NFTFactory is Ownable {
         string memory symbol,
         string memory imageURL,
         bool mintPerWallet,
-        uint256 mintPrice
-    ) public returns (address) {
+        uint256 mintPrice) public returns (address) {
         /// @dev Default maxTime is 168 hours equal to 1 week
         uint256 maxTime = block.timestamp + 7 days;
         /// @dev Default maxSupply is max uint256
@@ -172,8 +168,7 @@ contract NFTFactory is Ownable {
         string memory name,
         string memory description,
         string memory symbol,
-        string memory imageURL
-    ) public payable {
+        string memory imageURL) public payable {
         /// @dev Default maxTime is 1 hours
         uint256 maxTime = block.timestamp + 1 hours;
         /// @dev Default maxSupply is 1
@@ -214,11 +209,7 @@ contract NFTFactory is Ownable {
 
     //// ---------------------------MINT--------------------------- ////
 
-    function mintNFT(
-        address collectionAddress,
-        address to,
-        uint256 quantity
-    ) public payable {
+    function mintNFT(address collectionAddress, address to, uint256 quantity) public payable {
         NFTCollection collection = NFTCollection(collectionAddress);
         bool mintedBefore = collection.hasMinted(to);
         collection.mintNFT{value: msg.value}(to, quantity);
@@ -241,11 +232,7 @@ contract NFTFactory is Ownable {
 
     ///// --------------- RETRIEVE ALL AVAILABLE COLLECTION DETAILS --------- ////
     // function to retrieve all available collection details
-    function getAvailableCollectionsToMintDetails()
-        public
-        view
-        returns (CollectionDetails[] memory)
-    {
+    function getAvailableCollectionsToMintDetails() public view returns (CollectionDetails[] memory){
         uint256 length = mintPadCollections.length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
@@ -286,9 +273,7 @@ contract NFTFactory is Ownable {
     }
 
     // function to retrieve all available collection details with sender address
-    function getAvailableCollectionsToMintDetails(
-        address sender
-    ) public view returns (CollectionDetails[] memory) {
+    function getAvailableCollectionsToMintDetails(address sender) public view returns (CollectionDetails[] memory) {
         uint256 length = mintPadCollections.length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
@@ -332,9 +317,7 @@ contract NFTFactory is Ownable {
 
     ///// --------------- RETRIEVE USER COLLECTION DETAILS --------- ////
     // function to retrieve user collection details with sender address
-    function getUserCollectionsDetails(
-        address sender
-    ) public view returns (CollectionDetails[] memory) {
+    function getUserCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
         uint256 length = _usersCollections[sender].length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
@@ -370,9 +353,7 @@ contract NFTFactory is Ownable {
 
     ///// --------------- RETRIEVE SPECIFIC COLLECTION DETAILS BY CONTRACT ADDRESS --------- ////
     /// function to retrieve specefic available collection details by contract address
-    function getCollectionDetailsByContractAddress(
-        address contractAddress
-    ) public view returns (CollectionDetails memory) {
+    function getCollectionDetailsByContractAddress(address contractAddress) public view returns (CollectionDetails memory) {
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
@@ -415,10 +396,7 @@ contract NFTFactory is Ownable {
     }
 
     /// function to retrieve specefic available collection details by contract address
-    function getCollectionDetailsByContractAddress(
-        address contractAddress,
-        address sender
-    ) public view returns (CollectionDetails memory) {
+    function getCollectionDetailsByContractAddress(address contractAddress,address sender) public view returns (CollectionDetails memory) {
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
