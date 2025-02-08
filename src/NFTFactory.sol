@@ -37,6 +37,7 @@ contract AIBasedNFTFactory is Ownable {
     );
     event ChangeGenerateFee(uint256 indexed newFee);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
+    event NFTMinted(address indexed collectionAddress, address indexed to, uint256 indexed qunatity);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -138,6 +139,8 @@ contract AIBasedNFTFactory is Ownable {
             msg.sender
         );
         collection.mint{value: msg.value}(msg.sender, 1);
+
+        emit NFTMinted(collectionAddress, msg.sender, 1);
     }
 
     function mintNFT(address collectionAddress, address to, uint256 quantity) external payable {
@@ -148,6 +151,8 @@ contract AIBasedNFTFactory is Ownable {
         if (!mintedBefore) {
             _usersMint[to].push(collectionAddress);
         }
+
+        emit NFTMinted(collectionAddress, to, quantity);
     }
 
     function getCollections() external view returns (address[] memory) {

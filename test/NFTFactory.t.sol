@@ -57,15 +57,15 @@ contract NFTFactoryTest is Test {
     }
 
     function testMetadata() public {
-    address collectionAddress = factory.createCollection("Test", "TST", "Test Description", "ipfs://QmTestHash/", 10, defaultMaxTime, false, 0, false, false);
-    NFTCollection collection = NFTCollection(collectionAddress);
-    
-    // 3. Mint NFT
-    factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
-    
-    // 4. Verify URI
-    assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjoiVGVzdCAjMSIsImRlc2NyaXB0aW9uIjoiVFNUIiwiaW1hZ2UiOiJpcGZzOi8vUW1UZXN0SGFzaC8ifQ==");
-}
+        address collectionAddress = factory.createCollection("Test", "TST", "Test Description", "ipfs://QmTestHash/", 10, defaultMaxTime, false, 0, false, false);
+        NFTCollection collection = NFTCollection(collectionAddress);
+        
+        // 3. Mint NFT
+        factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
+        
+        // 4. Verify URI
+        assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjoiVGVzdCAjMSIsImRlc2NyaXB0aW9uIjoiVFNUIiwiaW1hZ2UiOiJpcGZzOi8vUW1UZXN0SGFzaC8ifQ==");
+    }
 
     function testMaxTimeRestriction() public {
         // Create a collection with maxTime = 1 minute
