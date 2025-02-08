@@ -287,8 +287,7 @@ function testCalculatePlatformFee() public {
 function testAdminWithdraw() public {
     // Setup
     address admin = factory.owner();
-    vm.deal(admin, 1 ether);
-
+    uint256 adminBalanceBefore = admin.balance;
     // Create collection
     vm.prank(owner);
 
@@ -305,18 +304,17 @@ function testAdminWithdraw() public {
     vm.deal(user, 1 ether);
     vm.prank(user);
     factory.mintNFT{value: nftPrice + platformFee}(collectionAddress, user, 1);
-
+    assertEq(admin.balance - adminBalanceBefore, nftPrice);
+    assertEq(address(collection).balance, platformFee);
+    // assertEq(admin.balance, 1 ether + nftPrice);
     // Verify withdrawal
     uint256 contractBalanceBefore = address(collection).balance;
     vm.prank(admin);
     collection.withdraw();
     
     assertEq(address(collection).balance, 0);
-    assertEq(admin.balance, 1 ether + contractBalanceBefore + nftPrice);
+    assertEq(admin.balance - adminBalanceBefore, contractBalanceBefore + nftPrice);
 }
-
-
-
 
 
 function testAdminFunctionsAccessControl() public {

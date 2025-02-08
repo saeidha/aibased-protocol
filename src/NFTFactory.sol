@@ -4,6 +4,8 @@ pragma solidity 0.8.24;
 import "./NFTCollection.sol";
 
 contract AIBasedNFTFactory is Ownable {
+    using Address for address payable;
+
     address[] public deployedCollections;
     address[] public mintPadCollections;
 
@@ -26,6 +28,8 @@ contract AIBasedNFTFactory is Ownable {
         uint256 mintPrice,
         address owner
     );
+
+    event EtherWithdrawn(address indexed recipient, uint256 amount);
 
     // Struct to hold collection details
     struct CollectionDetails {
@@ -94,7 +98,7 @@ contract AIBasedNFTFactory is Ownable {
         uint256 maxSupply,
         bool mintPerWallet,
         uint256 mintPrice,
-        bool isUltimateMintQuantity) public returns (address) {
+        bool isUltimateMintQuantity) external returns (address) {
         /// @dev Default maxTime is 1 week
         uint256 maxTime = block.timestamp + 7 days;
         return
@@ -120,7 +124,7 @@ contract AIBasedNFTFactory is Ownable {
         uint256 maxTime,
         bool mintPerWallet,
         uint256 mintPrice,
-        bool isUltimateMintTime) public returns (address) {
+        bool isUltimateMintTime) external returns (address) {
         /// @dev Default maxSupply is max uint256
         uint256 maxSupply = type(uint256).max;
         return
@@ -144,7 +148,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory symbol,
         string memory imageURL,
         bool mintPerWallet,
-        uint256 mintPrice) public returns (address) {
+        uint256 mintPrice) external returns (address) {
         /// @dev Default maxTime is 168 hours equal to 1 week
         uint256 maxTime = block.timestamp + 7 days;
         /// @dev Default maxSupply is max uint256
@@ -168,7 +172,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory name,
         string memory description,
         string memory symbol,
-        string memory imageURL) public payable {
+        string memory imageURL) external payable {
         /// @dev Default maxTime is 1 hours
         uint256 maxTime = block.timestamp + 1 hours;
         /// @dev Default maxSupply is 1
@@ -233,7 +237,7 @@ contract AIBasedNFTFactory is Ownable {
 
     ///// --------------- RETRIEVE ALL AVAILABLE COLLECTION DETAILS --------- ////
     // function to retrieve all available collection details
-    function getAvailableCollectionsToMintDetails() public view returns (CollectionDetails[] memory){
+    function getAvailableCollectionsToMintDetails() external view returns (CollectionDetails[] memory){
         uint256 length = mintPadCollections.length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
@@ -274,7 +278,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     // function to retrieve all available collection details with sender address
-    function getAvailableCollectionsToMintDetails(address sender) public view returns (CollectionDetails[] memory) {
+    function getAvailableCollectionsToMintDetails(address sender) external view returns (CollectionDetails[] memory) {
         uint256 length = mintPadCollections.length;
 
         // Use a dynamic memory array and then copy it to a fixed-size array to save gas.
@@ -318,7 +322,7 @@ contract AIBasedNFTFactory is Ownable {
 
     ///// --------------- RETRIEVE USER COLLECTION DETAILS --------- ////
     // function to retrieve user collection details with sender address
-    function getUserCollectionsDetails(address sender) public view returns (CollectionDetails[] memory) {
+    function getUserCollectionsDetails(address sender) external view returns (CollectionDetails[] memory) {
         address[] memory usersCollections = getUserCollections(sender);
         uint256 length = usersCollections.length;
 
@@ -355,7 +359,7 @@ contract AIBasedNFTFactory is Ownable {
 
     ///// --------------- RETRIEVE SPECIFIC COLLECTION DETAILS BY CONTRACT ADDRESS --------- ////
     /// function to retrieve specefic available collection details by contract address
-    function getCollectionDetailsByContractAddress(address contractAddress) public view returns (CollectionDetails memory) {
+    function getCollectionDetailsByContractAddress(address contractAddress) external view returns (CollectionDetails memory) {
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
@@ -398,7 +402,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     /// function to retrieve specefic available collection details by contract address
-    function getCollectionDetailsByContractAddress(address contractAddress,address sender) public view returns (CollectionDetails memory) {
+    function getCollectionDetailsByContractAddress(address contractAddress,address sender) external view returns (CollectionDetails memory) {
         for (uint256 i = 0; i < deployedCollections.length; i++) {
             NFTCollection collection = NFTCollection(deployedCollections[i]);
 
@@ -464,13 +468,23 @@ contract AIBasedNFTFactory is Ownable {
     ///// -------------------------------------------------------------------------- ////
 
     ///// ---------------------------- ADMIN ---------------------------------------- ////
-    function withdraw() public onlyOwner{
+    /**
+ * @dev Allows the contract owner to withdraw accumulated Ether.
+ * Ensures the recipient is valid and uses safe Ether transfer mechanisms.
+ */
+    function withdraw() external onlyOwner{
 
-            // Ensure the recipient is explicitly set to the owner
         address payable recipient = payable(owner());
+        require(recipient != address(0), "Invalid recipient address");
 
-        // Use OpenZeppelin's Address library to safely send Ether
-        Address.sendValue(recipient, address(this).balance);
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No Ether to withdraw");
+
+        // Safely send Ether to the owner
+        recipient.sendValue(balance);
+
+        // Emit an event for logging
+        emit EtherWithdrawn(recipient, balance);
     }
 
     ///// -------------------------------------------------------------------------- ////

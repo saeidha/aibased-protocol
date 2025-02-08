@@ -10,7 +10,8 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract NFTCollection is ERC721, Ownable {
     using Strings for uint256;
-    
+    using Address for address payable;
+
     struct Counter {
         uint256 _value;
     }
@@ -19,7 +20,8 @@ contract NFTCollection is ERC721, Ownable {
     event MaxSupplyUpdated(uint256 newMaxSupply);
     event MaxTimeUpdated(uint256 newMaxTime);
     event ChangePlatformFee(uint256 newFee);
-    event Withdraw();
+    event EtherWithdrawn(address indexed recipient, uint256 amount);
+    event WithdrawToCreator(address creator, uint256 amount);
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
@@ -76,7 +78,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
     //     require(msg.sender == admin, "Only admin");
     // }
-    function mintNFT(address to, uint256 quantity) public payable {
+    function mintNFT(address to, uint256 quantity) external payable {
 
         require(quantity > 0, "Quantity must be greater than zero");
 
@@ -114,8 +116,14 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
         // Transfer ownerPayment to the owner of the collection
         if (ownerPayment > 0) {
-            // Send payment to owner
-            payable(creatorAddress).transfer(ownerPayment);
+            // Send payment to creator of the collection
+            // Ensure the recipient is explicitly set to the creator of the collection
+            address payable recipient = payable(creatorAddress);
+
+            // Use OpenZeppelin's Address library to safely send Ether
+            Address.sendValue(recipient, ownerPayment);
+
+            emit WithdrawToCreator(creatorAddress, ownerPayment);
         }
 
         // Mint tokens
@@ -222,14 +230,19 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
 
     /////-------- ADMIN ------------
     /// witdraw
-    function withdraw() external onlyOwner{
-        // Ensure the recipient is explicitly set to the owner
+ // Withdraw function to allow the owner to withdraw accumulated Ether
+    function withdraw() external onlyOwner {
         address payable recipient = payable(owner());
+        require(recipient != address(0), "Invalid recipient address");
 
-        // Use OpenZeppelin's Address library to safely send Ether
-        Address.sendValue(recipient, address(this).balance);
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No Ether to withdraw");
 
-        emit Withdraw();
+        // Safely send Ether to the owner
+        recipient.sendValue(balance);
+
+        // Emit an event for logging
+        emit EtherWithdrawn(recipient, balance);
     }
 
     function setMaxSupply(uint256 _newMaxSupply) external onlyOwner{ 
