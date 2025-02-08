@@ -17,15 +17,12 @@ contract NFTCollection is ERC721, Ownable {
         uint256 _value;
     }
     
-    event TokenMinted(uint256 tokenId, address owner);
-    event MaxSupplyUpdated(uint256 newMaxSupply);
-    event MaxTimeUpdated(uint256 newMaxTime);
-    event ChangePlatformFee(uint256 newFee);
-    event EtherWithdrawn(address indexed recipient, uint256 amount);
-    event WithdrawToCreator(address creator, uint256 amount);
-
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
-    bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
+    event TokenMinted(uint256 indexed tokenId, address indexed owner);
+    event MaxSupplyUpdated(uint256 indexed newMaxSupply);
+    event MaxTimeUpdated(uint256 indexed newMaxTime);
+    event ChangePlatformFee(uint256 indexed newFee);
+    event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
+    event WithdrawToCreator(address indexed creator, uint256 indexed amount);
 
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
@@ -75,11 +72,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         
     }
 
-    // function mint(address to, uint256 quantity) public onlyOwner {
-
-    //     require(msg.sender == admin, "Only admin");
-    // }
-    function mintNFT(address to, uint256 quantity) external payable {
+    function mint(address to, uint256 quantity) external payable {
 
         require(quantity > 0, "Quantity must be greater than zero");
 
@@ -127,17 +120,17 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
             emit WithdrawToCreator(creatorAddress, ownerPayment);
         }
 
+        hasMinted[to] = true;
+        // Batch increment the token ID counter
+        uint256 startTokenId = _tokenIdCounter._value;
+        uint256 endTokenId = startTokenId + quantity;
+        _tokenIdCounter._value += quantity;
+
         // Mint tokens
-        for (uint256 i = 0; i < quantity; i++) {
-            hasMinted[to] = true;
-            _increment();
-            _safeMint(to, _tokenIdCounter._value);
+        for (uint256 i = startTokenId + 1; i <= endTokenId; i++) {
+            
+            _safeMint(to, i);
         }
-    }
-
-
-    function _increment() private {
-        _tokenIdCounter._value += 1;
     }
 
     function _baseURI() internal pure override returns (string memory) {

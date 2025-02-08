@@ -12,7 +12,7 @@ contract AIBasedNFTFactory is Ownable {
     error OnlyAdmin();
     error InvalidRecipient();
     error NoEtherToWithdraw();
-    event ChangeGenerateFee(uint256 newFee);
+
     address[] public deployedCollections;
     address[] public mintPadCollections;
 
@@ -25,8 +25,8 @@ contract AIBasedNFTFactory is Ownable {
 
     event CollectionCreated(
         address indexed collection,
-        string name,
-        string description,
+        string indexed name,
+        string indexed description,
         string symbol,
         uint256 maxSupply,
         uint256 maxTime,
@@ -35,8 +35,8 @@ contract AIBasedNFTFactory is Ownable {
         uint256 mintPrice,
         address owner
     );
-
-    event EtherWithdrawn(address indexed recipient, uint256 amount);
+    event ChangeGenerateFee(uint256 indexed newFee);
+    event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -137,13 +137,13 @@ contract AIBasedNFTFactory is Ownable {
             0,
             msg.sender
         );
-        collection.mintNFT{value: msg.value}(msg.sender, 1);
+        collection.mint{value: msg.value}(msg.sender, 1);
     }
 
     function mintNFT(address collectionAddress, address to, uint256 quantity) public payable {
         NFTCollection collection = NFTCollection(collectionAddress);
         bool mintedBefore = collection.hasMinted(to);
-        collection.mintNFT{value: msg.value}(to, quantity);
+        collection.mint{value: msg.value}(to, quantity);
 
         if (!mintedBefore) {
             _usersMint[to].push(collectionAddress);
@@ -159,9 +159,10 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getAvailableCollectionsToMintDetails() external view returns (CollectionDetails[] memory) {
-        CollectionDetails[] memory details = new CollectionDetails[](mintPadCollections.length);
+        uint256 mintPadCollectionsLength = mintPadCollections.length;
+        CollectionDetails[] memory details = new CollectionDetails[](mintPadCollectionsLength);
         uint256 count = 0;
-        for (uint256 i = 0; i < mintPadCollections.length; i++) {
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(mintPadCollections[i]);
             if (!collection.canNotToShow()) {
                 details[count++] = _getCollectionDetails(collection, mintPadCollections[i], true, false);
@@ -171,9 +172,10 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getAvailableCollectionsToMintDetails(address sender) external view returns (CollectionDetails[] memory) {
-        CollectionDetails[] memory details = new CollectionDetails[](mintPadCollections.length);
+        uint256 mintPadCollectionsLength = mintPadCollections.length;
+        CollectionDetails[] memory details = new CollectionDetails[](mintPadCollectionsLength);
         uint256 count = 0;
-        for (uint256 i = 0; i < mintPadCollections.length; i++) {
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(mintPadCollections[i]);
             if (!collection.canNotToShow()) {
                 CollectionDetails memory detail = _getCollectionDetails(collection, mintPadCollections[i], false, sender == collection.creatorAddress());
@@ -185,9 +187,10 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getUserCollectionsDetails(address sender) external view returns (CollectionDetails[] memory) {
+        uint256 mintPadCollectionsLength = mintPadCollections.length;
         address[] memory usersCollections = _usersCollections[sender];
-        CollectionDetails[] memory details = new CollectionDetails[](usersCollections.length);
-        for (uint256 i = 0; i < usersCollections.length; i++) {
+        CollectionDetails[] memory details = new CollectionDetails[](mintPadCollectionsLength);
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(usersCollections[i]);
             details[i] = _getCollectionDetails(collection, usersCollections[i], false, sender == collection.creatorAddress());
             details[i].isDisable = collection.isDisabled(sender);
@@ -196,7 +199,8 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getCollectionDetailsByContractAddress(address contractAddress) external view returns (CollectionDetails memory) {
-        for (uint256 i = 0; i < deployedCollections.length; i++) {
+        uint256 deployedCollectionsLength = deployedCollections.length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
             if (deployedCollections[i] == contractAddress) {
                 NFTCollection collection = NFTCollection(deployedCollections[i]);
                 return _getCollectionDetails(collection, deployedCollections[i], true, false);
@@ -206,7 +210,8 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getCollectionDetailsByContractAddress(address contractAddress, address sender) external view returns (CollectionDetails memory) {
-        for (uint256 i = 0; i < deployedCollections.length; i++) {
+        uint256 deployedCollectionsLength = deployedCollections.length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
             if (deployedCollections[i] == contractAddress) {
                 NFTCollection collection = NFTCollection(deployedCollections[i]);
                 CollectionDetails memory detail = _getCollectionDetails(collection, deployedCollections[i], false, sender == collection.creatorAddress());
