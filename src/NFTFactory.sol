@@ -65,7 +65,7 @@ contract AIBasedNFTFactory is Ownable {
         uint256 mintPrice,
         bool isUltimateMintTime,
         bool isUltimateMintQuantity
-    ) public returns (address) {
+    ) external returns (address) {
         NFTCollection collection = new NFTCollection(
             name,
             description,
@@ -140,7 +140,7 @@ contract AIBasedNFTFactory is Ownable {
         collection.mint{value: msg.value}(msg.sender, 1);
     }
 
-    function mintNFT(address collectionAddress, address to, uint256 quantity) public payable {
+    function mintNFT(address collectionAddress, address to, uint256 quantity) external payable {
         NFTCollection collection = NFTCollection(collectionAddress);
         bool mintedBefore = collection.hasMinted(to);
         collection.mint{value: msg.value}(to, quantity);
@@ -150,11 +150,11 @@ contract AIBasedNFTFactory is Ownable {
         }
     }
 
-    function getCollections() public view returns (address[] memory) {
+    function getCollections() external view returns (address[] memory) {
         return deployedCollections;
     }
 
-    function getMintPadCollections() public view returns (address[] memory) {
+    function getMintPadCollections() external view returns (address[] memory) {
         return mintPadCollections;
     }
 

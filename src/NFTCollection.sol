@@ -165,7 +165,7 @@ function contractURI() external view returns (string memory) {
 
 
 function tokenURI(uint256 tokenId) public view override returns (string memory) {
-    require(exists(tokenId), "Nonexistent token");
+    require(_ownerOf(tokenId) != address(0), "Nonexistent token");
 
     // Construct the name with the token ID
     string memory nameWithTokenId = string.concat(name(), " #", Strings.toString(tokenId));
@@ -190,12 +190,6 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
     // Return the full token URI
     return string.concat(_baseURI(), json);
 }
-
-
-    // Custom existence check using owner lookup
-    function exists(uint256 tokenId) internal view returns (bool) {
-        return _ownerOf(tokenId) != address(0);
-    }
 
     function totalSupply() external view returns (uint256) {
         return _tokenIdCounter._value;
