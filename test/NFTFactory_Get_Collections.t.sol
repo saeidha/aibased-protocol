@@ -233,14 +233,14 @@ contract NFTFactoryTest is Test {
         factory.createCollection("Regular", "Desc", "REG", "ipfs://regular",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
-        factory.createWithDefaultCollectionWithDefaultTime(
+        factory.createCollection(
             "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
-            100, false, 0.001 ether, false
+            100, block.timestamp + 7 days, false, 0.001 ether, false, false
         );
 
-        factory.createWithDefaultCollectionWithDefaultTime(
+        factory.createCollection(
             "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
-            100, false, 0.001 ether, false
+            100, block.timestamp + 7 days, false, 0.001 ether, false, false
         );
 
         factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "QCK", "ipfs://quick");
@@ -262,14 +262,16 @@ contract NFTFactoryTest is Test {
         factory.createCollection("Regular", "Desc", "REG", "ipfs://regular",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
-        factory.createWithDefaultCollectionWithDefaultTime(
+        factory.createCollection(
             "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
-            100, false, 0.001 ether, false
+            block.timestamp + 7 days,
+            100, false, 0.001 ether, false, false
         );
 
-        factory.createWithDefaultCollectionWithDefaultTime(
+        factory.createCollection(
             "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
-            100, false, 0.001 ether, false
+            block.timestamp + 7 days,
+            100, false, 0.001 ether, false, false
         );
 
         factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "QCK", "ipfs://quick");

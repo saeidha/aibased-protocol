@@ -424,6 +424,7 @@ function testAdminFunctionsAccessControl() public {
         vm.deal(user, fee);
         
         vm.prank(user);
+        
         factory.payGenerateFee{value: fee}();
 
         assertEq(address(factory).balance, fee, "Contract should have received fee");
@@ -440,7 +441,7 @@ function testAdminFunctionsAccessControl() public {
         vm.stopPrank();
         vm.deal(user, fee - 1);
         vm.startPrank(user);
-        vm.expectRevert("Payable: msg.value must be equal to amount");
+        vm.expectRevert(abi.encodeWithSelector(AIBasedNFTFactory.InsufficientFee.selector));
         factory.payGenerateFee{value: fee - 1}();
     }
 
@@ -508,7 +509,7 @@ function testAdminFunctionsAccessControl() public {
         // Test insufficient payment
         vm.deal(user2, fee - 1);
         vm.prank(user2);
-        vm.expectRevert("Payable: msg.value must be equal to amount");
+        vm.expectRevert(abi.encodeWithSelector(AIBasedNFTFactory.InsufficientFee.selector));
         factory.payGenerateFee{value: fee - 1}();
     }
 
@@ -552,7 +553,7 @@ function testAdminFunctionsAccessControl() public {
         vm.stopPrank();
         // Test non-owner sets fee
         vm.startPrank(user);
-        vm.expectRevert("Only admin");
+        vm.expectRevert(abi.encodeWithSelector(AIBasedNFTFactory.OnlyAdmin.selector));
         factory.setGenerateFee(newFee);
     }
 
@@ -703,20 +704,22 @@ function testAdminFunctionsAccessControl() public {
         uint256 mintPrice = 0.005 ether;
 
         // Create a collection with default time
-        address collectionAddress = factory.createWithDefaultCollectionWithDefaultTime(
+        address collectionAddress = factory.createCollection(
             name,
             description,
             symbol,
             imageURL,
             maxSupply,
+            block.timestamp + 7 days,
             mintPerWallet,
             mintPrice,
+            false,
             false
         );
 
         // Verify the collection was deployed with default maxTime
         NFTCollection collection = NFTCollection(collectionAddress);
-        uint256 expectedMaxTime = block.timestamp + (60 * 60 * 24 * 7); // 1 week
+        uint256 expectedMaxTime = block.timestamp + 7 days; // 1 week
         assertEq(collection.maxTime(), expectedMaxTime);
     }
 
@@ -812,14 +815,15 @@ function testAdminFunctionsAccessControl() public {
 
         vm.startPrank(creatorUser);
         // Create a  collection
-        address collection = factory.createWithDefaultCollectionWithDefaultTime("Restricted Collection", 
+        address collection = factory.createCollection("Restricted Collection", 
         "A restricted collection", 
         "RCOL", 
         "https://example.com/restricted.png", 
         10, 
+        block.timestamp + 7 days,
         false, 
         nftPrice, 
-        false);
+        false, false);
 
         vm.stopPrank();
         
