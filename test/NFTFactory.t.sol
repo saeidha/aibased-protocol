@@ -553,7 +553,9 @@ function testAdminFunctionsAccessControl() public {
         vm.stopPrank();
         // Test non-owner sets fee
         vm.startPrank(user);
-        vm.expectRevert(abi.encodeWithSelector(AIBasedNFTFactory.OnlyAdmin.selector));
+        vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user));
         factory.setGenerateFee(newFee);
     }
 
