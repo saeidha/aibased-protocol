@@ -1,20 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
-
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract NFTCollection is ERC721, Ownable {
-       using Strings for uint256;
+    using Strings for uint256;
     
     struct Counter {
         uint256 _value;
     }
     
     event TokenMinted(uint256 tokenId, address owner);
+
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
 
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
@@ -24,11 +28,10 @@ contract NFTCollection is ERC721, Ownable {
     uint256 public mintPrice;
     string public description;
     uint256 private platformFee;
-    address private immutable admin; 
     uint256 private initialPrice;
     bool public isUltimateMintTime;
     bool public isUltimateMintQuantity;
-
+    address private immutable creatorAddress;
     mapping(address => bool) public hasMinted;
 
     constructor(
@@ -42,7 +45,7 @@ contract NFTCollection is ERC721, Ownable {
         uint256 _initialPrice,
         address _admin,
         address initialOwner
-    ) ERC721(name, symbol) Ownable(initialOwner) {
+    ) ERC721(name, symbol) Ownable(_admin) {
 
 
 
@@ -58,10 +61,11 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         description = _description;
         platformFee = calculatePlatformFee(_initialPrice) ;
         mintPrice = platformFee + _initialPrice;
-        admin = _admin;
         initialPrice = _initialPrice;
         isUltimateMintTime = _maxTime == type(uint256).max;
         isUltimateMintQuantity = _maxSupply == type(uint256).max;
+        creatorAddress = initialOwner;
+        
     }
 
     // function mint(address to, uint256 quantity) public onlyOwner {
@@ -76,7 +80,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
         uint256 platformPayment = platformFee * quantity;
 
         // If the caller is the owner, set ownerPayment to 0
-        if (to == owner()) {
+        if (to == creatorAddress) {
             ownerPayment = 0 ether;
         }
 
@@ -104,9 +108,10 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
             require(!hasMinted[to], "Wallet already minted");
         }
 
+        // Transfer ownerPayment to the owner of the collection
         if (ownerPayment > 0) {
             // Send payment to owner
-            payable(owner()).transfer(ownerPayment);
+            payable(creatorAddress).transfer(ownerPayment);
         }
 
         // Mint tokens
@@ -127,34 +132,51 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
     }
 
 
-    function contractURI() external view returns (string memory) {
+function contractURI() external view returns (string memory) {
+    // Directly use the contract name
+    string memory encodedName = name();
 
-        string memory json = Base64.encode(
-            bytes(
-                string.concat(
-                '{"name": "', name(), '",',
-                '"description":"', description, '",',
-                '"image": "', imageURL, '"}'
+    // Directly use the image URL
+    string memory imageURI = imageURL;
+
+    // Directly use the description
+    string memory _description = description;
+
+    // Build the JSON metadata
+    string memory json = Base64.encode(
+        bytes(
+            string.concat(
+                '{"name":"', encodedName, '",',
+                '"description":"', _description, '",',
+                '"image":"', imageURI, '"}'
             )
-            )
-        );
+        )
+    );
 
-        return string(abi.encode(_baseURI(), json));
-    }
+    // Return the full metadata URI
+    return string.concat(_baseURI(), json);
+}
 
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+
+function tokenURI(uint256 tokenId) public view override returns (string memory) {
     require(exists(tokenId), "Nonexistent token");
 
     // Construct the name with the token ID
     string memory nameWithTokenId = string.concat(name(), " #", Strings.toString(tokenId));
 
-    // Construct the JSON metadata using string.concat
+    // Construct the image URI
+    string memory imageURI = imageURL; // Assuming imageURL is already a properly formatted string
+
+    // Construct the description
+    string memory _description = description; // Assuming description is already a properly formatted string
+
+    // Construct the JSON metadata
     string memory json = Base64.encode(
         bytes(
             string.concat(
-                '{"name": "', nameWithTokenId, '",',
-                '"description":"', description, '",',
-                '"image": "', imageURL, '"}'
+                '{"name":"', nameWithTokenId, '",',
+                '"description":"', _description, '",',
+                '"image":"', imageURI, '"}'
             )
         )
     );
@@ -162,6 +184,7 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
     // Return the full token URI
     return string.concat(_baseURI(), json);
 }
+
 
     // Custom existence check using owner lookup
     function exists(uint256 tokenId) public view returns (bool) {
@@ -195,29 +218,28 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
 
     /////-------- ADMIN ------------
     /// witdraw
-    function withdraw() external {
+    function withdraw() external onlyOwner{
+        // Ensure the recipient is explicitly set to the owner
+        address payable recipient = payable(owner());
 
-        require(msg.sender == admin, "Only admin");
-        payable(admin).transfer(address(this).balance);
+        // Use OpenZeppelin's Address library to safely send Ether
+        Address.sendValue(recipient, address(this).balance);
     }
 
-    function setMaxSupply(uint256 _newMaxSupply) public { 
+    function setMaxSupply(uint256 _newMaxSupply) external onlyOwner{ 
 
-        require(msg.sender == admin, "Only admin");
         maxSupply = _newMaxSupply;
         isUltimateMintQuantity = _newMaxSupply == type(uint256).max;
     }
 
-    function setMaxTime(uint256 _newMaxTime) public { 
+    function setMaxTime(uint256 _newMaxTime) external onlyOwner{ 
 
-        require(msg.sender == admin, "Only admin");
         maxTime = _newMaxTime;
         isUltimateMintTime = _newMaxTime == type(uint256).max;
     }
 
-    function changePlatformFee(uint256 _newPlatformFee) public { 
+    function changePlatformFee(uint256 _newPlatformFee) external onlyOwner{ 
 
-        require(msg.sender == admin, "Only admin");
         platformFee = _newPlatformFee;
     }
 

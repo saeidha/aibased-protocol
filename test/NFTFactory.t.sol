@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.24;
 
 import "forge-std/Test.sol";
 import "../src/NFTFactory.sol";
@@ -82,7 +82,7 @@ contract NFTFactoryTest is Test {
     factory.mintNFT{value: 0.0001 ether}(collectionAddress, user, 1);
     
     // 4. Verify URI
-    assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjogIlRlc3QgIzEiLCJkZXNjcmlwdGlvbiI6IlRTVCIsImltYWdlIjogImlwZnM6Ly9RbVRlc3RIYXNoLyJ9");
+    assertEq(collection.tokenURI(1), "data:application/json;base64,eyJuYW1lIjoiVGVzdCAjMSIsImRlc2NyaXB0aW9uIjoiVFNUIiwiaW1hZ2UiOiJpcGZzOi8vUW1UZXN0SGFzaC8ifQ==");
 }
 
     function testMaxTimeRestriction() public {
@@ -322,6 +322,8 @@ function testAdminWithdraw() public {
 function testAdminFunctionsAccessControl() public {
     
     uint nftFee = 0.001 ether;
+    vm.deal(user, 1 ether);
+    vm.startPrank(user);
     address collectionAddress = factory.createCollection(
         "AdminTest", "Desc", "ADM", "ipfs://admin", 
         100, defaultMaxTime, false, nftFee, false, false
@@ -329,16 +331,24 @@ function testAdminFunctionsAccessControl() public {
     NFTCollection collection = NFTCollection(collectionAddress);
     
     // Test admin-only functions with non-admin
-    vm.deal(user, 1 ether);
-    vm.startPrank(user);
     
-    vm.expectRevert("Only admin");
+    
+    vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user
+    ));
     collection.setMaxSupply(200);
     
-    vm.expectRevert("Only admin");
+    vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user
+    ));
     collection.setMaxTime(200);
     
-    vm.expectRevert("Only admin");
+    vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user
+    ));
     collection.changePlatformFee(0.0002 ether);
     
     // Test with admin (factory owner)
@@ -468,7 +478,10 @@ function testAdminFunctionsAccessControl() public {
     // Test non-owner withdrawal attempt
     function testWithdrawAsNonOwner() public {
         vm.prank(user);
-        vm.expectRevert("Only admin");
+        vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user
+        ));
         factory.withdraw();
     }
 
@@ -523,7 +536,10 @@ function testAdminFunctionsAccessControl() public {
 
         // Test non-owner withdrawal attempt
         vm.prank(user);
-        vm.expectRevert("Only admin");
+        vm.expectRevert(abi.encodeWithSelector(
+        Ownable.OwnableUnauthorizedAccount.selector, 
+        user
+        ));
         factory.withdraw();
     }
 

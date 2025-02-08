@@ -464,10 +464,13 @@ contract AIBasedNFTFactory is Ownable {
     ///// -------------------------------------------------------------------------- ////
 
     ///// ---------------------------- ADMIN ---------------------------------------- ////
-    function withdraw() public {
+    function withdraw() public onlyOwner{
 
-        require(msg.sender == owner(), "Only admin");
-        payable(owner()).transfer(address(this).balance);
+            // Ensure the recipient is explicitly set to the owner
+        address payable recipient = payable(owner());
+
+        // Use OpenZeppelin's Address library to safely send Ether
+        Address.sendValue(recipient, address(this).balance);
     }
 
     ///// -------------------------------------------------------------------------- ////
