@@ -16,6 +16,10 @@ contract NFTCollection is ERC721, Ownable {
     }
     
     event TokenMinted(uint256 tokenId, address owner);
+    event MaxSupplyUpdated(uint256 newMaxSupply);
+    event MaxTimeUpdated(uint256 newMaxTime);
+    event ChangePlatformFee(uint256 newFee);
+    event Withdraw();
 
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 private constant OWNER_ROLE = keccak256("OWNER_ROLE");
@@ -24,11 +28,11 @@ contract NFTCollection is ERC721, Ownable {
     uint256 public maxSupply;
     string public imageURL;
     uint256 public maxTime;
-    bool public mintPerWallet;
-    uint256 public mintPrice;
+    bool public immutable mintPerWallet;
+    uint256 public immutable mintPrice;
     string public description;
     uint256 private platformFee;
-    uint256 private initialPrice;
+    uint256 private immutable initialPrice;
     bool public isUltimateMintTime;
     bool public isUltimateMintQuantity;
     address private immutable creatorAddress;
@@ -224,23 +228,28 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
 
         // Use OpenZeppelin's Address library to safely send Ether
         Address.sendValue(recipient, address(this).balance);
+
+        emit Withdraw();
     }
 
     function setMaxSupply(uint256 _newMaxSupply) external onlyOwner{ 
 
         maxSupply = _newMaxSupply;
         isUltimateMintQuantity = _newMaxSupply == type(uint256).max;
+        emit MaxSupplyUpdated(_newMaxSupply);
     }
 
     function setMaxTime(uint256 _newMaxTime) external onlyOwner{ 
 
         maxTime = _newMaxTime;
         isUltimateMintTime = _newMaxTime == type(uint256).max;
+        emit MaxTimeUpdated(_newMaxTime);
     }
 
     function changePlatformFee(uint256 _newPlatformFee) external onlyOwner{ 
 
         platformFee = _newPlatformFee;
+        emit ChangePlatformFee(_newPlatformFee);
     }
 
 }
