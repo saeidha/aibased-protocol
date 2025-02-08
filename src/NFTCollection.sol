@@ -38,7 +38,7 @@ contract NFTCollection is ERC721, Ownable {
     uint256 private immutable initialPrice;
     bool public isUltimateMintTime;
     bool public isUltimateMintQuantity;
-    address private immutable creatorAddress;
+    address public immutable creatorAddress;
     mapping(address => bool) public hasMinted;
 
     constructor(

@@ -15,24 +15,6 @@ contract NFTFactoryTest is Test {
     uint256 defaultMaxTime = block.timestamp + 120;
     uint256 defaultGenerateFee = 0.0001 ether;
 
-
-
-    AIBasedNFTFactory.CollectionDetails emptyCollectionDetails = AIBasedNFTFactory.CollectionDetails({
-        collectionAddress: address(0),
-        name: "",
-        description: "",
-        tokenIdCounter: 0,
-        maxSupply: 0,
-        baseImageURI: "",
-        maxTime: 0,
-        mintPerWallet: false,
-        mintPrice: 0,
-        isDisable: false,
-        isUltimateMintTime: false,
-        isUltimateMintQuantity: false
-    });
-
-
     receive() external payable {} 
 
     function setUp() public {
@@ -581,7 +563,7 @@ function testAdminFunctionsAccessControl() public {
         
         // Expect the function to revert or return empty details
        AIBasedNFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
-        assertTrue(emptyCollectionDetails.collectionAddress == invalidResult.collectionAddress, "Incorrect collection address");
+        assertTrue(address(0) == invalidResult.collectionAddress, "Incorrect collection address");
     }
 
     // Test retrieving details for a collection with ultimate mint conditions
