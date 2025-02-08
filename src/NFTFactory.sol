@@ -222,17 +222,17 @@ contract AIBasedNFTFactory is Ownable {
         return _emptyCollectionDetails();
     }
 
-    function payGenerateFee() public payable {
+    function payGenerateFee() external payable {
         if (msg.value < generateFee) revert InsufficientFee();
     }
 
-    function setGenerateFee(uint256 _newFee) public onlyOwner{
+    function setGenerateFee(uint256 _newFee) external onlyOwner{
         if (msg.sender != owner()) revert OnlyAdmin();
         generateFee = _newFee;
         emit ChangeGenerateFee(_newFee);
     }
 
-    function getFee() public view returns (uint256) {
+    function getFee() external view returns (uint256) {
         if (msg.sender != owner()) revert OnlyAdmin();
         return generateFee;
     }
@@ -246,19 +246,19 @@ contract AIBasedNFTFactory is Ownable {
         emit EtherWithdrawn(recipient, balance);
     }
 
-    function getUserMints(address user) public view returns (address[] memory) {
+    function getUserMints(address user) external view returns (address[] memory) {
         return _usersMint[user];
     }
 
-    function getUserMintCount(address user) public view returns (uint256) {
+    function getUserMintCount(address user) external view returns (uint256) {
         return _usersMint[user].length;
     }
 
-    function getUserCollectionsCount(address user) public view returns (uint256) {
+    function getUserCollectionsCount(address user) external view returns (uint256) {
         return _usersCollections[user].length;
     }
 
-    function getUserCollections(address user) public view returns (address[] memory) {
+    function getUserCollections(address user) external view returns (address[] memory) {
         return _usersCollections[user];
     }
 
