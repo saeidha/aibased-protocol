@@ -52,7 +52,6 @@ contract AIBasedNFTFactory is Ownable {
         bool isDisable;
         bool isUltimateMintTime;
         bool isUltimateMintQuantity;
-        bool  isOwner;
     }
 
     function createCollection(
@@ -170,7 +169,7 @@ contract AIBasedNFTFactory is Ownable {
         for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(mintPadCollections[i]);
             if (!collection.canNotToShow()) {
-                details[count++] = _getCollectionDetails(collection, mintPadCollections[i], true, false);
+                details[count++] = _getCollectionDetails(collection, mintPadCollections[i], true, collection.mintPrice());
             }
         }
         return _trimDetails(details, count);
@@ -183,7 +182,7 @@ contract AIBasedNFTFactory is Ownable {
         for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(mintPadCollections[i]);
             if (!collection.canNotToShow()) {
-                CollectionDetails memory detail = _getCollectionDetails(collection, mintPadCollections[i], false, sender == collection.creatorAddress());
+                CollectionDetails memory detail = _getCollectionDetails(collection, mintPadCollections[i], false, collection.mintPriceForUser(sender));
                 detail.isDisable = collection.isDisabled(sender);
                 details[count++] = detail;
             }
@@ -197,7 +196,7 @@ contract AIBasedNFTFactory is Ownable {
         CollectionDetails[] memory details = new CollectionDetails[](mintPadCollectionsLength);
         for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
             NFTCollection collection = NFTCollection(usersCollections[i]);
-            details[i] = _getCollectionDetails(collection, usersCollections[i], false, sender == collection.creatorAddress());
+            details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPriceForUser(sender));
             details[i].isDisable = collection.isDisabled(sender);
         }
         return details;
@@ -208,7 +207,7 @@ contract AIBasedNFTFactory is Ownable {
         for (uint256 i = 0; i < deployedCollectionsLength; i++) {
             if (deployedCollections[i] == contractAddress) {
                 NFTCollection collection = NFTCollection(deployedCollections[i]);
-                return _getCollectionDetails(collection, deployedCollections[i], true, false);
+                return _getCollectionDetails(collection, deployedCollections[i], true, collection.mintPrice());
             }
         }
         return _emptyCollectionDetails();
@@ -219,7 +218,7 @@ contract AIBasedNFTFactory is Ownable {
         for (uint256 i = 0; i < deployedCollectionsLength; i++) {
             if (deployedCollections[i] == contractAddress) {
                 NFTCollection collection = NFTCollection(deployedCollections[i]);
-                CollectionDetails memory detail = _getCollectionDetails(collection, deployedCollections[i], false, sender == collection.creatorAddress());
+                CollectionDetails memory detail = _getCollectionDetails(collection, deployedCollections[i], false, collection.mintPriceForUser(sender) );
                 detail.isDisable = collection.isDisabled(sender);
                 return detail;
             }
@@ -268,7 +267,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     // Helper functions to reduce code duplication
-    function _getCollectionDetails(NFTCollection collection, address collectionAddress, bool isDisable, bool isOwner) private view returns (CollectionDetails memory) {
+    function _getCollectionDetails(NFTCollection collection, address collectionAddress, bool isDisable, uint256 mintPrice) private view returns (CollectionDetails memory) {
         return CollectionDetails({
             collectionAddress: collectionAddress,
             name: collection.name(),
@@ -278,11 +277,10 @@ contract AIBasedNFTFactory is Ownable {
             baseImageURI: collection.imageURL(),
             maxTime: collection.maxTime(),
             mintPerWallet: collection.mintPerWallet(),
-            mintPrice: collection.mintPrice(),
+            mintPrice: mintPrice,
             isDisable: isDisable,
             isUltimateMintTime: collection.isUltimateMintTime(),
-            isUltimateMintQuantity: collection.isUltimateMintQuantity(),
-            isOwner: isOwner
+            isUltimateMintQuantity: collection.isUltimateMintQuantity()
         });
     }
 
@@ -307,8 +305,7 @@ contract AIBasedNFTFactory is Ownable {
             mintPrice: 0,
             isDisable: false,
             isUltimateMintTime: false,
-            isUltimateMintQuantity: false,
-            isOwner: false
+            isUltimateMintQuantity: false
         });
     }
 }

@@ -832,4 +832,31 @@ function testAdminFunctionsAccessControl() public {
         assertEq(owner.balance, ownerBalanceBefore + (nftFee * 3), "Owner should receive contract balance");
         assertEq(collection.balance, 0, "User ETH not deducted");
     }
+
+    function testCollectionFee() public {
+    
+        uint nftFee = 0.001 ether;
+        uint platformFee = 0.0001 ether;
+        vm.deal(user, 1 ether);
+        vm.deal(user2, 1 ether);
+        vm.startPrank(user);
+        address collectionAddress = factory.createCollection(
+            "AdminTest", "Desc", "ADM", "ipfs://admin", 
+            100, defaultMaxTime, false, nftFee, false, false
+        );
+        NFTCollection collection = NFTCollection(collectionAddress);
+        
+        // Test admin-only functions with non-admin
+        
+        AIBasedNFTFactory.CollectionDetails[] memory detailsGeneral = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory detailsUser1 = factory.getAvailableCollectionsToMintDetails(user);
+        AIBasedNFTFactory.CollectionDetails[] memory detailsUser2 = factory.getAvailableCollectionsToMintDetails(user2);
+        
+        
+        assertEq(detailsGeneral[0].mintPrice, nftFee + platformFee);
+        assertEq(detailsUser1[0].mintPrice, platformFee);
+        assertEq(detailsUser2[0].mintPrice, nftFee + platformFee);
+
+    }
+
 }

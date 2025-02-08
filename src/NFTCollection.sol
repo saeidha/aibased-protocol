@@ -253,4 +253,9 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
         emit ChangePlatformFee(_newPlatformFee);
     }
 
+    function mintPriceForUser(address user) external view returns (uint256) { 
+
+        return user == creatorAddress ? platformFee : mintPrice;
+    }
+
 }

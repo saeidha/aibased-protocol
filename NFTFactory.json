@@ -190,11 +190,6 @@
             "name": "isUltimateMintQuantity",
             "type": "bool",
             "internalType": "bool"
-          },
-          {
-            "name": "isOwner",
-            "type": "bool",
-            "internalType": "bool"
           }
         ]
       }
@@ -268,11 +263,6 @@
           },
           {
             "name": "isUltimateMintQuantity",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "isOwner",
             "type": "bool",
             "internalType": "bool"
           }
@@ -354,11 +344,6 @@
           },
           {
             "name": "isUltimateMintQuantity",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "isOwner",
             "type": "bool",
             "internalType": "bool"
           }
@@ -445,11 +430,6 @@
           },
           {
             "name": "isUltimateMintQuantity",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "isOwner",
             "type": "bool",
             "internalType": "bool"
           }
@@ -608,11 +588,6 @@
           },
           {
             "name": "isUltimateMintQuantity",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "isOwner",
             "type": "bool",
             "internalType": "bool"
           }
