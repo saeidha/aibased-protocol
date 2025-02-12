@@ -177,6 +177,11 @@
             "internalType": "uint256"
           },
           {
+            "name": "actualPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
             "name": "isDisable",
             "type": "bool",
             "internalType": "bool"
@@ -248,6 +253,11 @@
           },
           {
             "name": "mintPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "actualPrice",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -329,6 +339,11 @@
           },
           {
             "name": "mintPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "actualPrice",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -415,6 +430,11 @@
           },
           {
             "name": "mintPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "actualPrice",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -573,6 +593,11 @@
           },
           {
             "name": "mintPrice",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "actualPrice",
             "type": "uint256",
             "internalType": "uint256"
           },
@@ -852,7 +877,7 @@
         "internalType": "address"
       },
       {
-        "name": "qunatity",
+        "name": "quantity",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
