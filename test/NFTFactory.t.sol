@@ -840,11 +840,11 @@ function testAdminFunctionsAccessControl() public {
         vm.deal(user, 1 ether);
         vm.deal(user2, 1 ether);
         vm.startPrank(user);
-        address collectionAddress = factory.createCollection(
+        factory.createCollection(
             "AdminTest", "Desc", "ADM", "ipfs://admin", 
             100, defaultMaxTime, false, nftFee, false, false
         );
-        NFTCollection collection = NFTCollection(collectionAddress);
+        // NFTCollection collection = NFTCollection(collectionAddress);
         
         // Test admin-only functions with non-admin
         
@@ -854,8 +854,10 @@ function testAdminFunctionsAccessControl() public {
         
         
         assertEq(detailsGeneral[0].mintPrice, nftFee + platformFee);
-        assertEq(detailsUser1[0].mintPrice, platformFee);
+        assertEq(detailsUser1[0].mintPrice, nftFee + platformFee);
+        assertEq(detailsUser1[0].actualPrice, platformFee);
         assertEq(detailsUser2[0].mintPrice, nftFee + platformFee);
+        assertEq(detailsUser2[0].actualPrice, nftFee + platformFee);
 
     }
 
