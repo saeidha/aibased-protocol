@@ -27,6 +27,8 @@ contract AIBasedNFTFactory is Ownable {
         address indexed collection,
         string indexed name,
         string indexed description,
+        string model,
+        string style,
         string symbol,
         uint256 maxSupply,
         uint256 maxTime,
@@ -54,10 +56,12 @@ contract AIBasedNFTFactory is Ownable {
         bool isUltimateMintTime;
         bool isUltimateMintQuantity;
     }
-
+    
     function createCollection(
         string memory name,
         string memory description,
+        string memory model,
+        string memory style,
         string memory symbol,
         string memory imageURL,
         uint256 maxSupply,
@@ -67,18 +71,23 @@ contract AIBasedNFTFactory is Ownable {
         bool isUltimateMintTime,
         bool isUltimateMintQuantity
     ) external returns (address) {
-        NFTCollection collection = new NFTCollection(
-            name,
-            description,
-            symbol,
-            isUltimateMintQuantity ? type(uint256).max : maxSupply,
-            isUltimateMintTime ? type(uint256).max : maxTime,
-            imageURL,
-            mintPerWallet,
-            mintPrice,
-            owner(),
-            msg.sender
-        );
+
+        NFTCollection.ContractConfig memory config = NFTCollection.ContractConfig({
+            name: name,
+            description: description,
+            model: model,
+            style: style,  
+            symbol: symbol,
+            maxSupply: isUltimateMintQuantity ? type(uint256).max : maxSupply,
+            maxTime: isUltimateMintTime ? type(uint256).max : maxTime,
+            imageURL: imageURL,
+            mintPerWallet: mintPerWallet,
+            initialPrice: mintPrice,
+            admin: owner(),
+            initialOwner: msg.sender
+        });
+
+        NFTCollection collection = new NFTCollection(config);
 
         deployedCollections.push(address(collection));
         mintPadCollections.push(address(collection));
@@ -88,13 +97,15 @@ contract AIBasedNFTFactory is Ownable {
             address(collection),
             name,
             description,
-            symbol,
-            isUltimateMintQuantity ? type(uint256).max : maxSupply,
-            isUltimateMintTime ? type(uint256).max : maxTime,
-            imageURL,
-            mintPerWallet,
-            mintPrice,
-            msg.sender
+            config.model,
+            config.style,
+            config.symbol,
+            config.maxSupply,
+            config.maxTime,
+            config.imageURL,
+            config.mintPerWallet,
+            config.initialPrice,
+            config.initialOwner
         );
         return address(collection);
     }
@@ -102,24 +113,29 @@ contract AIBasedNFTFactory is Ownable {
     function createAndMint(
         string memory name,
         string memory description,
+        string memory model,
+        string memory style,
         string memory symbol,
         string memory imageURL
     ) external payable {
         uint256 maxTime = block.timestamp + 1 hours;
         uint256 maxSupply = 1;
 
-        NFTCollection collection = new NFTCollection(
-            name,
-            description,
-            symbol,
-            maxSupply,
-            maxTime,
-            imageURL,
-            true,
-            0,
-            owner(),
-            msg.sender
-        );
+        NFTCollection.ContractConfig memory config = NFTCollection.ContractConfig({
+            name: name,
+            description: description,
+            model: model,
+            style: style,
+            symbol: symbol,
+            maxSupply: maxSupply,
+            maxTime: maxTime,
+            imageURL: imageURL,
+            mintPerWallet: true,
+            initialPrice: 0,
+            admin: owner(),
+            initialOwner: msg.sender
+        });
+        NFTCollection collection = new NFTCollection(config);
 
         address collectionAddress = address(collection);
         deployedCollections.push(collectionAddress);
@@ -130,6 +146,8 @@ contract AIBasedNFTFactory is Ownable {
             collectionAddress,
             name,
             description,
+            model,
+            style,
             symbol,
             maxSupply,
             maxTime,
