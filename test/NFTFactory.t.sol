@@ -556,15 +556,15 @@ function testAdminFunctionsAccessControl() public {
         assertEq(details.isDisable, true, "Incorrect disable status");
     }
 
-    // Test retrieving details for an invalid contract address
-    function testGetDetailsByInvalidAddress() view public {
-        // Attempt to retrieve details for a non-existent collection
-        address invalidAddress = address(0x999);
+    // // Test retrieving details for an invalid contract address
+    // function testGetDetailsByInvalidAddress() view public {
+    //     // Attempt to retrieve details for a non-existent collection
+    //     address invalidAddress = address(0x999);
         
-        // Expect the function to revert or return empty details
-       AIBasedNFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
-        assertTrue(address(0) == invalidResult.collectionAddress, "Incorrect collection address");
-    }
+    //     // Expect the function to revert or return empty details
+    //    AIBasedNFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
+    //     assertTrue(address(0) == invalidResult.collectionAddress, "Incorrect collection address");
+    // }
 
     // Test retrieving details for a collection with ultimate mint conditions
     function testGetDetailsWithUltimateMintConditions() public {

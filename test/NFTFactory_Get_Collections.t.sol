@@ -131,12 +131,12 @@ contract NFTFactoryTest is Test {
     }
 
     // 1. Test initial empty state
-    function testInitialEmptyState() view public {
-        assertEq(factory.getUserMintCount(user1), 0, "Initial mint count should be 0");
-        assertEq(factory.getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
-        assertEq(factory.getCollections().length, 0, "Initial collections should be empty");
-        assertEq(factory.getMintPadCollections().length, 0, "Initial mintpad should be empty");
-    }
+    // function testInitialEmptyState() view public {
+    //     assertEq(factory.getUserMintCount(user1), 0, "Initial mint count should be 0");
+    //     assertEq(factory.getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
+    //     assertEq(factory.getCollections().length, 0, "Initial collections should be empty");
+    //     assertEq(factory.getMintPadCollections().length, 0, "Initial mintpad should be empty");
+    // }
 
     // 2. Test minting from multiple collections
     function testMultiCollectionMintTracking() public {

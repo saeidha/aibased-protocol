@@ -120,6 +120,16 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
             emit WithdrawToCreator(creatorAddress, ownerPayment);
         }
 
+        // Transfer platformPayment to the platform wallet
+        if (platformPayment > 0) {
+            // Send payment to the platform
+            // Ensure the recipient is explicitly set to the platform
+            address payable recipient = payable(owner());
+            recipient.sendValue(platformPayment);
+
+            emit EtherWithdrawn(recipient, platformPayment);
+        }
+
         hasMinted[to] = true;
         // Batch increment the token ID counter
         uint256 startTokenId = _tokenIdCounter._value;
