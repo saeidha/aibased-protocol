@@ -24,13 +24,34 @@ contract NFTCollection is ERC721, Ownable {
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event WithdrawToCreator(address indexed creator, uint256 indexed amount);
 
+
+    struct ContractConfig {
+        string name;
+        string description;
+        string model;
+        string style;
+        string symbol;
+        uint256 maxSupply;
+        uint256 maxTime;
+        string imageURL;
+        bool mintPerWallet;
+        uint256 initialPrice;
+        address admin;
+        address initialOwner;
+    }
+
+
+    string public description;
+    string public style;
+    string public model;
+
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
     string public imageURL;
     uint256 public maxTime;
     bool public immutable mintPerWallet;
-    uint256 public immutable mintPrice;
-    string public description;
+    uint256 public mintPrice;
+    
     uint256 private platformFee;
     uint256 private immutable initialPrice;
     bool public isUltimateMintTime;
@@ -38,38 +59,28 @@ contract NFTCollection is ERC721, Ownable {
     address public immutable creatorAddress;
     mapping(address => bool) public hasMinted;
 
-    constructor(
-        string memory name,
-        string memory _description,
-        string memory symbol,
-        uint256 _maxSupply,
-        uint256 _maxTime,
-        string memory _imageURL,
-        bool _mintPerWallet,
-        uint256 _initialPrice,
-        address _admin,
-        address initialOwner
-    ) ERC721(name, symbol) Ownable(_admin) {
+    constructor(ContractConfig memory config)
+     ERC721(config.name, config.symbol) 
+     Ownable(config.admin) {
 
+    require(config.maxTime >= block.timestamp + 60, "Max time should be end up next minutes");
 
+    require(config.maxSupply >= 1, "Max Supply should be grather than 1");
 
-require(_maxTime >= block.timestamp + 60, "Max time should be end up next minutes");
-
-require(_maxSupply >= 1, "Max Supply should be grather than 1");
-
-        maxSupply = _maxSupply;
-        imageURL = _imageURL;
+        maxSupply = config.maxSupply;
+        imageURL = config.imageURL;
         _tokenIdCounter._value = 0;
-        maxTime =  _maxTime;
-        mintPerWallet = _mintPerWallet;
-        description = _description;
-        platformFee = calculatePlatformFee(_initialPrice) ;
-        mintPrice = platformFee + _initialPrice;
-        initialPrice = _initialPrice;
-        isUltimateMintTime = _maxTime == type(uint256).max;
-        isUltimateMintQuantity = _maxSupply == type(uint256).max;
-        creatorAddress = initialOwner;
-        
+        maxTime =  config.maxTime;
+        mintPerWallet = config.mintPerWallet;
+        description = config.description;
+        style = config.style;
+        model = config.model;
+        platformFee = calculatePlatformFee(config.initialPrice) ;
+        mintPrice = platformFee + config.initialPrice;
+        initialPrice = config.initialPrice;
+        isUltimateMintTime = config.maxTime == type(uint256).max;
+        isUltimateMintQuantity = config.maxSupply == type(uint256).max;
+        creatorAddress = config.initialOwner;
     }
 
     function mint(address to, uint256 quantity) external payable {
@@ -120,6 +131,16 @@ require(_maxSupply >= 1, "Max Supply should be grather than 1");
             emit WithdrawToCreator(creatorAddress, ownerPayment);
         }
 
+        // Transfer platformPayment to the platform wallet
+        if (platformPayment > 0) {
+            // Send payment to the platform
+            // Ensure the recipient is explicitly set to the platform
+            address payable recipient = payable(owner());
+            recipient.sendValue(platformPayment);
+
+            emit EtherWithdrawn(recipient, platformPayment);
+        }
+
         hasMinted[to] = true;
         // Batch increment the token ID counter
         uint256 startTokenId = _tokenIdCounter._value;
@@ -148,12 +169,18 @@ function contractURI() external view returns (string memory) {
     // Directly use the description
     string memory _description = description;
 
+    string memory _model = model; // Assuming model is already a properly formatted string
+
+    string memory _style = style; // Assuming style is already a properly formatted string
+
     // Build the JSON metadata
     string memory json = Base64.encode(
         bytes(
             string.concat(
                 '{"name":"', encodedName, '",',
                 '"description":"', _description, '",',
+                '"style":"', _style, '",',
+                '"model":"', _model, '",',
                 '"image":"', imageURI, '"}'
             )
         )
@@ -176,12 +203,18 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
     // Construct the description
     string memory _description = description; // Assuming description is already a properly formatted string
 
+    string memory _model = model; // Assuming model is already a properly formatted string
+
+    string memory _style = style; // Assuming style is already a properly formatted string
+
     // Construct the JSON metadata
     string memory json = Base64.encode(
         bytes(
             string.concat(
                 '{"name":"', nameWithTokenId, '",',
                 '"description":"', _description, '",',
+                '"style":"', _style, '",',
+                '"model":"', _model, '",',
                 '"image":"', imageURI, '"}'
             )
         )
@@ -250,6 +283,7 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
     function changePlatformFee(uint256 _newPlatformFee) external onlyOwner{ 
 
         platformFee = _newPlatformFee;
+        mintPrice = platformFee + initialPrice;
         emit ChangePlatformFee(_newPlatformFee);
     }
 

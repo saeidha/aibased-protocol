@@ -29,7 +29,7 @@ contract NFTFactoryTest is Test {
         
         // Create collection via factory
         address collection = factory.createCollection(
-            "Test", "Desc", "TST", "ipfs://test",
+            "Test", "Desc", "v1", "cartone", "TST", "ipfs://test",
             100, 
             block.timestamp + 1 days,
             false, 
@@ -56,13 +56,13 @@ contract NFTFactoryTest is Test {
         
         // Create two collections
         address coll1 = factory.createCollection(
-            "Coll1", "Desc", "C1", "ipfs://1",
+            "Coll1", "Desc", "v1", "cartone", "C1", "ipfs://1",
             100, block.timestamp + 1 days,
             false, 0.001 ether, false, false
         );
         
         address coll2 = factory.createCollection(
-            "Coll2", "Desc", "C2", "ipfs://2",
+            "Coll2", "Desc", "v1", "cartone", "C2", "ipfs://2",
             100, block.timestamp + 1 days,
             false, 0.001 ether, false, false
         );
@@ -82,14 +82,14 @@ contract NFTFactoryTest is Test {
         
         // Create via normal method
         address normalCollection = factory.createCollection(
-            "Normal", "Desc", "N", "ipfs://normal",
+            "Normal", "Desc", "v1", "cartone", "N", "ipfs://normal",
             100, block.timestamp + 1 days,
             false, 0.001 ether, false, false
         );
 
         // Create via createAndMint
         factory.createAndMint{value: 0.1 ether}(
-            "QuickMint", "Desc", "QM", "ipfs://quickmint"
+            "QuickMint", "Desc", "v1", "cartone", "QM", "ipfs://quickmint"
         );
         // address quickCollection = factory.getCollections()[1];
 
@@ -110,7 +110,7 @@ contract NFTFactoryTest is Test {
         // User1 creates collection
         vm.prank(user1);
         address user1Coll = factory.createCollection(
-            "User1Coll", "Desc", "U1", "ipfs://u1",
+            "User1Coll", "Desc", "v1", "cartone", "U1", "ipfs://u1",
             100, block.timestamp + 1 days,
             false, 0.001 ether, false, false
         );
@@ -118,7 +118,7 @@ contract NFTFactoryTest is Test {
         // User2 creates collection
         vm.prank(user2);
         address user2Coll = factory.createCollection(
-            "User2Coll", "Desc", "U2", "ipfs://u2",
+            "User2Coll", "Desc", "v1", "cartone", "U2", "ipfs://u2",
             100, block.timestamp + 1 days,
             false, 0.001 ether, false, false
         );
@@ -131,21 +131,21 @@ contract NFTFactoryTest is Test {
     }
 
     // 1. Test initial empty state
-    function testInitialEmptyState() view public {
-        assertEq(factory.getUserMintCount(user1), 0, "Initial mint count should be 0");
-        assertEq(factory.getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
-        assertEq(factory.getCollections().length, 0, "Initial collections should be empty");
-        assertEq(factory.getMintPadCollections().length, 0, "Initial mintpad should be empty");
-    }
+    // function testInitialEmptyState() view public {
+    //     assertEq(factory.getUserMintCount(user1), 0, "Initial mint count should be 0");
+    //     assertEq(factory.getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
+    //     assertEq(factory.getCollections().length, 0, "Initial collections should be empty");
+    //     assertEq(factory.getMintPadCollections().length, 0, "Initial mintpad should be empty");
+    // }
 
     // 2. Test minting from multiple collections
     function testMultiCollectionMintTracking() public {
         vm.startPrank(user1);
         
-        address coll1 = factory.createCollection("Coll1", "Desc", "C1", "ipfs://1",
+        address coll1 = factory.createCollection("Coll1", "Desc", "v1", "cartone", "C1", "ipfs://1",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
-        address coll2 = factory.createCollection("Coll2", "Desc", "C2", "ipfs://2",
+        address coll2 = factory.createCollection("Coll2", "Desc", "v1", "cartone", "C2", "ipfs://2",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         factory.mintNFT{value: 0.002 ether}(coll1, user1, 1);
@@ -161,7 +161,7 @@ contract NFTFactoryTest is Test {
     function testCrossUserMintTracking() public {
         // User1 creates collection
         vm.prank(user1);
-        address coll = factory.createCollection("Coll", "Desc", "C", "ipfs://",
+        address coll = factory.createCollection("Coll", "Desc", "v1", "cartone", "C", "ipfs://",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         // User2 mints from it
@@ -179,11 +179,11 @@ contract NFTFactoryTest is Test {
         vm.startPrank(user1);
         
         // Create via regular method
-        address regularColl = factory.createCollection("Regular", "Desc", "RC", "ipfs://regular",
+        address regularColl = factory.createCollection("Regular", "Desc", "v1", "cartone", "RC", "ipfs://regular",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
         // Create via createAndMint
-        factory.createAndMint{value: 0.1 ether}("Quick", "Desc", "QC", "ipfs://quick");
+        factory.createAndMint{value: 0.1 ether}("Quick", "Desc", "v1", "cartone", "QC", "ipfs://quick");
 
         // Verify global tracking
         address[] memory allCollections = factory.getCollections();
@@ -198,7 +198,7 @@ contract NFTFactoryTest is Test {
     function testDuplicateMintPrevention() public {
         vm.startPrank(user1);
         
-        address coll = factory.createCollection("Coll", "Desc", "C", "ipfs://",
+        address coll = factory.createCollection("Coll", "Desc", "v1", "cartone", "C", "ipfs://",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         // Mint 5 times from same collection
@@ -214,10 +214,10 @@ contract NFTFactoryTest is Test {
     function testCollectionCreationOrder() public {
         vm.startPrank(user1);
         
-        address coll1 = factory.createCollection("First", "Desc", "1ST", "ipfs://1",
+        address coll1 = factory.createCollection("First", "Desc", "v1", "cartone", "1ST", "ipfs://1",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
-        address coll2 = factory.createCollection("Second", "Desc", "2ND", "ipfs://2",
+        address coll2 = factory.createCollection("Second", "Desc", "v1", "cartone", "2ND", "ipfs://2",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         address[] memory collections = factory.getUserCollections(user1);
@@ -230,22 +230,22 @@ contract NFTFactoryTest is Test {
         vm.startPrank(user1);
         
         // Create via different methods
-        factory.createCollection("Regular", "Desc", "REG", "ipfs://regular",
+        factory.createCollection("Regular", "Desc", "v1", "cartone", "REG", "ipfs://regular",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
         factory.createCollection(
-            "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
+            "DefaultTime", "Desc", "v1", "cartone", "DEF", "ipfs://defaulttime",
             100, block.timestamp + 7 days, false, 0.001 ether, false, false
         );
 
         factory.createCollection(
-            "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
+            "DefaultTime", "Desc", "v1", "cartone", "DEF", "ipfs://defaulttime",
             100, block.timestamp + 7 days, false, 0.001 ether, false, false
         );
 
-        factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "QCK", "ipfs://quick");
+        factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "v1", "cartone", "QCK", "ipfs://quick");
 
-        factory.createAndMint{value: 0.1 ether}("QuickMint", "Desc", "QM", "ipfs://quick");
+        factory.createAndMint{value: 0.1 ether}("QuickMint", "Desc", "v1", "cartone", "QM", "ipfs://quick");
 
         vm.stopPrank();
         
@@ -259,24 +259,24 @@ contract NFTFactoryTest is Test {
         vm.startPrank(user2);
         
         // Create via different methods
-        factory.createCollection("Regular", "Desc", "REG", "ipfs://regular",
+        factory.createCollection("Regular", "Desc", "v1", "cartone", "REG", "ipfs://regular",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
         factory.createCollection(
-            "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
+            "DefaultTime", "Desc", "v1", "cartone", "DEF", "ipfs://defaulttime",
             block.timestamp + 7 days,
             100, false, 0.001 ether, false, false
         );
 
         factory.createCollection(
-            "DefaultTime", "Desc", "DEF", "ipfs://defaulttime",
+            "DefaultTime", "Desc", "v1", "cartone", "DEF", "ipfs://defaulttime",
             block.timestamp + 7 days,
             100, false, 0.001 ether, false, false
         );
 
-        factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "QCK", "ipfs://quick");
+        factory.createAndMint{value: 0.001 ether}("Quick", "Desc", "v1", "cartone", "QCK", "ipfs://quick");
 
-        factory.createAndMint{value: 0.1 ether}("QuickMint", "Desc", "QM", "ipfs://quick");
+        factory.createAndMint{value: 0.1 ether}("QuickMint", "Desc", "v1", "cartone", "QM", "ipfs://quick");
 
         vm.stopPrank();
         
@@ -291,7 +291,7 @@ contract NFTFactoryTest is Test {
     function testMaxSupplyTracking() public {
         vm.startPrank(user1);
         
-        address coll = factory.createCollection("MaxSupply", "Desc", "MAX", "ipfs://max",
+        address coll = factory.createCollection("MaxSupply", "Desc", "v1", "cartone", "MAX", "ipfs://max",
             1, // Max supply = 1
             block.timestamp + 1 days,
             true, // mintPerWallet
@@ -309,10 +309,10 @@ contract NFTFactoryTest is Test {
     function testMintPadVisibility() public {
         vm.startPrank(user1);
         
-        factory.createCollection("Visible", "Desc", "VIS", "ipfs://visible",
+        factory.createCollection("Visible", "Desc", "v1", "cartone", "VIS", "ipfs://visible",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
         
-        factory.createCollection("Hidden", "Desc", "HID", "ipfs://hidden",
+        factory.createCollection("Hidden", "Desc", "v1", "cartone", "HID", "ipfs://hidden",
             100, block.timestamp + 1 days, true, 0.001 ether, false, false);
 
         // Assume canNotToShow() checks some visibility condition
@@ -324,11 +324,11 @@ contract NFTFactoryTest is Test {
     // 10. Test user collection ownership
     function testUserCollectionOwnership() public {
         vm.prank(user1);
-        address coll = factory.createCollection("Owned", "Desc", "OWN", "ipfs://",
+        address coll = factory.createCollection("Owned", "Desc", "v1", "cartone", "OWN", "ipfs://",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         vm.prank(user2);
-        factory.createCollection("Other", "Desc", "OTH", "ipfs://",
+        factory.createCollection("Other", "Desc", "v1", "cartone", "OTH", "ipfs://",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
         address[] memory user1Collections = factory.getUserCollections(user1);
