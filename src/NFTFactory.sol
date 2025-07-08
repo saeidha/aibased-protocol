@@ -38,6 +38,7 @@ contract AIBasedNFTFactory is Ownable {
         address owner
     );
     event ChangeGenerateFee(uint256 indexed newFee);
+    event PayGenerateFee(uint256 indexed amount);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event NFTMinted(address indexed collectionAddress, address indexed to, uint256 indexed quantity);
 
@@ -249,6 +250,7 @@ contract AIBasedNFTFactory is Ownable {
 
     function payGenerateFee() external payable {
         if (msg.value < generateFee) revert InsufficientFee();
+        emit PayGenerateFee(msg.value);
     }
 
     function setGenerateFee(uint256 _newFee) external onlyOwner{
