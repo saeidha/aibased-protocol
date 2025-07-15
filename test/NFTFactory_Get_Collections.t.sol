@@ -18,6 +18,153 @@ contract NFTFactoryTest is Test {
         factory = new AIBasedNFTFactory();
     }
 
+    ///-------------------------------------------------------- HELPER FUNCTIONS ------------------------------------------------------------------///
+    function getCollections() internal view returns (address[] memory) {
+    // Call the explicit getter function you defined in the factory
+    return factory.getCollections(); 
+}
+
+function getMintPadCollections() internal view returns (address[] memory) {
+    // Call the explicit getter function you defined in the factory
+    return factory.getMintPadCollections();
+}
+
+    function getAvailableCollectionsToMintDetails() internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        uint256 count = 0;
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+            if (!collection.canNotToShow()) {
+                uint256 mintPrice = collection.mintPrice();
+                details[count++] = _getCollectionDetails(collection, factory.getMintPadCollections()[i], true, mintPrice, mintPrice);
+            }
+        }
+        return _trimDetails(details, count);
+    }
+
+    function getAvailableCollectionsToMintDetails(address sender) internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        uint256 count = 0;
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+            if (!collection.canNotToShow()) {
+                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getMintPadCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+                detail.isDisable = collection.isDisabled(sender);
+                details[count++] = detail;
+            }
+        }
+        return _trimDetails(details, count);
+    }
+
+    function getUserCollectionsDetails(address sender) internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        address[] memory usersCollections = factory.getUserCollection(sender);
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(usersCollections[i]);
+            details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+            details[i].isDisable = collection.isDisabled(sender);
+        }
+        return details;
+    }
+
+    function getCollectionDetailsByContractAddress(address contractAddress) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        uint256 deployedCollectionsLength = factory.getCollections().length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+            if (factory.getCollections()[i] == contractAddress) {
+                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+                uint256 mintPrice = collection.mintPrice();
+                return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
+            }
+        }
+        return _emptyCollectionDetails();
+    }
+
+    function getCollectionDetailsByContractAddress(address contractAddress, address sender) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        uint256 deployedCollectionsLength = factory.getCollections().length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+            if (factory.getCollections()[i] == contractAddress) {
+                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+                detail.isDisable = collection.isDisabled(sender);
+                return detail;
+            }
+        }
+        return _emptyCollectionDetails();
+    }
+
+
+    function getUserMints(address user) internal view returns (address[] memory) {
+        return factory.getMintCollection(user);
+    }
+
+    function getUserMintCount(address user) internal view returns (uint256) {
+        return factory.getMintCollection(user).length;
+    }
+
+    function getUserCollectionsCount(address user) internal view returns (uint256) {
+        return factory.getUserCollection(user).length;
+    }
+
+    function getUserCollections(address user) internal view returns (address[] memory) {
+        return factory.getUserCollection(user);
+    }
+
+    // Helper functions to reduce code duplication
+    function _getCollectionDetails(NFTCollection collection, 
+    address collectionAddress, bool isDisable, uint256 mintPrice, 
+    uint256 actualPrice) private view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        return AIBasedNFTFactory.CollectionDetails({
+            collectionAddress: collectionAddress,
+            name: collection.name(),
+            description: collection.description(),
+            tokenIdCounter: collection.totalSupply(),
+            maxSupply: collection.maxSupply(),
+            baseImageURI: collection.imageURL(),
+            maxTime: collection.maxTime(),
+            mintPerWallet: collection.mintPerWallet(),
+            mintPrice: mintPrice,
+            actualPrice: actualPrice,
+            isDisable: isDisable,
+            isUltimateMintTime: collection.isUltimateMintTime(),
+            isUltimateMintQuantity: collection.isUltimateMintQuantity()
+        });
+    }
+
+    function _trimDetails(AIBasedNFTFactory.CollectionDetails[] memory details, uint256 count) private pure 
+            returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        AIBasedNFTFactory.CollectionDetails[] memory trimmed = new AIBasedNFTFactory.CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            trimmed[i] = details[i];
+        }
+        return trimmed;
+    }
+
+    function _emptyCollectionDetails() private pure returns (AIBasedNFTFactory.CollectionDetails memory) {
+        return AIBasedNFTFactory.CollectionDetails({
+            collectionAddress: address(0),
+            name: "",
+            description: "",
+            tokenIdCounter: 0,
+            maxSupply: 0,
+            baseImageURI: "",
+            maxTime: 0,
+            mintPerWallet: false,
+            mintPrice: 0,
+            actualPrice: 0,
+            isDisable: false,
+            isUltimateMintTime: false,
+            isUltimateMintQuantity: false
+        });
+    }
+
+
+///-------------------------------------------------------- HELPER FUNCTIONS ------------------------------------------------------------------///
+
+
     // ERC721 receiver support for test contract
     function onERC721Received(address, address, uint256, bytes memory) public pure returns (bytes4) {
         return this.onERC721Received.selector;
@@ -43,8 +190,8 @@ contract NFTFactoryTest is Test {
         factory.mintNFT{value: 0.001 ether}(collection, user1, 1);
 
         // Verify mint tracking (should have 1 unique entry)
-        address[] memory mints = factory.getUserMints(user1);
-        uint256 mintCount = factory.getUserMintCount(user1);
+        address[] memory mints = getUserMints(user1);
+        uint256 mintCount = getUserMintCount(user1);
         
         assertEq(mintCount, 1, "Mint count mismatch");
         assertEq(mints[0], collection, "Mint record mismatch");
@@ -68,8 +215,8 @@ contract NFTFactoryTest is Test {
         );
 
         // Verify collections tracking
-        address[] memory userCollections = factory.getUserCollections(user1);
-        uint256 collectionCount = factory.getUserCollectionsCount(user1);
+        address[] memory userCollections = getUserCollections(user1);
+        uint256 collectionCount = getUserCollectionsCount(user1);
 
         assertEq(collectionCount, 2, "Collection count mismatch");
         assertEq(userCollections[0], coll1, "First collection mismatch");
@@ -124,16 +271,16 @@ contract NFTFactoryTest is Test {
         );
 
         // Verify isolation
-        assertEq(factory.getUserCollections(user1)[0], user1Coll, "User1 collection mismatch");
-        assertEq(factory.getUserCollections(user2)[0], user2Coll, "User2 collection mismatch");
-        assertEq(factory.getUserCollectionsCount(user1), 1, "User1 should have 1 collection");
-        assertEq(factory.getUserCollectionsCount(user2), 1, "User2 should have 1 collection");
+        assertEq(getUserCollections(user1)[0], user1Coll, "User1 collection mismatch");
+        assertEq(getUserCollections(user2)[0], user2Coll, "User2 collection mismatch");
+        assertEq(getUserCollectionsCount(user1), 1, "User1 should have 1 collection");
+        assertEq(getUserCollectionsCount(user2), 1, "User2 should have 1 collection");
     }
 
     // 1. Test initial empty state
     // function testInitialEmptyState() view public {
-    //     assertEq(factory.getUserMintCount(user1), 0, "Initial mint count should be 0");
-    //     assertEq(factory.getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
+    //     assertEq(getUserMintCount(user1), 0, "Initial mint count should be 0");
+    //     assertEq(getUserCollectionsCount(user1), 0, "Initial collection count should be 0");
     //     assertEq(factory.getCollections().length, 0, "Initial collections should be empty");
     //     assertEq(factory.getMintPadCollections().length, 0, "Initial mintpad should be empty");
     // }
@@ -151,7 +298,7 @@ contract NFTFactoryTest is Test {
         factory.mintNFT{value: 0.002 ether}(coll1, user1, 1);
         factory.mintNFT{value: 0.002 ether}(coll2, user1, 1);
 
-        address[] memory mints = factory.getUserMints(user1);
+        address[] memory mints = getUserMints(user1);
         assertEq(mints.length, 2, "Should track 2 minted collections");
         assertEq(mints[0], coll1, "First mint mismatch");
         assertEq(mints[1], coll2, "Second mint mismatch");
@@ -169,9 +316,9 @@ contract NFTFactoryTest is Test {
         factory.mintNFT{value: 0.0011 ether}(coll, user2, 1);
 
         // Verify tracking
-        assertEq(factory.getUserMintCount(user1), 0, "Creator shouldn't get mint tracking");
-        assertEq(factory.getUserMintCount(user2), 1, "Minter should get tracking");
-        assertEq(factory.getUserMints(user2)[0], coll, "Minter's mint record mismatch");
+        assertEq(getUserMintCount(user1), 0, "Creator shouldn't get mint tracking");
+        assertEq(getUserMintCount(user2), 1, "Minter should get tracking");
+        assertEq(getUserMints(user2)[0], coll, "Minter's mint record mismatch");
     }
 
     // 4. Test collection type differentiation
@@ -206,8 +353,8 @@ contract NFTFactoryTest is Test {
             factory.mintNFT{value: 0.001 ether}(coll, user1, 1);
         }
 
-        assertEq(factory.getUserMintCount(user1), 1, "Should count as single mint record");
-        assertEq(factory.getUserMints(user1)[0], coll, "Mint record mismatch");
+        assertEq(getUserMintCount(user1), 1, "Should count as single mint record");
+        assertEq(getUserMints(user1)[0], coll, "Mint record mismatch");
     }
 
     // 6. Test collection creation order
@@ -220,7 +367,7 @@ contract NFTFactoryTest is Test {
         address coll2 = factory.createCollection("Second", "Desc", "v1", "cartone", "2ND", "ipfs://2",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
-        address[] memory collections = factory.getUserCollections(user1);
+        address[] memory collections = getUserCollections(user1);
         assertEq(collections[0], coll1, "First collection mismatch");
         assertEq(collections[1], coll2, "Second collection mismatch");
     }
@@ -251,8 +398,8 @@ contract NFTFactoryTest is Test {
         
 
         // Verify user collections
-        assertEq(factory.getUserCollectionsCount(user1), 5, "Should track all creations");
-        assertEq(factory.getUserMintCount(user1), 2, "Just mint user");
+        assertEq(getUserCollectionsCount(user1), 5, "Should track all creations");
+        assertEq(getUserMintCount(user1), 2, "Just mint user");
         assertEq(factory.getMintPadCollections().length, 3, "Should exclude createAndMint");
 
 
@@ -282,8 +429,8 @@ contract NFTFactoryTest is Test {
         
 
         // Verify user collections
-        assertEq(factory.getUserCollectionsCount(user2), 5, "Should track all creations");
-        assertEq(factory.getUserMintCount(user2), 2, "Just mint user");
+        assertEq(getUserCollectionsCount(user2), 5, "Should track all creations");
+        assertEq(getUserMintCount(user2), 2, "Just mint user");
         assertEq(factory.getMintPadCollections().length,6, "Should exclude createAndMint");
     }
 
@@ -302,7 +449,7 @@ contract NFTFactoryTest is Test {
         factory.mintNFT{value: 0.001 ether}(coll, user1, 1);
 
         // Verify mint tracking despite max supply
-        assertEq(factory.getUserMintCount(user1), 1, "Should track mint even at max supply");
+        assertEq(getUserMintCount(user1), 1, "Should track mint even at max supply");
     }
 
     // 9. Test collection visibility in mintpad
@@ -331,8 +478,8 @@ contract NFTFactoryTest is Test {
         factory.createCollection("Other", "Desc", "v1", "cartone", "OTH", "ipfs://",
             100, block.timestamp + 1 days, false, 0.001 ether, false, false);
 
-        address[] memory user1Collections = factory.getUserCollections(user1);
-        address[] memory user2Collections = factory.getUserCollections(user2);
+        address[] memory user1Collections = getUserCollections(user1);
+        address[] memory user2Collections = getUserCollections(user2);
 
         assertEq(user1Collections.length, 1, "User1 should have 1 collection");
         assertEq(user2Collections.length, 1, "User2 should have 1 collection");

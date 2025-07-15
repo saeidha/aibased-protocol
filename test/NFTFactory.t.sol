@@ -21,6 +21,151 @@ contract NFTFactoryTest is Test {
         vm.prank(owner);
         factory = new AIBasedNFTFactory();
     }
+///-------------------------------------------------------- HELPER FUNCTIONS ------------------------------------------------------------------///
+    function getCollections() internal view returns (address[] memory) {
+    // Call the explicit getter function you defined in the factory
+    return factory.getCollections(); 
+}
+
+function getMintPadCollections() internal view returns (address[] memory) {
+    // Call the explicit getter function you defined in the factory
+    return factory.getMintPadCollections();
+}
+
+    function getAvailableCollectionsToMintDetails() internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        uint256 count = 0;
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+            if (!collection.canNotToShow()) {
+                uint256 mintPrice = collection.mintPrice();
+                details[count++] = _getCollectionDetails(collection, factory.getMintPadCollections()[i], true, mintPrice, mintPrice);
+            }
+        }
+        return _trimDetails(details, count);
+    }
+
+    function getAvailableCollectionsToMintDetails(address sender) internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        uint256 count = 0;
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+            if (!collection.canNotToShow()) {
+                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getMintPadCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+                detail.isDisable = collection.isDisabled(sender);
+                details[count++] = detail;
+            }
+        }
+        return _trimDetails(details, count);
+    }
+
+    function getUserCollectionsDetails(address sender) internal view returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
+        address[] memory usersCollections = factory.getUserCollection(sender);
+        AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+            NFTCollection collection = NFTCollection(usersCollections[i]);
+            details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+            details[i].isDisable = collection.isDisabled(sender);
+        }
+        return details;
+    }
+
+    function getCollectionDetailsByContractAddress(address contractAddress) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        uint256 deployedCollectionsLength = factory.getCollections().length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+            if (factory.getCollections()[i] == contractAddress) {
+                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+                uint256 mintPrice = collection.mintPrice();
+                return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
+            }
+        }
+        return _emptyCollectionDetails();
+    }
+
+    function getCollectionDetailsByContractAddress(address contractAddress, address sender) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        uint256 deployedCollectionsLength = factory.getCollections().length;
+        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+            if (factory.getCollections()[i] == contractAddress) {
+                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+                detail.isDisable = collection.isDisabled(sender);
+                return detail;
+            }
+        }
+        return _emptyCollectionDetails();
+    }
+
+
+    function getUserMints(address user) internal view returns (address[] memory) {
+        return factory.getMintCollection(user);
+    }
+
+    function getUserMintCount(address user) internal view returns (uint256) {
+        return factory.getMintCollection(user).length;
+    }
+
+    function getUserCollectionsCount(address user) internal view returns (uint256) {
+        return factory.getUserCollection(user).length;
+    }
+
+    function getUserCollections(address user) internal view returns (address[] memory) {
+        return factory.getUserCollection(user);
+    }
+
+    // Helper functions to reduce code duplication
+    function _getCollectionDetails(NFTCollection collection, 
+    address collectionAddress, bool isDisable, uint256 mintPrice, 
+    uint256 actualPrice) private view returns (AIBasedNFTFactory.CollectionDetails memory) {
+        return AIBasedNFTFactory.CollectionDetails({
+            collectionAddress: collectionAddress,
+            name: collection.name(),
+            description: collection.description(),
+            tokenIdCounter: collection.totalSupply(),
+            maxSupply: collection.maxSupply(),
+            baseImageURI: collection.imageURL(),
+            maxTime: collection.maxTime(),
+            mintPerWallet: collection.mintPerWallet(),
+            mintPrice: mintPrice,
+            actualPrice: actualPrice,
+            isDisable: isDisable,
+            isUltimateMintTime: collection.isUltimateMintTime(),
+            isUltimateMintQuantity: collection.isUltimateMintQuantity()
+        });
+    }
+
+    function _trimDetails(AIBasedNFTFactory.CollectionDetails[] memory details, uint256 count) private pure 
+            returns (AIBasedNFTFactory.CollectionDetails[] memory) {
+        AIBasedNFTFactory.CollectionDetails[] memory trimmed = new AIBasedNFTFactory.CollectionDetails[](count);
+        for (uint256 i = 0; i < count; i++) {
+            trimmed[i] = details[i];
+        }
+        return trimmed;
+    }
+
+    function _emptyCollectionDetails() private pure returns (AIBasedNFTFactory.CollectionDetails memory) {
+        return AIBasedNFTFactory.CollectionDetails({
+            collectionAddress: address(0),
+            name: "",
+            description: "",
+            tokenIdCounter: 0,
+            maxSupply: 0,
+            baseImageURI: "",
+            maxTime: 0,
+            mintPerWallet: false,
+            mintPrice: 0,
+            actualPrice: 0,
+            isDisable: false,
+            isUltimateMintTime: false,
+            isUltimateMintQuantity: false
+        });
+    }
+
+
+///-------------------------------------------------------- HELPER FUNCTIONS ------------------------------------------------------------------///
 
     function testCreateCollection() public {
         vm.startPrank(owner);
@@ -548,7 +693,7 @@ function testAdminFunctionsAccessControl() public {
         address collectionAddress = createTestCollection(owner, 100, block.timestamp + 1 days, false);
         
         // Retrieve details
-        AIBasedNFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(collectionAddress);
+        AIBasedNFTFactory.CollectionDetails memory details = getCollectionDetailsByContractAddress(collectionAddress);
         
         // Verify returned details
         assertEq(details.collectionAddress, collectionAddress, "Incorrect collection address");
@@ -563,7 +708,7 @@ function testAdminFunctionsAccessControl() public {
     //     address invalidAddress = address(0x999);
         
     //     // Expect the function to revert or return empty details
-    //    AIBasedNFTFactory.CollectionDetails memory invalidResult = factory.getCollectionDetailsByContractAddress(invalidAddress);
+    //    AIBasedNFTFactory.CollectionDetails memory invalidResult = getCollectionDetailsByContractAddress(invalidAddress);
     //     assertTrue(address(0) == invalidResult.collectionAddress, "Incorrect collection address");
     // }
 
@@ -576,11 +721,11 @@ function testAdminFunctionsAccessControl() public {
         address quantityCol = createTestCollection(owner, type(uint256).max, block.timestamp + 1 days, false);
 
         // Retrieve details for time-sensitive collection
-        AIBasedNFTFactory.CollectionDetails memory timeDetails = factory.getCollectionDetailsByContractAddress(timeCol);
+        AIBasedNFTFactory.CollectionDetails memory timeDetails = getCollectionDetailsByContractAddress(timeCol);
         assertTrue(timeDetails.isUltimateMintTime, "Should indicate ultimate mint time");
 
         // // Retrieve details for quantity-sensitive collection
-        AIBasedNFTFactory.CollectionDetails memory quantityDetails = factory.getCollectionDetailsByContractAddress(quantityCol);
+        AIBasedNFTFactory.CollectionDetails memory quantityDetails = getCollectionDetailsByContractAddress(quantityCol);
         assertTrue(quantityDetails.isUltimateMintQuantity, "Should indicate ultimate mint quantity");
     }
 
@@ -595,7 +740,7 @@ function testAdminFunctionsAccessControl() public {
         factory.mintNFT{value: 0.0002 ether}(restrictedCol, user, 1);
 
         // Retrieve details
-        AIBasedNFTFactory.CollectionDetails memory details = factory.getCollectionDetailsByContractAddress(restrictedCol);
+        AIBasedNFTFactory.CollectionDetails memory details = getCollectionDetailsByContractAddress(restrictedCol);
         
         // Verify restrictions
         assertTrue(details.mintPerWallet, "Should indicate mint per wallet restriction");
@@ -674,7 +819,7 @@ function testAdminFunctionsAccessControl() public {
         assertEq(collections.length, 1);
         assertEq(collections[0], collectionAddress);
 
-        AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = getAvailableCollectionsToMintDetails();
         assertEq(avaiableColloctions.length, 1);
         assertEq(avaiableColloctions[0].collectionAddress, collectionAddress);
     }
@@ -742,7 +887,7 @@ function testAdminFunctionsAccessControl() public {
         // NFTCollection(collection2).setCanShow(true);
 
         // Get available collection details
-        AIBasedNFTFactory.CollectionDetails[] memory details = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory details = getAvailableCollectionsToMintDetails();
 
         // Verify details of the first collection
         assertEq(details.length, 2);
@@ -761,7 +906,7 @@ function testAdminFunctionsAccessControl() public {
 
         vm.warp(block.timestamp + 366 days); 
 
-            AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = factory.getAvailableCollectionsToMintDetails();
+            AIBasedNFTFactory.CollectionDetails[] memory avaiableColloctions = getAvailableCollectionsToMintDetails();
             assertEq(avaiableColloctions.length, 1);
             assertEq(avaiableColloctions[0].collectionAddress, details[1].collectionAddress);
     }
@@ -778,7 +923,7 @@ function testAdminFunctionsAccessControl() public {
         }
         // vm.resumeGasMetering();
         address[] memory details = factory.getCollections();
-        AIBasedNFTFactory.CollectionDetails[] memory detailsCollectios = factory.getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory detailsCollectios = getAvailableCollectionsToMintDetails();
         assertEq(details.length, length);
         assertEq(detailsCollectios.length, length);
     }
@@ -850,9 +995,9 @@ function testAdminFunctionsAccessControl() public {
         
         // Test admin-only functions with non-admin
         
-        AIBasedNFTFactory.CollectionDetails[] memory detailsGeneral = factory.getAvailableCollectionsToMintDetails();
-        AIBasedNFTFactory.CollectionDetails[] memory detailsUser1 = factory.getAvailableCollectionsToMintDetails(user);
-        AIBasedNFTFactory.CollectionDetails[] memory detailsUser2 = factory.getAvailableCollectionsToMintDetails(user2);
+        AIBasedNFTFactory.CollectionDetails[] memory detailsGeneral = getAvailableCollectionsToMintDetails();
+        AIBasedNFTFactory.CollectionDetails[] memory detailsUser1 = getAvailableCollectionsToMintDetails(user);
+        AIBasedNFTFactory.CollectionDetails[] memory detailsUser2 = getAvailableCollectionsToMintDetails(user2);
         
         
         assertEq(detailsGeneral[0].mintPrice, nftFee + platformFee);
