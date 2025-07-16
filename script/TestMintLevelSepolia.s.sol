@@ -18,6 +18,9 @@ contract MintLevel is Script {
         address minter = vm.envAddress("MINTER_ADDRESS_SEPOLIA"); // The user who will receive the NFT
         uint256 minterPrivateKey = vm.envUint("MINTER_ADDRESS_KEY_SEPOLIA"); // The user who will receive the NFT
 
+        uint256 anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_ADDRESS_KEY_SEPOLIA"); // The user who will receive the NFT
+        
+
         // Validate configuration
         require(factoryAddress != address(0), "FACTORY_ADDRESS_SEPOLIA not set");
         require(levelNftAddress != address(0), "LEVEL_NFT_ADDRESS_SEPOLIA not set");
@@ -29,14 +32,18 @@ contract MintLevel is Script {
         
 
         // The level we want to test minting for
-        uint256 levelToMint = 5;
+        uint256 levelToMint = 25;
 
         // --- 2. Simulate Backend: Create the Signature ---
-        bytes32 messageHash = keccak256(abi.encodePacked(minter, levelToMint));
-        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(authorizerPrivateKey, ethSignedMessageHash);
-        bytes memory signature = abi.encodePacked(r, s, v);
+        // bytes32 messageHash = keccak256(abi.encodePacked(minter, levelToMint));
+        // bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        // (uint8 v, bytes32 r, bytes32 s) = vm.sign(authorizerPrivateKey, ethSignedMessageHash);
+        // bytes memory signature = abi.encodePacked(r, s, v);
 
+        // console.log("Signature:");
+        // console.logBytes(signature);
+
+        bytes memory signature = hex"254bfe5297a424ddd05d75ac9fd66585166892fb27a7d4ed86c9f0776f8c05fa0d9ce1dcd10e17c3d222ad9d1fb01cfc42fa9cc000158b821ae723e83eda875d1c";
         // --- 3. Simulate User: Call the Mint Function ---
         AIBasedNFTFactory factory = AIBasedNFTFactory(factoryAddress);
         

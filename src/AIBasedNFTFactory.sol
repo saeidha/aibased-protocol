@@ -36,8 +36,11 @@ contract AIBasedNFTFactory is Ownable {
      * The factory will call the mint function on this contract.*/
     address public levelNFTCollection;
 
-    /*** @dev Tracks wallets that have already minted a Level NFT to enforce one-mint-per-wallet rule.*/
-    mapping(address => bool) public hasMintedLevelNFT;
+    /*** @dev Tracks which levels each wallet has already minted.
+     * `mapping(walletAddress => mapping(level => hasMinted))`
+     */
+    mapping(address => mapping(uint256 => bool)) public hasMintedLevel;
+
 
     /*** @dev To prevent replay attacks, each signature can only be used once.
      * We store the hash of the used signatures.*/
@@ -282,13 +285,12 @@ contract AIBasedNFTFactory is Ownable {
     function mintLevelNFT(uint256 level, bytes calldata signature) external {
         require(levelNFTCollection != address(0), "Level NFT collection not set");
         require(authorizer != address(0), "Authorizer not set");
-        require(!hasMintedLevelNFT[msg.sender], "You have already minted a Level NFT");
+        require(!hasMintedLevel[msg.sender][level], "You have already minted this level");
         
         // Use the signature itself as a nonce to prevent replay attacks.
         // A signature can only be used once across the entire contract.
         bytes32 sigHash = keccak256(signature);
         require(!usedSignatures[sigHash], "Signature already used");
-        usedSignatures[sigHash] = true;
 
         // Recreate the message hash that was signed by the backend.
         // It must match exactly: keccak256(abi.encodePacked(msg.sender, level))
@@ -302,9 +304,11 @@ contract AIBasedNFTFactory is Ownable {
         require(recoveredSigner == authorizer, "Invalid signature");
 
         // If all checks pass, mint the NFT by calling the LevelNFTCollection contract.
-        hasMintedLevelNFT[msg.sender] = true;
+        hasMintedLevel[msg.sender][level] = true;
         uint256 newTokenId = ILevelNFTCollection(levelNFTCollection).mint(msg.sender, level);
 
+        // A signature can only be used once across the entire contract.
+        usedSignatures[sigHash] = true;
         emit LevelNFTMinted(levelNFTCollection, msg.sender, level, newTokenId);
     }
 
