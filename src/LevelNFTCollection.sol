@@ -4,16 +4,19 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/Base64.sol";
 
 /**
  * @title LevelNFTCollection
- * @dev An NFT collection where each token has a "Level" trait.
- * Minting is restricted to a designated factory contract.
- * The metadata (including the level trait) is generated on-chain.
+ * @dev An NFT collection for "The Core Stack".
+ * Metadata is stored off-chain on IPFS and the contract constructs the URI
+ * based on the token's level.
  */
 contract LevelNFTCollection is ERC721, Ownable {
     using Strings for uint256;
+
+    // --- FIX ---
+    // Renamed the state variable to avoid conflict with the inherited _baseURI() function.
+    string private _tokenBaseURI;
 
     uint256 private _nextTokenId;
     address public factoryAddress;
@@ -21,25 +24,59 @@ contract LevelNFTCollection is ERC721, Ownable {
     // Mapping from token ID to its level
     mapping(uint256 => uint256) public tokenLevels;
 
-    // Event to announce when the factory address is changed
     event FactoryAddressSet(address indexed newFactoryAddress);
+    event BaseURISet(string newBaseURI);
 
     modifier onlyFactory() {
         require(msg.sender == factoryAddress, "Caller is not the authorized factory");
         _;
     }
 
-    constructor(address initialFactory) ERC721("Level NFT", "LVLNFT") Ownable(msg.sender) {
+    // Pass the factory address and the IPFS metadata URI during deployment.
+    constructor(
+        address initialFactory,
+        string memory initialBaseURI
+    ) ERC721("The Core Stack", "CORE") Ownable(msg.sender) {
         factoryAddress = initialFactory;
+        // --- FIX ---
+        // Set the newly named state variable.
+        _tokenBaseURI = initialBaseURI;
+    }
+    
+    /**
+     * @dev Returns the base URI for all token IDs by overriding the standard function.
+     */
+    function _baseURI() internal view override returns (string memory) {
+        // --- FIX ---
+        // Return the value from our correctly named state variable.
+        return _tokenBaseURI;
     }
 
     /**
-     * @dev The core minting function, callable only by the factory.
-     * It creates a new NFT, assigns it to the 'to' address, and stores its level.
-     * @param to The address that will receive the NFT.
-     * @param level The level to be assigned to the new NFT.
-     * @return The ID of the newly minted token.
+     * @dev Constructs and returns the metadata URI for a given token ID.
+     * It fetches the token's level and appends it to the base URI.
+     * Example: ipfs://METADATA_CID/5.json
      */
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        _requireOwned(tokenId);
+        
+        uint256 level = tokenLevels[tokenId];
+        
+        // Concatenate the base URI, the level, and the ".json" suffix.
+        return string(abi.encodePacked(_baseURI(), level.toString(), ".json"));
+    }
+
+    /**
+     * @dev Allows the contract owner to update the base URI for metadata.
+     */
+    function setBaseURI(string memory newBaseURI) external onlyOwner {
+        
+        // Update the newly named state variable.
+        _tokenBaseURI = newBaseURI;
+        emit BaseURISet(newBaseURI);
+    }
+    
+    // ... The rest of the functions (mint, setFactoryAddress, etc.) remain the same ...
     function mint(address to, uint256 level) external onlyFactory returns (uint256) {
         uint256 tokenId = _nextTokenId;
         _nextTokenId++;
@@ -47,35 +84,7 @@ contract LevelNFTCollection is ERC721, Ownable {
         _safeMint(to, tokenId);
         return tokenId;
     }
-    
-    /**
-     * @dev Generates the token URI on-the-fly, including attributes.
-     * Returns a Base64 encoded JSON string, compliant with OpenSea standards.
-     */
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        _requireOwned(tokenId);
-        
-        uint256 level = tokenLevels[tokenId];
-        
-        string memory json = Base64.encode(
-            bytes(
-                string.concat(
-                    '{"name": "Level NFT #', tokenId.toString(), '",',
-                    '"description": "A unique, level-based NFT granted by the AIBased Factory.",',
-                    '"image": "ipfs://bafybeifx7yeb55armcsxwwitkymga5xf53dxiarykms3ygq42o53uc4bqy/nft-image.png",', // A placeholder image
-                    '"attributes": [',
-                        '{ "trait_type": "Level", "value": ', level.toString(), ' }',
-                    ']}'
-                )
-            )
-        );
 
-        return string(abi.encodePacked("data:application/json;base64,", json));
-    }
-
-    /**
-     * @dev Allows the contract owner to update the factory address if needed.
-     */
     function setFactoryAddress(address _newFactoryAddress) external onlyOwner {
         require(_newFactoryAddress != address(0), "Cannot be zero address");
         factoryAddress = _newFactoryAddress;

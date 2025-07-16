@@ -2,7 +2,7 @@
 pragma solidity 0.8.24;
 
 import "forge-std/Test.sol";
-import "../src/NFTFactory.sol";
+import "../src/AIBasedNFTFactory.sol";
 import "../src/NFTCollection.sol";
 
 contract NFTFactoryTest is Test {
