@@ -4,9 +4,16 @@ pragma solidity 0.8.24;
 import "./NFTCollection.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+
+interface ILevelNFTCollection {
+    function mint(address to, uint256 level) external returns (uint256);
+}
 
 contract AIBasedNFTFactory is Ownable {
     using Address for address payable;
+    using ECDSA for bytes32;
 
     error InsufficientFee();
     error OnlyAdmin();
@@ -20,6 +27,24 @@ contract AIBasedNFTFactory is Ownable {
     mapping(address => address[]) private _usersMint;
 
     uint256 private generateFee = 0 ether;
+
+    /*** @dev The address authorized to sign minting requests for Level NFTs.
+     * This is set by the factory owner and is used to verify signatures.*/
+    address public authorizer;
+
+    /*** @dev The address of the deployed LevelNFTCollection contract.
+     * The factory will call the mint function on this contract.*/
+    address public levelNFTCollection;
+
+    /*** @dev Tracks wallets that have already minted a Level NFT to enforce one-mint-per-wallet rule.*/
+    mapping(address => bool) public hasMintedLevelNFT;
+
+    /*** @dev To prevent replay attacks, each signature can only be used once.
+     * We store the hash of the used signatures.*/
+    mapping(bytes32 => bool) public usedSignatures;
+
+
+
 
     constructor() Ownable(msg.sender) {}
 
@@ -41,6 +66,14 @@ contract AIBasedNFTFactory is Ownable {
     event PayGenerateFee(uint256 indexed amount);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event NFTMinted(address indexed collectionAddress, address indexed to, uint256 indexed quantity);
+
+    /*** @dev Emitted when the authorizer address is changed by the owner.*/
+    event AuthorizerSet(address indexed newAuthorizer);
+    /*** @dev Emitted when the Level NFT collection address is set by the owner.*/
+    event LevelNFTCollectionSet(address indexed collectionAddress);
+    /*** @dev Emitted when a user successfully mints a Level NFT through the factory. */
+    event LevelNFTMinted(address indexed collectionAddress, address indexed minter,
+     uint256 indexed level, uint256 tokenId);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -217,4 +250,62 @@ contract AIBasedNFTFactory is Ownable {
 
         return _usersMint[user];
     }
+
+    /**
+     * @dev Sets the address of the authorizer. Only the owner can call this.
+     * @param _newAuthorizer The address of the new authorizer.
+     */
+    function setAuthorizer(address _newAuthorizer) external onlyOwner {
+        require(_newAuthorizer != address(0), "Cannot set authorizer to zero address");
+        authorizer = _newAuthorizer;
+        emit AuthorizerSet(_newAuthorizer);
+    }
+
+    /**
+     * @dev Sets the address of the LevelNFTCollection contract. Only the owner can call this.
+     * @param _collectionAddress The deployed address of the Level NFT contract.
+     */
+    function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
+        require(_collectionAddress != address(0), "Cannot set collection to zero address");
+        levelNFTCollection = _collectionAddress;
+        emit LevelNFTCollectionSet(_collectionAddress);
+    }
+
+
+    /**
+     * @dev Mints a Level NFT for the caller (`msg.sender`).
+     * This function requires a valid signature from the `authorizer`.
+     * The signature must be for a message containing the minter's address and the desired level.
+     * @param level The level of the NFT to be minted (e.g., 1, 2, 3, 4, 5).
+     * @param signature The cryptographic signature produced by the authorizer's private key.
+     */
+    function mintLevelNFT(uint256 level, bytes calldata signature) external {
+        require(levelNFTCollection != address(0), "Level NFT collection not set");
+        require(authorizer != address(0), "Authorizer not set");
+        require(!hasMintedLevelNFT[msg.sender], "You have already minted a Level NFT");
+        
+        // Use the signature itself as a nonce to prevent replay attacks.
+        // A signature can only be used once across the entire contract.
+        bytes32 sigHash = keccak256(signature);
+        require(!usedSignatures[sigHash], "Signature already used");
+        usedSignatures[sigHash] = true;
+
+        // Recreate the message hash that was signed by the backend.
+        // It must match exactly: keccak256(abi.encodePacked(msg.sender, level))
+        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender, level));
+        
+        // Add the standard Ethereum message prefix and recover the signer's address.
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        address recoveredSigner = ethSignedMessageHash.recover(signature);
+
+        // Verify that the signer is the authorized address.
+        require(recoveredSigner == authorizer, "Invalid signature");
+
+        // If all checks pass, mint the NFT by calling the LevelNFTCollection contract.
+        hasMintedLevelNFT[msg.sender] = true;
+        uint256 newTokenId = ILevelNFTCollection(levelNFTCollection).mint(msg.sender, level);
+
+        emit LevelNFTMinted(levelNFTCollection, msg.sender, level, newTokenId);
+    }
+
 }
