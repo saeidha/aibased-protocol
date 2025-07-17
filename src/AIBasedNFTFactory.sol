@@ -11,6 +11,10 @@ interface ILevelNFTCollection {
     function mint(address to, uint256 level) external returns (uint256);
 }
 
+interface IW3PASS {
+    function mint(address _to, uint256 _discountTier, bytes32[] calldata _merkleProof) external payable;
+}
+
 contract AIBasedNFTFactory is Ownable {
     using Address for address payable;
     using ECDSA for bytes32;
@@ -47,6 +51,8 @@ contract AIBasedNFTFactory is Ownable {
     mapping(bytes32 => bool) public usedSignatures;
 
 
+    // The address of the deployed W3PASS contract.
+    address public w3PassAddress;
 
 
     constructor() Ownable(msg.sender) {}
@@ -77,6 +83,11 @@ contract AIBasedNFTFactory is Ownable {
     /*** @dev Emitted when a user successfully mints a Level NFT through the factory. */
     event LevelNFTMinted(address indexed collectionAddress, address indexed minter,
      uint256 indexed level, uint256 tokenId);
+
+     /*** @dev Emitted when the W3PASS contract address is set.*/
+    event W3PassAddressSet(address indexed w3PassAddress);
+    /*** @dev Emitted when a user successfully mints a W3PASS through the factory.*/
+    event W3PassMinted(address indexed minter);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -310,6 +321,42 @@ contract AIBasedNFTFactory is Ownable {
         // A signature can only be used once across the entire contract.
         usedSignatures[sigHash] = true;
         emit LevelNFTMinted(levelNFTCollection, msg.sender, level, newTokenId);
+    }
+
+
+    /*** @dev Sets the address of the W3PASS contract. Only owner.*/
+    function setW3PassAddress(address _newAddress) external onlyOwner {
+        require(_newAddress != address(0), "Cannot be zero address");
+        w3PassAddress = _newAddress;
+        emit W3PassAddressSet(_newAddress);
+    }
+
+    /*** @dev Mints a W3PASS NFT by calling the dedicated contract.
+     * It forwards the payment, signature, and Merkle proof.
+     * The signature here authorizes the user to *attempt* a mint.
+     * The Merkle proof authorizes the *discount*.*/
+    function mintW3Pass(
+        uint256 _discountTier,
+        bytes32[] calldata _merkleProof,
+        bytes calldata _signature
+    ) external payable {
+        require(w3PassAddress != address(0), "W3PASS address not set");
+        require(authorizer != address(0), "Authorizer not set");
+
+        // --- Signature Verification ---
+        // The signature proves the user is authorized by the backend to mint.
+        // We can simplify the signed message to just the user's address.
+        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        address recoveredSigner = ethSignedMessageHash.recover(_signature);
+        require(recoveredSigner == authorizer, "Invalid authorizer signature");
+        
+        // --- Call the W3PASS Contract ---
+        // Forward the payment and all necessary data.
+        IW3PASS(w3PassAddress).mint{value: msg.value}(msg.sender,_discountTier,_merkleProof);
+
+        // This line is executed only if the mint call above succeeds.
+        emit W3PassMinted(msg.sender);
     }
 
 }

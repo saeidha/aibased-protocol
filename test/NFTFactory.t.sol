@@ -100,21 +100,21 @@ function getMintPadCollections() internal view returns (address[] memory) {
     }
 
 
-    function getUserMints(address user) internal view returns (address[] memory) {
-        return factory.getMintCollection(user);
-    }
+    // function getUserMints(address user) internal view returns (address[] memory) {
+    //     return factory.getMintCollection(user);
+    // }
 
-    function getUserMintCount(address user) internal view returns (uint256) {
-        return factory.getMintCollection(user).length;
-    }
+    // function getUserMintCount(address user) internal view returns (uint256) {
+    //     return factory.getMintCollection(user).length;
+    // }
 
-    function getUserCollectionsCount(address user) internal view returns (uint256) {
-        return factory.getUserCollection(user).length;
-    }
+    // function getUserCollectionsCount(address user) internal view returns (uint256) {
+    //     return factory.getUserCollection(user).length;
+    // }
 
-    function getUserCollections(address user) internal view returns (address[] memory) {
-        return factory.getUserCollection(user);
-    }
+    // function getUserCollections(address user) internal view returns (address[] memory) {
+    //     return factory.getUserCollection(user);
+    // }
 
     // Helper functions to reduce code duplication
     function _getCollectionDetails(NFTCollection collection, 
