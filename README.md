@@ -16,7 +16,7 @@ Deply FACTROY TESTNET:
 forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
 
 SET FEE:
-forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast --with-gas-price 100000000000000 -- -- 0.05e18
+forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
 
 TEST MINT AND CREATE COLLECTION:
@@ -25,7 +25,7 @@ forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --r
 
 TEST FEE:
 
-forge script script/TestFeesSepolia.s.sol:TestFees --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+forge script script/TestFeesSepolia.s.sol:PayFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
 
 DEPLOY LEVEL:
@@ -40,6 +40,12 @@ forge script script/TestMintLevelSepolia.s.sol:MintLevel --rpc-url $RPC_URL_SEPO
 
 DEPLOY W3PASS:
 forge script script/DeployW3PassSepolia.s.sol:DeployW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
+
+
+SET MARKLET ROOT:
+
+forge script script/SetMerkleRootSepolia.s.sol:SetMerkleRoot --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
+
 
 TEST MINT W3PASS:
 

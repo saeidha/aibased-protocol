@@ -32,7 +32,7 @@ contract MintLevel is Script {
         
 
         // The level we want to test minting for
-        uint256 levelToMint = 25;
+        uint256 levelToMint = 5;
 
         // --- 2. Simulate Backend: Create the Signature ---
         // bytes32 messageHash = keccak256(abi.encodePacked(minter, levelToMint));
@@ -43,7 +43,7 @@ contract MintLevel is Script {
         // console.log("Signature:");
         // console.logBytes(signature);
 
-        bytes memory signature = hex"254bfe5297a424ddd05d75ac9fd66585166892fb27a7d4ed86c9f0776f8c05fa0d9ce1dcd10e17c3d222ad9d1fb01cfc42fa9cc000158b821ae723e83eda875d1c";
+        bytes memory signature = hex"c8221f95b7671dad401df0bd0254815d5b81030450a0fd4dc5c2175bb3112f0907b4485beb84ac990d54e49d042cae84d0ada6dc59ab1deab3965d9b7f2798e61b";
         // --- 3. Simulate User: Call the Mint Function ---
         AIBasedNFTFactory factory = AIBasedNFTFactory(factoryAddress);
         
