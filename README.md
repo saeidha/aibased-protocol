@@ -15,6 +15,17 @@ Deply FACTROY TESTNET:
 
 forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
 
+SET FEE:
+forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast --with-gas-price 100000000000000 -- -- 0.05e18
+
+
+TEST MINT AND CREATE COLLECTION:
+
+forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+
+TEST FEE:
+
+forge script script/TestFeesSepolia.s.sol:TestFees --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
 
 DEPLOY LEVEL:

@@ -18,7 +18,7 @@ contract MintLevel is Script {
         address minter = vm.envAddress("MINTER_ADDRESS_SEPOLIA"); // The user who will receive the NFT
         uint256 minterPrivateKey = vm.envUint("MINTER_ADDRESS_KEY_SEPOLIA"); // The user who will receive the NFT
 
-        // uint256 anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_ADDRESS_KEY_SEPOLIA"); // The user who will receive the NFT
+        // uint256 anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_PRIVATE_KEY_SEPOLIA"); // The user who will receive the NFT
         
 
         // Validate configuration

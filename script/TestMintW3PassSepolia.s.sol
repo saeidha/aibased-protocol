@@ -34,7 +34,7 @@ contract TestMintW3Pass is Script {
         minterPrivateKey = vm.envUint("MINTER_ADDRESS_KEY_SEPOLIA");
         authorizerPrivateKey = vm.envUint("AUTHORIZER_PRIVATE_KEY_SEPOLIA");
         anotherMinter = vm.envAddress("ANOTHER_INVALID_MINTER_ADDRESS_SEPOLIA");
-        anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_ADDRESS_KEY_SEPOLIA");
+        anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_PRIVATE_KEY_SEPOLIA");
     }
 
     // --- Main Run Function ---
