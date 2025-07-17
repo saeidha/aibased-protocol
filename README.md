@@ -1,3 +1,16 @@
+ABI:
+
+
+forge inspect src/AIBasedNFTFactory.sol:AIBasedNFTFactory abi --json > AIBasedNFTFactory.json
+
+forge inspect src/NFTCollection.sol:NFTCollection abi --json > NFTCollection.json
+
+forge inspect src/LevelNFTCollection.sol:LevelNFTCollection abi --json > LevelNFTCollection.json
+
+forge inspect src/W3PASS.sol:W3PASS abi --json > W3PASS.json
+
+
+
 Deply FACTROY TESTNET:
 
 forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
@@ -19,4 +32,4 @@ forge script script/DeployW3PassSepolia.s.sol:DeployW3Pass --rpc-url $RPC_URL_SE
 
 TEST MINT W3PASS:
 
-forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_URL_SEPOLIA -vvvv
+forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv

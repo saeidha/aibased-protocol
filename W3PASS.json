@@ -3,71 +3,24 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "config",
-        "type": "tuple",
-        "internalType": "struct NFTCollection.ContractConfig",
-        "components": [
-          {
-            "name": "name",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "model",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "style",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "symbol",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "maxSupply",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "maxTime",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "imageURL",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "mintPerWallet",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "initialPrice",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "admin",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "initialOwner",
-            "type": "address",
-            "internalType": "address"
-          }
-        ]
+        "name": "_factoryAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "_initialMerkleRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_initialPrice",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "_initialBaseURI",
+        "type": "string",
+        "internalType": "string"
       }
     ],
     "stateMutability": "nonpayable"
@@ -111,65 +64,26 @@
   },
   {
     "type": "function",
-    "name": "canNotToShow",
+    "name": "basePrice",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "changePlatformFee",
-    "inputs": [
-      {
-        "name": "_newPlatformFee",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "contractURI",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "creatorAddress",
+    "name": "factoryAddress",
     "inputs": [],
     "outputs": [
       {
         "name": "",
         "type": "address",
         "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "description",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
       }
     ],
     "stateMutability": "view"
@@ -195,32 +109,19 @@
   },
   {
     "type": "function",
-    "name": "hasMinted",
+    "name": "getPrice",
     "inputs": [
       {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
+        "name": "_discountTier",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [
       {
         "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "imageURL",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -251,71 +152,13 @@
   },
   {
     "type": "function",
-    "name": "isDisabled",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isUltimateMintQuantity",
+    "name": "merkleRoot",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isUltimateMintTime",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "maxSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "maxTime",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "bytes32",
+        "internalType": "bytes32"
       }
     ],
     "stateMutability": "view"
@@ -325,76 +168,23 @@
     "name": "mint",
     "inputs": [
       {
-        "name": "to",
+        "name": "_to",
         "type": "address",
         "internalType": "address"
       },
       {
-        "name": "quantity",
+        "name": "_discountTier",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "_merkleProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
       }
     ],
     "outputs": [],
     "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "mintPerWallet",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "mintPrice",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "mintPriceForUser",
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "model",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -519,10 +309,10 @@
   },
   {
     "type": "function",
-    "name": "setMaxSupply",
+    "name": "setBasePrice",
     "inputs": [
       {
-        "name": "_newMaxSupply",
+        "name": "_newPrice",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -532,29 +322,29 @@
   },
   {
     "type": "function",
-    "name": "setMaxTime",
+    "name": "setBaseURI",
     "inputs": [
       {
-        "name": "_newMaxTime",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "style",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
+        "name": "_newURI",
         "type": "string",
         "internalType": "string"
       }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setMerkleRoot",
+    "inputs": [
+      {
+        "name": "_newRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -593,7 +383,7 @@
     "name": "tokenURI",
     "inputs": [
       {
-        "name": "tokenId",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -603,19 +393,6 @@
         "name": "",
         "type": "string",
         "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -653,13 +430,6 @@
         "internalType": "address"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "withdraw",
-    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -715,10 +485,10 @@
   },
   {
     "type": "event",
-    "name": "ChangePlatformFee",
+    "name": "BasePriceUpdated",
     "inputs": [
       {
-        "name": "newFee",
+        "name": "newPrice",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -728,45 +498,26 @@
   },
   {
     "type": "event",
-    "name": "EtherWithdrawn",
+    "name": "BaseURIUpdated",
     "inputs": [
       {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        "name": "newURI",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
       }
     ],
     "anonymous": false
   },
   {
     "type": "event",
-    "name": "MaxSupplyUpdated",
+    "name": "MerkleRootUpdated",
     "inputs": [
       {
-        "name": "newMaxSupply",
-        "type": "uint256",
+        "name": "newRoot",
+        "type": "bytes32",
         "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "MaxTimeUpdated",
-    "inputs": [
-      {
-        "name": "newMaxTime",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
+        "internalType": "bytes32"
       }
     ],
     "anonymous": false
@@ -792,8 +543,14 @@
   },
   {
     "type": "event",
-    "name": "TokenMinted",
+    "name": "PassMinted",
     "inputs": [
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
       {
         "name": "tokenId",
         "type": "uint256",
@@ -801,10 +558,10 @@
         "internalType": "uint256"
       },
       {
-        "name": "owner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
+        "name": "pricePaid",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -835,23 +592,9 @@
     "anonymous": false
   },
   {
-    "type": "event",
-    "name": "WithdrawToCreator",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
+    "type": "error",
+    "name": "AlreadyMinted",
+    "inputs": []
   },
   {
     "type": "error",
@@ -958,24 +701,23 @@
   },
   {
     "type": "error",
-    "name": "FailedCall",
+    "name": "InsufficientPayment",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "InsufficientBalance",
-    "inputs": [
-      {
-        "name": "balance",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "needed",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
+    "name": "InvalidProof",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NonTransferable",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotFactory",
+    "inputs": []
   },
   {
     "type": "error",
@@ -998,5 +740,15 @@
         "internalType": "address"
       }
     ]
+  },
+  {
+    "type": "error",
+    "name": "ProofRequiredForDiscount",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ReentrancyGuardReentrantCall",
+    "inputs": []
   }
 ]
