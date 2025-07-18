@@ -39,12 +39,12 @@ contract TestMintAndCollection is Script {
         vm.startBroadcast(creatorPrivateKey);
 
         address newCollectionAddress = factory.createCollection(
-            "My Test Collection",
-            "A collection created for testing.",
+            "NewSAEID Test Collection",
+            "NewSAEID collection created for testing.",
             "model-x",
             "style-y",
             "TEST",
-            "bafybeigrloi6bxvyzhzg5us3acsqhmehbraeg5uudltg2op2a6ftirl53i",
+            "bafybeibio4mg45pued6znmeluljrtp2fw2zy766j2o7bozrtrjvfpx7fsm",
             100,
             block.timestamp + 1 days,
             false,
@@ -68,12 +68,12 @@ contract TestMintAndCollection is Script {
         
         vm.startBroadcast(creatorPrivateKey);
         factory.createAndMint{value: 0.0001 ether}(
-            "Instant Mint Collection",
-            "A collection with an immediate mint.",
+            "NewSAEIDInstant Mint Collection",
+            "NewSAEIDA collection with an immediate mint.",
             "model-instant",
             "style-now",
             "INST",
-            "bafybeicrcnb7lflr6qm7r4i4buj6rmlf35cggwvf4t36cqyrylklgyff4m"
+            "bafybeibio4mg45pued6znmeluljrtp2fw2zy766j2o7bozrtrjvfpx7fsm"
         );
         vm.stopBroadcast();
 
@@ -110,7 +110,7 @@ contract TestMintAndCollection is Script {
         // Step A: First, create a collection to mint from
         vm.startBroadcast(creatorPrivateKey);
         address collectionToMintFrom = factory.createCollection(
-            "Existing Collection", "For mintNFT test", "model-e", "style-f", "EXIST", "bafybeiakay7umrgtfmfc5ngrcj7nwgqsasr23hiugfiyhd2iywd77aw7d4", 100, block.timestamp + 1 days, false, 0.0001 ether, false, false
+            "NewSAEIDExisting Collection", "For mintNFT test", "model-e", "style-f", "EXIST", "bafybeibre3kd34cptwqfcok2qhjf7eliiaxsyokvz2awpd7gb6u57anv3e", 100, block.timestamp + 1 days, false, 0.0001 ether, false, false
         );
         vm.stopBroadcast();
         
