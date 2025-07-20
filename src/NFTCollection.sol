@@ -9,6 +9,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
+interface IFactory {
+
+    function getPlatformFee(uint256 _mintPrice) external view returns (uint256);
+}
+
 contract NFTCollection is ERC721, Ownable {
     using Strings for uint256;
     using Address for address payable;
@@ -20,7 +25,6 @@ contract NFTCollection is ERC721, Ownable {
     event TokenMinted(uint256 indexed tokenId, address indexed owner);
     event MaxSupplyUpdated(uint256 indexed newMaxSupply);
     event MaxTimeUpdated(uint256 indexed newMaxTime);
-    event ChangePlatformFee(uint256 indexed newFee);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event WithdrawToCreator(address indexed creator, uint256 indexed amount);
 
@@ -38,6 +42,7 @@ contract NFTCollection is ERC721, Ownable {
         uint256 initialPrice;
         address admin;
         address initialOwner;
+        address factoryAddress;
     }
 
 
@@ -50,9 +55,8 @@ contract NFTCollection is ERC721, Ownable {
     string public imageURL;
     uint256 public maxTime;
     bool public immutable mintPerWallet;
-    uint256 public mintPrice;
-    
-    uint256 private platformFee;
+
+    address public immutable factoryAddress;
     uint256 private immutable initialPrice;
     bool public isUltimateMintTime;
     bool public isUltimateMintQuantity;
@@ -75,20 +79,20 @@ contract NFTCollection is ERC721, Ownable {
         description = config.description;
         style = config.style;
         model = config.model;
-        platformFee = calculatePlatformFee(config.initialPrice) ;
-        mintPrice = platformFee + config.initialPrice;
         initialPrice = config.initialPrice;
         isUltimateMintTime = config.maxTime == type(uint256).max;
         isUltimateMintQuantity = config.maxSupply == type(uint256).max;
         creatorAddress = config.initialOwner;
+        factoryAddress = config.factoryAddress;
     }
 
     function mint(address to, uint256 quantity) external payable {
 
         require(quantity > 0, "Quantity must be greater than zero");
 
+        uint256 currentPlatformFee = IFactory(factoryAddress).getPlatformFee(initialPrice);
         uint256 ownerPayment = initialPrice * quantity;
-        uint256 platformPayment = platformFee * quantity;
+        uint256 platformPayment = currentPlatformFee * quantity;
 
         // If the caller is the owner, set ownerPayment to 0
         if (to == creatorAddress) {
@@ -228,17 +232,6 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
         return _tokenIdCounter._value;
     }
 
-    function calculatePlatformFee(uint256 mint_price) pure private returns (uint256) {
-
-        if (mint_price > 0.002 ether) {
-
-            return mint_price * 5 / 100;
-        }else{
-
-            return 0.0001 ether;
-        }
-    }
-
     function isDisabled(address sender) external view returns (bool) {
         return  canNotToShow() ||   // Supply reached
             (mintPerWallet && hasMinted[sender]);    // Wallet already minted (if restriction enabled)
@@ -278,18 +271,6 @@ function tokenURI(uint256 tokenId) public view override returns (string memory) 
         maxTime = _newMaxTime;
         isUltimateMintTime = _newMaxTime == type(uint256).max;
         emit MaxTimeUpdated(_newMaxTime);
-    }
-
-    function changePlatformFee(uint256 _newPlatformFee) external onlyOwner{ 
-
-        platformFee = _newPlatformFee;
-        mintPrice = platformFee + initialPrice;
-        emit ChangePlatformFee(_newPlatformFee);
-    }
-
-    function mintPriceForUser(address user) external view returns (uint256) { 
-
-        return user == creatorAddress ? platformFee : mintPrice;
     }
 
 }

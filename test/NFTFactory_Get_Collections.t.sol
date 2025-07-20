@@ -34,13 +34,13 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
         uint256 count = 0;
-        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
-            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
-            if (!collection.canNotToShow()) {
-                uint256 mintPrice = collection.mintPrice();
-                details[count++] = _getCollectionDetails(collection, factory.getMintPadCollections()[i], true, mintPrice, mintPrice);
-            }
-        }
+        // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+        //     NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+        //     if (!collection.canNotToShow()) {
+        //         uint256 mintPrice = collection.mintPrice();
+        //         details[count++] = _getCollectionDetails(collection, factory.getMintPadCollections()[i], true, mintPrice, mintPrice);
+        //     }
+        // }
         return _trimDetails(details, count);
     }
 
@@ -48,14 +48,14 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
         uint256 count = 0;
-        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
-            NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
-            if (!collection.canNotToShow()) {
-                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getMintPadCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
-                detail.isDisable = collection.isDisabled(sender);
-                details[count++] = detail;
-            }
-        }
+        // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+        //     NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
+        //     if (!collection.canNotToShow()) {
+        //         AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getMintPadCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+        //         detail.isDisable = collection.isDisabled(sender);
+        //         details[count++] = detail;
+        //     }
+        // }
         return _trimDetails(details, count);
     }
 
@@ -63,36 +63,36 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         address[] memory usersCollections = factory.getUserCollection(sender);
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
-        for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
-            NFTCollection collection = NFTCollection(usersCollections[i]);
-            details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
-            details[i].isDisable = collection.isDisabled(sender);
-        }
+        // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
+        //     NFTCollection collection = NFTCollection(usersCollections[i]);
+        //     details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+        //     details[i].isDisable = collection.isDisabled(sender);
+        // }
         return details;
     }
 
     function getCollectionDetailsByContractAddress(address contractAddress) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
         uint256 deployedCollectionsLength = factory.getCollections().length;
-        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
-            if (factory.getCollections()[i] == contractAddress) {
-                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
-                uint256 mintPrice = collection.mintPrice();
-                return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
-            }
-        }
+        // for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+        //     if (factory.getCollections()[i] == contractAddress) {
+        //         NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+        //         uint256 mintPrice = collection.mintPrice();
+        //         return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
+        //     }
+        // }
         return _emptyCollectionDetails();
     }
 
     function getCollectionDetailsByContractAddress(address contractAddress, address sender) internal view returns (AIBasedNFTFactory.CollectionDetails memory) {
         uint256 deployedCollectionsLength = factory.getCollections().length;
-        for (uint256 i = 0; i < deployedCollectionsLength; i++) {
-            if (factory.getCollections()[i] == contractAddress) {
-                NFTCollection collection = NFTCollection(factory.getCollections()[i]);
-                AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
-                detail.isDisable = collection.isDisabled(sender);
-                return detail;
-            }
-        }
+        // for (uint256 i = 0; i < deployedCollectionsLength; i++) {
+        //     if (factory.getCollections()[i] == contractAddress) {
+        //         NFTCollection collection = NFTCollection(factory.getCollections()[i]);
+        //         AIBasedNFTFactory.CollectionDetails memory detail = _getCollectionDetails(collection, factory.getCollections()[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
+        //         detail.isDisable = collection.isDisabled(sender);
+        //         return detail;
+        //     }
+        // }
         return _emptyCollectionDetails();
     }
 

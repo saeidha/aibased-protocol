@@ -56,12 +56,13 @@ contract AIBasedNFTFactory is Ownable {
 
     // The address of the deployed W3PASS contract.
     address public w3PassAddress;
-
+    uint256 public basePlatformFee;
 
     constructor() Ownable(msg.sender) {
 
         modelGenerationFee["v1"] = 0.00001 ether;
         modelGenerationFee["v2"] = 0.00001 ether;
+        basePlatformFee = 0.0001 ether;
     }
 
 
@@ -100,6 +101,8 @@ contract AIBasedNFTFactory is Ownable {
     event W3PassAddressSet(address indexed w3PassAddress);
     /*** @dev Emitted when a user successfully mints a W3PASS through the factory.*/
     event W3PassMinted(address indexed minter);
+
+    event BasePlatformFeeSet(uint256 indexed newFee);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -144,7 +147,8 @@ contract AIBasedNFTFactory is Ownable {
             mintPerWallet: mintPerWallet,
             initialPrice: mintPrice,
             admin: owner(),
-            initialOwner: msg.sender
+            initialOwner: msg.sender,
+            factoryAddress: address(this)
         });
 
         NFTCollection collection = new NFTCollection(config);
@@ -193,7 +197,8 @@ contract AIBasedNFTFactory is Ownable {
             mintPerWallet: true,
             initialPrice: 0,
             admin: owner(),
-            initialOwner: msg.sender
+            initialOwner: msg.sender,
+            factoryAddress: address(this)
         });
         NFTCollection collection = new NFTCollection(config);
 
@@ -242,7 +247,7 @@ contract AIBasedNFTFactory is Ownable {
         emit EtherWithdrawn(recipient, balance);
     }
 
-
+////// ----------------- GENERATE AND MODRL SETTINGS ------------------///////
     /*** @dev Allows a user to pay the generation fee for a specific model.
      * @param model The model identifier (e.g., "v1", "v2").*/
     function payGenerateFee(string calldata model) external payable {
@@ -277,6 +282,32 @@ contract AIBasedNFTFactory is Ownable {
     function getGenerationFee(string calldata model) external view returns (uint256) {
         return modelGenerationFee[model];
     }
+
+///// -------------------------------------------------------------////////
+
+////// ----------------- PLATFORM FEE SETTINGS ------------------///////
+    // Add this new function
+    function setBasePlatformFee(uint256 _newFee) external {
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        basePlatformFee = _newFee;
+        emit BasePlatformFeeSet(_newFee);
+    }
+
+    /*** @dev Calculates the platform fee based on a collection's mint price.
+    * @param _mintPrice The initial mint price of an NFT in a collection.
+    * @return The calculated platform fee.*/
+    function getPlatformFee(uint256 _mintPrice) public view returns (uint256) {
+        if (_mintPrice > 0.002 ether) {
+            // Return 5% of the mint price
+            return (_mintPrice * 5) / 100;
+        } else {
+            // Return the base fee
+            return basePlatformFee;
+        }
+    }
+
+///// -------------------------------------------------------------////////
+
 
     function getCollections() external view returns (address[] memory) {
         return deployedCollections;
