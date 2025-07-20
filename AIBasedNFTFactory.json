@@ -387,7 +387,7 @@
   },
   {
     "type": "function",
-    "name": "setGenerateFee",
+    "name": "setGenerationModelFee",
     "inputs": [
       {
         "name": "_newFee",

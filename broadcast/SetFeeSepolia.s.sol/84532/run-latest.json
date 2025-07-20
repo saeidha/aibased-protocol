@@ -5,7 +5,7 @@
       "transactionType": "CALL",
       "contractName": null,
       "contractAddress": "0x3d87740163cd456bfc925f5a25195889897e9817",
-      "function": "setGenerateFee(uint256)",
+      "function": "setGenerationModelFee(uint256)",
       "arguments": [
         "10000000000000"
       ],

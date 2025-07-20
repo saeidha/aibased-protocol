@@ -50,12 +50,20 @@ contract AIBasedNFTFactory is Ownable {
      * We store the hash of the used signatures.*/
     mapping(bytes32 => bool) public usedSignatures;
 
+    // Add this new mapping
+    mapping(string => uint256) public modelGenerationFee;
+
 
     // The address of the deployed W3PASS contract.
     address public w3PassAddress;
 
 
-    constructor() Ownable(msg.sender) {}
+    constructor() Ownable(msg.sender) {
+
+        modelGenerationFee["v1"] = 0.00001 ether;
+        modelGenerationFee["v2"] = 0.00001 ether;
+    }
+
 
     event CollectionCreated(
         address indexed collection,
@@ -83,6 +91,10 @@ contract AIBasedNFTFactory is Ownable {
     /*** @dev Emitted when a user successfully mints a Level NFT through the factory. */
     event LevelNFTMinted(address indexed collectionAddress, address indexed minter,
      uint256 indexed level, uint256 tokenId);
+     // Add this new event
+    event ModelFeeSet(string indexed model, uint256 indexed newFee);
+    // Update this error
+    error OnlyAdminOrAuthorizer();
 
      /*** @dev Emitted when the W3PASS contract address is set.*/
     event W3PassAddressSet(address indexed w3PassAddress);
@@ -221,11 +233,6 @@ contract AIBasedNFTFactory is Ownable {
         emit NFTMinted(collectionAddress, to, quantity);
     }
 
-    function getFee() external view returns (uint256) {
-        if (msg.sender != owner()) revert OnlyAdmin();
-        return generateFee;
-    }
-
     function withdraw() external onlyOwner {
         address payable recipient = payable(owner());
         if (recipient == address(0)) revert InvalidRecipient();
@@ -236,15 +243,39 @@ contract AIBasedNFTFactory is Ownable {
     }
 
 
-    function payGenerateFee() external payable {
-        if (msg.value < generateFee) revert InsufficientFee();
+    /*** @dev Allows a user to pay the generation fee for a specific model.
+     * @param model The model identifier (e.g., "v1", "v2").*/
+    function payGenerateFee(string calldata model) external payable {
+        uint256 requiredFee = modelGenerationFee[model];
+        if (msg.value < requiredFee) revert InsufficientFee();
         emit PayGenerateFee(msg.value);
     }
 
-    function setGenerateFee(uint256 _newFee) external onlyOwner{
-        if (msg.sender != owner()) revert OnlyAdmin();
-        generateFee = _newFee;
-        emit ChangeGenerateFee(_newFee);
+    /*** @dev Adds a new model and sets its initial generation fee.
+    * Can only be called by the contract owner.
+    * @param model The new model identifier.
+    * @param _initialFee The initial fee for the new model.*/
+    function addModel(string calldata model, uint256 _initialFee) external onlyOwner {
+        require(modelGenerationFee[model] == 0, "Model already exists");
+        modelGenerationFee[model] = _initialFee;
+        emit ModelFeeSet(model, _initialFee);
+    }
+
+    /*** @dev Sets the generation fee for a specific model.
+    * Can only be called by the contract owner or the authorizer.
+    * @param model The model identifier (e.g., "v1", "v2").
+    * @param _newFee The new fee in wei.*/
+    function setGenerationModelFee(string calldata model, uint256 _newFee) external {
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        modelGenerationFee[model] = _newFee;
+        emit ModelFeeSet(model, _newFee);
+    }
+
+    /*** @dev Returns the generation fee for a specific model.
+     * @param model The model identifier (e.g., "v1", "v2").
+     * @return The fee in wei for the given model.*/
+    function getGenerationFee(string calldata model) external view returns (uint256) {
+        return modelGenerationFee[model];
     }
 
     function getCollections() external view returns (address[] memory) {

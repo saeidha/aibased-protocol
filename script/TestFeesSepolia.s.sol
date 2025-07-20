@@ -19,7 +19,7 @@ contract PayFee is Script {
 
         // --- Get the current fee ---
         vm.prank(owner);
-        uint256 feeToPay = factory.getFee();
+        uint256 feeToPay = factory.getGenerationFee("v1");
         console.log("Current fee to pay:", feeToPay);
         
         require(feeToPay > 0, "Fee is currently 0, nothing to pay.");
@@ -27,7 +27,7 @@ contract PayFee is Script {
         // --- Pay the fee from the user's account ---
         vm.startBroadcast(userPrivateKey);
 
-        factory.payGenerateFee{value: feeToPay}();
+        factory.payGenerateFee{value: feeToPay}("v1");
 
         vm.stopBroadcast();
 

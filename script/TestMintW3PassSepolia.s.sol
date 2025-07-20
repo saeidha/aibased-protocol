@@ -20,7 +20,7 @@ contract TestMintW3Pass is Script {
     address anotherMinter;
     uint256 anotherMinterPrivateKey;
     uint256 authorizerPrivateKey;
-    
+    bytes32 merkleRoot;
 
     // --- Test Configuration ---
     uint256 constant DISCOUNT_TIER = 3;
@@ -33,8 +33,10 @@ contract TestMintW3Pass is Script {
         minter = vm.envAddress("MINTER_ADDRESS_SEPOLIA");
         minterPrivateKey = vm.envUint("MINTER_ADDRESS_KEY_SEPOLIA");
         authorizerPrivateKey = vm.envUint("AUTHORIZER_PRIVATE_KEY_SEPOLIA");
-        anotherMinter = vm.envAddress("ANOTHER_INVALID_MINTER_ADDRESS_SEPOLIA");
-        anotherMinterPrivateKey = vm.envUint("ANOTHER_INVALID_MINTER_PRIVATE_KEY_SEPOLIA");
+        anotherMinter = vm.envAddress("TEST_ADDRESS");
+        anotherMinterPrivateKey = vm.envUint("TEST_PRIVATE_KEY");
+
+        merkleRoot = vm.envBytes32("INITIAL_MERKLE_ROOT");
     }
 
     // --- Main Run Function ---
@@ -111,6 +113,7 @@ contract TestMintW3Pass is Script {
 
         // --- 2. Get Required Data ---
         uint256 price = w3pass.getPrice(DISCOUNT_TIER);
+        console.log("Price:", price);
         bytes32 onChainMerkleRoot = w3pass.merkleRoot();
         
         // --- 3. Generate Signature ---
@@ -126,9 +129,11 @@ contract TestMintW3Pass is Script {
         // Get this from your Rust backend for the specific user.
         // --- Merkle Proof is an empty array for public mint ---
         // bytes32[] memory merkleProof = new bytes32[](0);
-        bytes32[] memory merkleProof = new bytes32[](1);
-        merkleProof[0] = 0x0fc848d505c80488eb6c0ff72af5476b293a59b05b1f1e15459325653158c2ad;
-
+        bytes32[] memory merkleProof = new bytes32[](3);
+        merkleProof[0] = hex"e0410ebda579fb9402b4bc3f43a6207e89dfb173f919ab55b2c6b01a97c56a92";
+        merkleProof[1] = hex"c848468b4d4d3d01334c80eb98dbf21812a4111f644f18b253587afe1be94d4b";
+        merkleProof[2] = hex"fd1c19c4b718dd9873717f42cffad3ccdac6037902d72226879075d4805f35f4";
+        // merkleProof[3] = hex"7fcec138428656da300294c921872fc080c011220e85ec1f83abe12e17584251";
         // --- 5. DEBUGGING STEP: Verify the proof inside the script ---
         bytes32 leaf = keccak256(abi.encodePacked(anotherMinter, DISCOUNT_TIER));
         bool isProofValid = MerkleProof.verify(merkleProof, onChainMerkleRoot, leaf);
@@ -150,9 +155,9 @@ contract TestMintW3Pass is Script {
         console.log("Balance before:", anotherMinter.balance);
 
 
-        vm.startBroadcast(anotherMinterPrivateKey);
-        factory.mintW3Pass{value: price}(DISCOUNT_TIER, merkleProof, signature);
-        vm.stopBroadcast();
+        // vm.startBroadcast(anotherMinterPrivateKey);
+        // factory.mintW3Pass{value: price}(DISCOUNT_TIER, merkleProof, signature);
+        // vm.stopBroadcast();
 
         console.log("Mint with discount successful!");
         console.log("Balance after:", anotherMinter.balance);

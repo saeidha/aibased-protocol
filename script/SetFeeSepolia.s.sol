@@ -21,7 +21,7 @@ contract SetFee is Script {
         vm.startBroadcast(ownerPrivateKey);
 
         // Call the function to set the new fee
-        factory.setGenerateFee(newFee);
+        factory.setGenerationModelFee("v1", newFee);
 
         vm.stopBroadcast();
 

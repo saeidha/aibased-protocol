@@ -88,7 +88,7 @@ Contracts have owners with privileged rights to perform admin tasks and need to 
 - Found in src/NFTFactory.sol [Line: 233](src/NFTFactory.sol#L233)
 
 	```solidity
-	    function setGenerateFee(uint256 _newFee) external onlyOwner{
+	    function setGenerationModelFee(uint256 _newFee) external onlyOwner{
 	```
 
 - Found in src/NFTFactory.sol [Line: 244](src/NFTFactory.sol#L244)
