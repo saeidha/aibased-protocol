@@ -54,3 +54,8 @@ forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_UR
 
 ExampleLog: 
 forge script script/example/SignAndVerifyScript.s.sol:SignAndVerifyScript --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
+
+
+TEST CHANGE FEE:
+
+forge script script/TestFeeLogicSepolia.s.sol:TestFeeLogic --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv

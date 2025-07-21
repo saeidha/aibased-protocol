@@ -6,6 +6,24 @@
   },
   {
     "type": "function",
+    "name": "addModel",
+    "inputs": [
+      {
+        "name": "model",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_initialFee",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "authorizer",
     "inputs": [],
     "outputs": [
@@ -13,6 +31,19 @@
         "name": "",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "basePlatformFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -163,8 +194,14 @@
   },
   {
     "type": "function",
-    "name": "getFee",
-    "inputs": [],
+    "name": "getGenerationFee",
+    "inputs": [
+      {
+        "name": "model",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
     "outputs": [
       {
         "name": "",
@@ -202,6 +239,25 @@
         "name": "",
         "type": "address[]",
         "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPlatformFee",
+    "inputs": [
+      {
+        "name": "_mintPrice",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -347,6 +403,25 @@
   },
   {
     "type": "function",
+    "name": "modelGenerationFee",
+    "inputs": [
+      {
+        "name": "",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "owner",
     "inputs": [],
     "outputs": [
@@ -361,7 +436,13 @@
   {
     "type": "function",
     "name": "payGenerateFee",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "model",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
     "outputs": [],
     "stateMutability": "payable"
   },
@@ -387,8 +468,26 @@
   },
   {
     "type": "function",
+    "name": "setBasePlatformFee",
+    "inputs": [
+      {
+        "name": "_newFee",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "setGenerationModelFee",
     "inputs": [
+      {
+        "name": "model",
+        "type": "string",
+        "internalType": "string"
+      },
       {
         "name": "_newFee",
         "type": "uint256",
@@ -485,6 +584,19 @@
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BasePlatformFeeSet",
+    "inputs": [
+      {
+        "name": "newFee",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -646,6 +758,25 @@
   },
   {
     "type": "event",
+    "name": "ModelFeeSet",
+    "inputs": [
+      {
+        "name": "model",
+        "type": "string",
+        "indexed": true,
+        "internalType": "string"
+      },
+      {
+        "name": "newFee",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "NFTMinted",
     "inputs": [
       {
@@ -793,6 +924,11 @@
   {
     "type": "error",
     "name": "OnlyAdmin",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "OnlyAdminOrAuthorizer",
     "inputs": []
   },
   {
