@@ -1,66 +1,61 @@
-## Foundry
+ABI:
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-Foundry consists of:
+forge inspect src/AIBasedNFTFactory.sol:AIBasedNFTFactory abi --json > AIBasedNFTFactory.json
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+forge inspect src/NFTCollection.sol:NFTCollection abi --json > NFTCollection.json
 
-## Documentation
+forge inspect src/LevelNFTCollection.sol:LevelNFTCollection abi --json > LevelNFTCollection.json
 
-https://book.getfoundry.sh/
+forge inspect src/W3PASS.sol:W3PASS abi --json > W3PASS.json
 
-## Usage
 
-### Build
 
-```shell
-$ forge build
-```
+Deply FACTROY TESTNET:
 
-### Test
+forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
 
-```shell
-$ forge test
-```
+SET FEE:
+forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
-### Format
 
-```shell
-$ forge fmt
-```
+TEST MINT AND CREATE COLLECTION:
 
-### Gas Snapshots
+forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
-```shell
-$ forge snapshot
-```
+TEST FEE:
 
-### Anvil
+forge script script/TestFeesSepolia.s.sol:PayFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
-```shell
-$ anvil
-```
 
-### Deploy
+DEPLOY LEVEL:
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+forge script script/DeployAndLinkLevelNFTSepolia.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
 
-### Cast
 
-```shell
-$ cast <subcommand>
-```
+TEST MINT LEVEL:
 
-### Help
+forge script script/TestMintLevelSepolia.s.sol:MintLevel --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+
+DEPLOY W3PASS:
+forge script script/DeployW3PassSepolia.s.sol:DeployW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
+
+
+SET MARKLET ROOT:
+
+forge script script/SetMerkleRootSepolia.s.sol:SetMerkleRoot --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
+
+
+TEST MINT W3PASS:
+
+forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
+
+
+ExampleLog: 
+forge script script/example/SignAndVerifyScript.s.sol:SignAndVerifyScript --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
+
+
+TEST CHANGE FEE:
+
+forge script script/TestFeeLogicSepolia.s.sol:TestFeeLogic --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
