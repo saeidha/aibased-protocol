@@ -3,76 +3,14 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "config",
-        "type": "tuple",
-        "internalType": "struct NFTCollection.ContractConfig",
-        "components": [
-          {
-            "name": "name",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "model",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "style",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "symbol",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "maxSupply",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "maxTime",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "imageURL",
-            "type": "string",
-            "internalType": "string"
-          },
-          {
-            "name": "mintPerWallet",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
-            "name": "initialPrice",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "admin",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "initialOwner",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "factoryAddress",
-            "type": "address",
-            "internalType": "address"
-          }
-        ]
+        "name": "initialFactory",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "initialBaseURI",
+        "type": "string",
+        "internalType": "string"
       }
     ],
     "stateMutability": "nonpayable"
@@ -116,58 +54,6 @@
   },
   {
     "type": "function",
-    "name": "canNotToShow",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "contractURI",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "creatorAddress",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "description",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "factoryAddress",
     "inputs": [],
     "outputs": [
@@ -200,38 +86,6 @@
   },
   {
     "type": "function",
-    "name": "hasMinted",
-    "inputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "imageURL",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "isApprovedForAll",
     "inputs": [
       {
@@ -256,77 +110,6 @@
   },
   {
     "type": "function",
-    "name": "isDisabled",
-    "inputs": [
-      {
-        "name": "sender",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isUltimateMintQuantity",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "isUltimateMintTime",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool",
-        "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "maxSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "maxTime",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "mint",
     "inputs": [
       {
@@ -335,39 +118,19 @@
         "internalType": "address"
       },
       {
-        "name": "quantity",
+        "name": "level",
         "type": "uint256",
         "internalType": "uint256"
       }
     ],
-    "outputs": [],
-    "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "mintPerWallet",
-    "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "bool",
-        "internalType": "bool"
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "model",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -492,42 +255,29 @@
   },
   {
     "type": "function",
-    "name": "setMaxSupply",
+    "name": "setBaseURI",
     "inputs": [
       {
-        "name": "_newMaxSupply",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setMaxTime",
-    "inputs": [
-      {
-        "name": "_newMaxTime",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "style",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
+        "name": "newBaseURI",
         "type": "string",
         "internalType": "string"
       }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setFactoryAddress",
+    "inputs": [
+      {
+        "name": "_newFactoryAddress",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -563,6 +313,25 @@
   },
   {
     "type": "function",
+    "name": "tokenLevels",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "tokenURI",
     "inputs": [
       {
@@ -576,19 +345,6 @@
         "name": "",
         "type": "string",
         "internalType": "string"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "totalSupply",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -626,13 +382,6 @@
         "internalType": "address"
       }
     ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "withdraw",
-    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -688,45 +437,26 @@
   },
   {
     "type": "event",
-    "name": "EtherWithdrawn",
+    "name": "BaseURISet",
     "inputs": [
       {
-        "name": "recipient",
+        "name": "newBaseURI",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "FactoryAddressSet",
+    "inputs": [
+      {
+        "name": "newFactoryAddress",
         "type": "address",
         "indexed": true,
         "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "MaxSupplyUpdated",
-    "inputs": [
-      {
-        "name": "newMaxSupply",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "MaxTimeUpdated",
-    "inputs": [
-      {
-        "name": "newMaxTime",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -752,25 +482,6 @@
   },
   {
     "type": "event",
-    "name": "TokenMinted",
-    "inputs": [
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "owner",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "Transfer",
     "inputs": [
       {
@@ -787,25 +498,6 @@
       },
       {
         "name": "tokenId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "WithdrawToCreator",
-    "inputs": [
-      {
-        "name": "creator",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
@@ -911,27 +603,6 @@
     "inputs": [
       {
         "name": "tokenId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "FailedCall",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InsufficientBalance",
-    "inputs": [
-      {
-        "name": "balance",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "needed",
         "type": "uint256",
         "internalType": "uint256"
       }
