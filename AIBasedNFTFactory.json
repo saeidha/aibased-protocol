@@ -78,7 +78,7 @@
         "internalType": "string"
       },
       {
-        "name": "imageURL",
+        "name": "initialBaseURI",
         "type": "string",
         "internalType": "string"
       }
@@ -116,7 +116,7 @@
         "internalType": "string"
       },
       {
-        "name": "imageURL",
+        "name": "initialBaseURI",
         "type": "string",
         "internalType": "string"
       },
@@ -320,6 +320,19 @@
   },
   {
     "type": "function",
+    "name": "maxBasePlatformFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "mintLevelNFT",
     "inputs": [
       {
@@ -448,6 +461,19 @@
   },
   {
     "type": "function",
+    "name": "percentagePlatformFee",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "renounceOwnership",
     "inputs": [],
     "outputs": [],
@@ -505,6 +531,32 @@
         "name": "_collectionAddress",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setMaxBasePlatformFee",
+    "inputs": [
+      {
+        "name": "_newFee",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setPercentageBasePlatformFee",
+    "inputs": [
+      {
+        "name": "_newFee",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -667,7 +719,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "imageURL",
+        "name": "initialBaseURI",
         "type": "string",
         "indexed": false,
         "internalType": "string"
@@ -758,6 +810,19 @@
   },
   {
     "type": "event",
+    "name": "MaxBasePlatformFeeSet",
+    "inputs": [
+      {
+        "name": "maxNewFee",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "ModelFeeSet",
     "inputs": [
       {
@@ -825,6 +890,19 @@
     "inputs": [
       {
         "name": "amount",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PercentagePlatformFeeSet",
+    "inputs": [
+      {
+        "name": "newPercentage",
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
