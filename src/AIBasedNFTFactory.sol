@@ -80,7 +80,7 @@ contract AIBasedNFTFactory is Ownable {
         string symbol,
         uint256 maxSupply,
         uint256 maxTime,
-        string imageURL,
+        string initialBaseURI,
         bool mintPerWallet,
         uint256 mintPrice,
         address owner
@@ -117,7 +117,7 @@ contract AIBasedNFTFactory is Ownable {
         string description;
         uint256 tokenIdCounter;
         uint256 maxSupply;
-        string baseImageURI;
+        string initialBaseURI;
         uint256 maxTime;
         bool mintPerWallet;
         uint256 mintPrice;
@@ -133,7 +133,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory model,
         string memory style,
         string memory symbol,
-        string memory imageURL,
+        string memory initialBaseURI,
         uint256 maxSupply,
         uint256 maxTime,
         bool mintPerWallet,
@@ -150,7 +150,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol: symbol,
             maxSupply: isUltimateMintQuantity ? type(uint256).max : maxSupply,
             maxTime: isUltimateMintTime ? type(uint256).max : maxTime,
-            imageURL: imageURL,
+            initialBaseURI: initialBaseURI,
             mintPerWallet: mintPerWallet,
             initialPrice: mintPrice,
             admin: owner(),
@@ -173,7 +173,7 @@ contract AIBasedNFTFactory is Ownable {
             config.symbol,
             config.maxSupply,
             config.maxTime,
-            config.imageURL,
+            config.initialBaseURI,
             config.mintPerWallet,
             config.initialPrice,
             config.initialOwner
@@ -187,7 +187,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory model,
         string memory style,
         string memory symbol,
-        string memory imageURL
+        string memory initialBaseURI
     ) external payable {
         uint256 maxTime = block.timestamp + 1 hours;
         uint256 maxSupply = 1;
@@ -200,7 +200,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol: symbol,
             maxSupply: maxSupply,
             maxTime: maxTime,
-            imageURL: imageURL,
+            initialBaseURI: initialBaseURI,
             mintPerWallet: true,
             initialPrice: 0,
             admin: owner(),
@@ -223,7 +223,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol,
             maxSupply,
             maxTime,
-            imageURL,
+            initialBaseURI,
             true,
             0,
             msg.sender
