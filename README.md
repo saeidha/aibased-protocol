@@ -21,7 +21,7 @@ forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broa
 
 TEST MINT AND CREATE COLLECTION:
 
-forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
 
 TEST FEE:
 
@@ -59,3 +59,19 @@ forge script script/example/SignAndVerifyScript.s.sol:SignAndVerifyScript --rpc-
 TEST CHANGE FEE:
 
 forge script script/TestFeeLogicSepolia.s.sol:TestFeeLogic --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+
+
+
+
+
+
+////////TEST MAIN
+
+
+Deply FACTROY:
+
+forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+TEST MINT AND CREATE COLLECTION:
+
+forge script script/Main/TestMintAndCollection.s.sol:TestMintAndCollection --rpc-url $RPC_URL --broadcast --verify -vvvv
