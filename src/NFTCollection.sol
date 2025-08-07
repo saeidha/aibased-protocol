@@ -27,7 +27,7 @@ contract NFTCollection is ERC721, Ownable {
     event MaxTimeUpdated(uint256 indexed newMaxTime);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event WithdrawToCreator(address indexed creator, uint256 indexed amount);
-
+    event BaseURIUpdated(string newURI);
 
     struct ContractConfig {
         string name;
@@ -37,7 +37,7 @@ contract NFTCollection is ERC721, Ownable {
         string symbol;
         uint256 maxSupply;
         uint256 maxTime;
-        string imageURL;
+        string initialBaseURI;
         bool mintPerWallet;
         uint256 initialPrice;
         address admin;
@@ -52,7 +52,7 @@ contract NFTCollection is ERC721, Ownable {
 
     Counter private _tokenIdCounter;
     uint256 public maxSupply;
-    string public imageURL;
+    string public _baseTokenURI;
     uint256 public maxTime;
     bool public immutable mintPerWallet;
 
@@ -72,7 +72,7 @@ contract NFTCollection is ERC721, Ownable {
     require(config.maxSupply >= 1, "Max Supply should be grather than 1");
 
         maxSupply = config.maxSupply;
-        imageURL = config.imageURL;
+        _baseTokenURI = config.initialBaseURI; 
         _tokenIdCounter._value = 0;
         maxTime =  config.maxTime;
         mintPerWallet = config.mintPerWallet;
@@ -158,75 +158,25 @@ contract NFTCollection is ERC721, Ownable {
         }
     }
 
-    function _baseURI() internal pure override returns (string memory) {
-        return "data:application/json;base64,";
+    ////// -------- Base URI and Token URI Functions ------------ ////////
+    // --- NEW: Overriding _baseURI to return our stored URI ---
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
     }
 
+    // --- NEW: Overriding tokenURI ---
+    // Since all tokens have the same metadata, we can simply return the base URI.
+    function tokenURI(uint256) public view override returns (string memory) {
+        return _baseURI();
+    }
 
-function contractURI() external view returns (string memory) {
-    // Directly use the contract name
-    string memory encodedName = name();
+    // --- NEW: Function to allow the owner to set the base URI from Pinata ---
 
-    // Directly use the image URL
-    string memory imageURI = imageURL;
-
-    // Directly use the description
-    string memory _description = description;
-
-    string memory _model = model; // Assuming model is already a properly formatted string
-
-    string memory _style = style; // Assuming style is already a properly formatted string
-
-    // Build the JSON metadata
-    string memory json = Base64.encode(
-        bytes(
-            string.concat(
-                '{"name":"', encodedName, '",',
-                '"description":"', _description, '",',
-                '"style":"', _style, '",',
-                '"model":"', _model, '",',
-                '"image":"', imageURI, '"}'
-            )
-        )
-    );
-
-    // Return the full metadata URI
-    return string.concat(_baseURI(), json);
-}
-
-
-function tokenURI(uint256 tokenId) public view override returns (string memory) {
-    require(_ownerOf(tokenId) != address(0), "Nonexistent token");
-
-    // Construct the name with the token ID
-    string memory nameWithTokenId = string.concat(name(), " #", Strings.toString(tokenId));
-
-    // Construct the image URI
-    string memory imageURI = imageURL; // Assuming imageURL is already a properly formatted string
-
-    // Construct the description
-    string memory _description = description; // Assuming description is already a properly formatted string
-
-    string memory _model = model; // Assuming model is already a properly formatted string
-
-    string memory _style = style; // Assuming style is already a properly formatted string
-
-    // Construct the JSON metadata
-    string memory json = Base64.encode(
-        bytes(
-            string.concat(
-                '{"name":"', nameWithTokenId, '",',
-                '"description":"', _description, '",',
-                '"style":"', _style, '",',
-                '"model":"', _model, '",',
-                '"image":"', imageURI, '"}'
-            )
-        )
-    );
-
-    // Return the full token URI
-    return string.concat(_baseURI(), json);
-}
+    function setBaseURI(string memory _newURI) external onlyOwner {
+        _baseTokenURI = _newURI;
+        emit BaseURIUpdated(_newURI);
+    }
+    ////// ------------------------------------------------ ////////
 
     function totalSupply() external view returns (uint256) {
         return _tokenIdCounter._value;

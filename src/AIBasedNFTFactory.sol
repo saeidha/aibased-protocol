@@ -56,13 +56,18 @@ contract AIBasedNFTFactory is Ownable {
 
     // The address of the deployed W3PASS contract.
     address public w3PassAddress;
+
     uint256 public basePlatformFee;
+    uint256 public maxBasePlatformFee;
+    uint256 public percentagePlatformFee;
 
     constructor() Ownable(msg.sender) {
 
         modelGenerationFee["v1"] = 0.00001 ether;
         modelGenerationFee["v2"] = 0.00001 ether;
-        basePlatformFee = 0.0001 ether;
+        basePlatformFee = 0.00005 ether;
+        maxBasePlatformFee = 0.002 ether;
+        percentagePlatformFee = 5;
     }
 
 
@@ -75,7 +80,7 @@ contract AIBasedNFTFactory is Ownable {
         string symbol,
         uint256 maxSupply,
         uint256 maxTime,
-        string imageURL,
+        string initialBaseURI,
         bool mintPerWallet,
         uint256 mintPrice,
         address owner
@@ -103,6 +108,8 @@ contract AIBasedNFTFactory is Ownable {
     event W3PassMinted(address indexed minter);
 
     event BasePlatformFeeSet(uint256 indexed newFee);
+    event MaxBasePlatformFeeSet(uint256 indexed maxNewFee);
+    event PercentagePlatformFeeSet(uint256 indexed newPercentage);
 
     struct CollectionDetails {
         address collectionAddress;
@@ -110,7 +117,7 @@ contract AIBasedNFTFactory is Ownable {
         string description;
         uint256 tokenIdCounter;
         uint256 maxSupply;
-        string baseImageURI;
+        string initialBaseURI;
         uint256 maxTime;
         bool mintPerWallet;
         uint256 mintPrice;
@@ -126,7 +133,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory model,
         string memory style,
         string memory symbol,
-        string memory imageURL,
+        string memory initialBaseURI,
         uint256 maxSupply,
         uint256 maxTime,
         bool mintPerWallet,
@@ -143,7 +150,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol: symbol,
             maxSupply: isUltimateMintQuantity ? type(uint256).max : maxSupply,
             maxTime: isUltimateMintTime ? type(uint256).max : maxTime,
-            imageURL: imageURL,
+            initialBaseURI: initialBaseURI,
             mintPerWallet: mintPerWallet,
             initialPrice: mintPrice,
             admin: owner(),
@@ -166,7 +173,7 @@ contract AIBasedNFTFactory is Ownable {
             config.symbol,
             config.maxSupply,
             config.maxTime,
-            config.imageURL,
+            config.initialBaseURI,
             config.mintPerWallet,
             config.initialPrice,
             config.initialOwner
@@ -180,7 +187,7 @@ contract AIBasedNFTFactory is Ownable {
         string memory model,
         string memory style,
         string memory symbol,
-        string memory imageURL
+        string memory initialBaseURI
     ) external payable {
         uint256 maxTime = block.timestamp + 1 hours;
         uint256 maxSupply = 1;
@@ -193,7 +200,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol: symbol,
             maxSupply: maxSupply,
             maxTime: maxTime,
-            imageURL: imageURL,
+            initialBaseURI: initialBaseURI,
             mintPerWallet: true,
             initialPrice: 0,
             admin: owner(),
@@ -216,7 +223,7 @@ contract AIBasedNFTFactory is Ownable {
             symbol,
             maxSupply,
             maxTime,
-            imageURL,
+            initialBaseURI,
             true,
             0,
             msg.sender
@@ -293,13 +300,27 @@ contract AIBasedNFTFactory is Ownable {
         emit BasePlatformFeeSet(_newFee);
     }
 
+    // Add this new set maxBasePlatformFee function
+    function setMaxBasePlatformFee(uint256 _newFee) external {
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        maxBasePlatformFee = _newFee;
+        emit MaxBasePlatformFeeSet(_newFee);
+    }
+
+        // Add this new set Percentage PlatformFee function
+    function setPercentageBasePlatformFee(uint256 _newFee) external {
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        percentagePlatformFee = _newFee;
+        emit PercentagePlatformFeeSet(_newFee);
+    }
+
     /*** @dev Calculates the platform fee based on a collection's mint price.
     * @param _mintPrice The initial mint price of an NFT in a collection.
     * @return The calculated platform fee.*/
     function getPlatformFee(uint256 _mintPrice) public view returns (uint256) {
-        if (_mintPrice > 0.002 ether) {
-            // Return 5% of the mint price
-            return (_mintPrice * 5) / 100;
+        if (_mintPrice > maxBasePlatformFee) {
+            // Return percentagePlatformFee% of the mint price
+            return (_mintPrice * percentagePlatformFee) / 100;
         } else {
             // Return the base fee
             return basePlatformFee;

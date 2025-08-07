@@ -6,7 +6,7 @@ import {console} from "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol"; // Import the Vm type to access Vm.Log
 import {AIBasedNFTFactory} from "../src/AIBasedNFTFactory.sol";
 import {NFTCollection} from "../src/NFTCollection.sol"; // We need this to interact with the created collections
-
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 contract TestMintAndCollection is Script {
     // --- State Variables for the Script ---
     AIBasedNFTFactory factory;
@@ -27,9 +27,9 @@ contract TestMintAndCollection is Script {
 
     // --- Main Run Function ---
     function run() public {
-        test_createCollection();
+        // test_createCollection();
         test_createAndMint();
-        test_mintFromExistingCollection();
+        // test_mintFromExistingCollection();
     }
 
     // --- Test Case 1: Creating a new collection ---
@@ -44,7 +44,7 @@ contract TestMintAndCollection is Script {
             "model-x",
             "style-y",
             "TEST",
-            "bafybeibio4mg45pued6znmeluljrtp2fw2zy766j2o7bozrtrjvfpx7fsm",
+            "ipfs://bafkreigllqqwui2rfhz6smd6m2efhclvzwtybrlfjibwj6b43vvbhi4tyi/",
             100,
             block.timestamp + 1 days,
             false,
@@ -70,10 +70,10 @@ contract TestMintAndCollection is Script {
         factory.createAndMint{value: 0.0001 ether}(
             "NewSAEIDInstant Mint Collection",
             "NewSAEIDA collection with an immediate mint.",
-            "model-instant",
-            "style-now",
-            "INST",
-            "bafybeibio4mg45pued6znmeluljrtp2fw2zy766j2o7bozrtrjvfpx7fsm"
+            "v2",
+            "Drawing",
+            "INS",
+            "ipfs://bafkreihgfshpecp7w5rzh56ooq5gjg5jqdcxrtowmsv2tfc4dxi2f45wn4"
         );
         vm.stopBroadcast();
 
@@ -110,7 +110,7 @@ contract TestMintAndCollection is Script {
         // Step A: First, create a collection to mint from
         vm.startBroadcast(creatorPrivateKey);
         address collectionToMintFrom = factory.createCollection(
-            "NewSAEIDExisting Collection", "For mintNFT test", "model-e", "style-f", "EXIST", "bafybeibre3kd34cptwqfcok2qhjf7eliiaxsyokvz2awpd7gb6u57anv3e", 100, block.timestamp + 1 days, false, 0.0001 ether, false, false
+            "NewSAEIDExisting Collection", "For mintNFT test", "model-e", "style-f", "EXIST", "bafkreigllqqwui2rfhz6smd6m2efhclvzwtybrlfjibwj6b43vvbhi4tyi", 100, block.timestamp + 1 days, false, 0.0001 ether, false, false
         );
         vm.stopBroadcast();
         
@@ -128,5 +128,78 @@ contract TestMintAndCollection is Script {
         uint256 finalBalance = existingCollection.balanceOf(collectionCreator);
         require(finalBalance > 0, "Balance should be greater than 0 after minting");
         console.log("mintNFT successful. Final balance:", finalBalance);
+    }
+
+    function createMintAndVerify() public {
+    // Setup contract config
+    string memory name = "NewSAEIDInstant Mint Collection";
+    string memory description = "NewSAEIDA collection with an immediate mint.";
+    string memory model = "v2";
+    string memory style = "Drawing";
+    string memory symbol = "INS";
+    string memory baseURI = "ipfs://bafkreibfsrknn42odtq4jnlmdl7alekjtpxusxusdfsnya4tgxyoouoqpy/";
+    
+    vm.recordLogs();
+    vm.startBroadcast(creatorPrivateKey);
+    
+    factory.createAndMint{value: 0.0001 ether}(
+        name,
+        description,
+        model,
+        style,
+        symbol,
+        baseURI
+    );
+
+    vm.stopBroadcast();
+
+    // Get collection address from logs
+    Vm.Log[] memory entries = vm.getRecordedLogs();
+    address newCollectionAddress;
+
+    for (uint i = 0; i < entries.length; i++) {
+        if (entries[i].topics[0] == AIBasedNFTFactory.CollectionCreated.selector) {
+            newCollectionAddress = address(uint160(uint256(entries[i].topics[1])));
+            break;
+        }
+    }
+    
+    require(newCollectionAddress != address(0), "Could not find new collection address from events");
+    console.log("New collection deployed at:", newCollectionAddress);
+
+    // Build verification command in parts
+       string memory command = string.concat(
+        "forge verify-contract ",
+        Strings.toHexString(uint160(newCollectionAddress), 20),
+        " NFTCollection",
+        " --chain-id 84532",
+        " --constructor-args \""
+    );
+
+    string memory constructorArgs = string.concat(
+        "$(cast abi-encode 'constructor((string,string,string,string,string,uint256,uint256,string,bool,uint256,address,address,address))' '(",
+        "\"", name, "\",",
+        "\"", description, "\",",
+        "\"", model, "\",",
+        "\"", style, "\",",
+        "\"", symbol, "\",",
+        "1,",
+        Strings.toString(block.timestamp + 1 hours), ",", // Fix: Use correct timestamp
+        "\"", baseURI, "\",",
+        "true,0,",
+        "\"", Strings.toHexString(uint160(factory.owner()), 20), "\",",
+        "\"", Strings.toHexString(uint160(collectionCreator), 20), "\",",
+        "\"", Strings.toHexString(uint160(address(factory)), 20), "\"",
+        ")')"
+    );
+
+    string memory flags = string.concat(
+        "\" --verifier-url https://api-sepolia.basescan.org/api",
+        " --etherscan-api-key $ETHERSCAN_API_KEY"
+    );
+
+    console.log("\nTo verify the contract, run:");
+    console.log("----------------------------------");
+    console.log(string.concat(command, constructorArgs, flags));
     }
 }

@@ -13,6 +13,7 @@ base = "${BASE_RPC}"
 
 [etherscan]
 base = { key = "${ETHERSCAN_API_KEY}" }
+base_sepolia = { key = "${ETHERSCAN_API_KEY}" }
 
 [fmt]
 line_length = 120

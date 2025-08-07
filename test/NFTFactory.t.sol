@@ -126,7 +126,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
             description: collection.description(),
             tokenIdCounter: collection.totalSupply(),
             maxSupply: collection.maxSupply(),
-            baseImageURI: collection.imageURL(),
+            initialBaseURI: collection._baseTokenURI(),
             maxTime: collection.maxTime(),
             mintPerWallet: collection.mintPerWallet(),
             mintPrice: mintPrice,
@@ -153,7 +153,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
             description: "",
             tokenIdCounter: 0,
             maxSupply: 0,
-            baseImageURI: "",
+            initialBaseURI: "",
             maxTime: 0,
             mintPerWallet: false,
             mintPrice: 0,
@@ -807,7 +807,7 @@ function testAdminFunctionsAccessControl() public {
         NFTCollection collection = NFTCollection(collectionAddress);
         assertEq(collection.name(), name);
         assertEq(collection.symbol(), symbol);
-        assertEq(collection.imageURL(), imageURL);
+        assertEq(collection._baseTokenURI(), imageURL);
         assertEq(collection.maxSupply(), maxSupply);
         assertEq(collection.maxTime(), maxTime);
         assertEq(collection.mintPerWallet(), mintPerWallet);
@@ -894,14 +894,14 @@ function testAdminFunctionsAccessControl() public {
         assertEq(details[0].collectionAddress, collection1);
         assertEq(details[0].tokenIdCounter, 0);
         assertEq(details[0].maxSupply, 100);
-        assertEq(details[0].baseImageURI, "https://example.com/image1.png");
+        assertEq(details[0].initialBaseURI, "https://example.com/image1.png");
         assertEq(details[0].maxTime, block.timestamp + 365 days);
 
         // Verify details of the second collection
         assertEq(details[1].collectionAddress, collection2);
         assertEq(details[1].tokenIdCounter, 0);
         assertEq(details[1].maxSupply, 200);
-        assertEq(details[1].baseImageURI, "https://example.com/image2.png");
+        assertEq(details[1].initialBaseURI, "https://example.com/image2.png");
         assertEq(details[1].maxTime, block.timestamp + 730 days);
 
         vm.warp(block.timestamp + 366 days); 

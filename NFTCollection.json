@@ -43,7 +43,7 @@
             "internalType": "uint256"
           },
           {
-            "name": "imageURL",
+            "name": "initialBaseURI",
             "type": "string",
             "internalType": "string"
           },
@@ -76,6 +76,19 @@
       }
     ],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "_baseTokenURI",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -123,19 +136,6 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "contractURI",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
       }
     ],
     "stateMutability": "view"
@@ -213,19 +213,6 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "imageURL",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "string",
-        "internalType": "string"
       }
     ],
     "stateMutability": "view"
@@ -492,6 +479,19 @@
   },
   {
     "type": "function",
+    "name": "setBaseURI",
+    "inputs": [
+      {
+        "name": "_newURI",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "setMaxSupply",
     "inputs": [
       {
@@ -566,7 +566,7 @@
     "name": "tokenURI",
     "inputs": [
       {
-        "name": "tokenId",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -682,6 +682,19 @@
         "type": "bool",
         "indexed": false,
         "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BaseURIUpdated",
+    "inputs": [
+      {
+        "name": "newURI",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
       }
     ],
     "anonymous": false
