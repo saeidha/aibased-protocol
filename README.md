@@ -72,6 +72,16 @@ Deply FACTROY:
 
 forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
 
-TEST MINT AND CREATE COLLECTION:
 
-forge script script/Main/TestMintAndCollection.s.sol:TestMintAndCollection --rpc-url $RPC_URL --broadcast --verify -vvvv
+DEPLOY LEVEL:
+
+forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+DEPLOY W3PASS:
+
+forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+
+<!-- TEST MINT AND CREATE COLLECTION:
+
+forge script script/Main/TestMintAndCollection.s.sol:TestMintAndCollection --rpc-url $RPC_URL --broadcast --verify -vvvv -->
