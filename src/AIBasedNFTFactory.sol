@@ -65,7 +65,7 @@ contract AIBasedNFTFactory is Ownable {
 
         modelGenerationFee["v1"] = 0.00001 ether;
         modelGenerationFee["v2"] = 0.00001 ether;
-        basePlatformFee = 0.0001 ether;
+        basePlatformFee = 0.00005 ether;
         maxBasePlatformFee = 0.002 ether;
         percentagePlatformFee = 5;
     }
