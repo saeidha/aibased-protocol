@@ -29,6 +29,7 @@ contract AIBasedNFTFactory is Ownable {
 
     mapping(address => address[]) private _usersCollections;
     mapping(address => address[]) private _usersMint;
+    mapping(address => uint256) private _userGenerationFeeCount;
 
     uint256 private generateFee = 0 ether;
 
@@ -260,6 +261,7 @@ contract AIBasedNFTFactory is Ownable {
     function payGenerateFee(string calldata model) external payable {
         uint256 requiredFee = modelGenerationFee[model];
         if (msg.value < requiredFee) revert InsufficientFee();
+        _userGenerationFeeCount[msg.sender] += 1;
         emit PayGenerateFee(msg.value);
     }
 
@@ -442,4 +444,15 @@ contract AIBasedNFTFactory is Ownable {
         emit W3PassMinted(msg.sender);
     }
 
+    function getUserMintCount(address user) external view returns (uint256) {
+        return _usersMint[user].length;
+    }
+
+    function getUserCollectionsCount(address user) external view returns (uint256) {
+        return _usersCollections[user].length;
+    }
+
+    function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
+        return _userGenerationFeeCount[user];
+    }
 }

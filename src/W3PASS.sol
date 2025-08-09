@@ -15,7 +15,7 @@ contract W3PASS is ERC721, Ownable, ReentrancyGuard {
     // --- State Variables ---
 
     // The address of the AIBasedNFTFactory, the only contract allowed to mint.
-    address public immutable factoryAddress;
+    address public factoryAddress;
 
     // The root of the Merkle Tree containing whitelisted addresses and their discount tiers.
     bytes32 public merkleRoot;
@@ -182,5 +182,10 @@ constructor(
     function setBaseURI(string memory _newURI) external onlyOwner {
         _baseTokenURI = _newURI;
         emit BaseURIUpdated(_newURI);
+    }
+
+    function setFactoryAddress(address _newFactory) external onlyOwner {
+        require(_newFactory != address(0), "Factory address cannot be zero");
+        factoryAddress = _newFactory;
     }
 }
