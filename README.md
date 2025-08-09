@@ -81,6 +81,16 @@ DEPLOY W3PASS:
 
 forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
 
+TEST MINT W3PASS:
+
+forge script script/Main/TestMintW3Pass.s.sol:TestMintW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+
+SET W3Pass New Price:
+
+forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $RPC_URL --broadcast  -vvvv
+
+
 
 <!-- TEST MINT AND CREATE COLLECTION:
 
