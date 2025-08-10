@@ -91,6 +91,11 @@ SET W3Pass New Price:
 forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $RPC_URL --broadcast  -vvvv
 
 
+DEPLOY LEVEL:
+
+forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+
 
 <!-- TEST MINT AND CREATE COLLECTION:
 
