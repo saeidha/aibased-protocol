@@ -44,6 +44,7 @@ contract W3PASS is ERC721, Ownable, ReentrancyGuard {
     error NotFactory();
     error ProofRequiredForDiscount();
     error NonTransferable();
+    error TransferFailed();
 
 
     // --- Constructor ---
@@ -100,15 +101,28 @@ constructor(
 
         if (msg.value < finalPrice) revert InsufficientPayment();
 
+        // Transfer the revenue to the owner's address.
+        if (finalPrice > 0) {
+            (bool success, ) = payable(owner()).call{value: finalPrice}("");
+            if (!success) {
+                revert TransferFailed();
+            }
+        }
+        
+        // Refund any excess payment to the user who initiated the transaction.
+        if (msg.value > finalPrice) {
+            (bool success, ) = payable(_to).call{value: msg.value - finalPrice}("");
+            if (!success) {
+                revert TransferFailed();
+            }
+        }
+
+
         _hasMinted[_to] = true;
         uint256 tokenId = _nextTokenId++;
         _safeMint(_to, tokenId);
 
-        emit PassMinted(_to, tokenId, msg.value);
-
-        if (msg.value > finalPrice) {
-            payable(_to).transfer(msg.value - finalPrice);
-        }
+        emit PassMinted(_to, tokenId, finalPrice);
     }
 
     // --- FINAL CORRECTED V5 OVERRIDE: Make tokens non-transferable ---
