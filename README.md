@@ -9,8 +9,7 @@ forge inspect src/LevelNFTCollection.sol:LevelNFTCollection abi --json > LevelNF
 
 forge inspect src/W3PASS.sol:W3PASS abi --json > W3PASS.json
 
-
-
+ok factory done
 Deply FACTROY TESTNET:
 
 forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
