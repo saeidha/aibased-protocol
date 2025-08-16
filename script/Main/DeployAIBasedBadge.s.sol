@@ -9,7 +9,8 @@ contract DeployAIBasedBadge is Script {
     
     function run() public {
   
-        deploy();
+        // deploy();
+        addFactory(0x418737EC22F93e95dD1dDE7860A718D3E3a4d886);
     }
 
     function deploy() public {
@@ -19,9 +20,10 @@ contract DeployAIBasedBadge is Script {
 
         vm.startBroadcast(deployerPrivateKey);
 
-        address[] memory factories = new address[](2);
-        factories[0] = 0x2C8C74C992aD8cbE2B657D718295EF1733Fd2788;
+        address[] memory factories = new address[](3);
+        factories[0] = 0x418737EC22F93e95dD1dDE7860A718D3E3a4d886;
         factories[1] = 0x68F3c44093440258Ee5Afde3B0cdF39a3Bf43e9F;
+        factories[2] = 0x179Ed73435F83fBBC863f576948be1C92120539d;
 
         AIBasedBadge badge = new AIBasedBadge(factories);
 
