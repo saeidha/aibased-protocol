@@ -98,6 +98,10 @@ forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLev
 
 
 forge script script/Main/SetW3PassInFactory.s.sol:SetW3PassInFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+
+DEPLOY AIBasedBadge:
+forge script script/Main/DeployAIBasedBadge.s.sol:DeployAIBasedBadge --rpc-url $RPC_URL --broadcast --verify -vvvv
 <!-- TEST MINT AND CREATE COLLECTION:
 
 forge script script/Main/TestMintAndCollection.s.sol:TestMintAndCollection --rpc-url $RPC_URL --broadcast --verify -vvvv -->

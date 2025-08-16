@@ -57,7 +57,7 @@ contract NFTCollection is ERC721, Ownable {
     bool public immutable mintPerWallet;
 
     address public immutable factoryAddress;
-    uint256 private immutable initialPrice;
+    uint256 public immutable initialPrice;
     bool public isUltimateMintTime;
     bool public isUltimateMintQuantity;
     address public immutable creatorAddress;
