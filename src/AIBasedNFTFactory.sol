@@ -64,9 +64,9 @@ contract AIBasedNFTFactory is Ownable {
 
     constructor() Ownable(msg.sender) {
 
-        modelGenerationFee["v1"] = 0.00001 ether;
-        modelGenerationFee["v2"] = 0.00001 ether;
-        basePlatformFee = 0.00005 ether;
+        modelGenerationFee["v1"] = 0.000003 ether;
+        modelGenerationFee["v2"] = 0.000003 ether;
+        basePlatformFee = 0.000003 ether;
         maxBasePlatformFee = 0.002 ether;
         percentagePlatformFee = 5;
     }
@@ -87,7 +87,7 @@ contract AIBasedNFTFactory is Ownable {
         address owner
     );
     event ChangeGenerateFee(uint256 indexed newFee);
-    event PayGenerateFee(uint256 indexed amount);
+    event PayGenerateFee(address indexed payer, uint256 indexed amount);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event NFTMinted(address indexed collectionAddress, address indexed to, uint256 indexed quantity);
 
@@ -282,7 +282,7 @@ contract AIBasedNFTFactory is Ownable {
         uint256 requiredFee = modelGenerationFee[model];
         require(msg.value == requiredFee, "Invalid ETH amount sent");
         _userGenerationFeeCount[msg.sender] += 1;
-        emit PayGenerateFee(msg.value);
+        emit PayGenerateFee(msg.sender, msg.value);
     }
 
     /*** @dev Adds a new model and sets its initial generation fee.

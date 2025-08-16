@@ -73,6 +73,11 @@ Deply FACTROY:
 forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
 
 
+ReDeply FACTROY:
+
+forge script script/Main/ReDeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+
 DEPLOY LEVEL:
 
 forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL --broadcast --verify -vvvv
@@ -91,7 +96,7 @@ SET W3Pass New Price:
 forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $RPC_URL --broadcast  -vvvv
 
 
-DEPLOY LEVEL:
+Set LEVEL in factory:
 
 forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv
 

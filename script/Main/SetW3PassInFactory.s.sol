@@ -21,6 +21,7 @@ contract SetW3PassInFactory is Script {
         // Configure the factory to link it to the set LevelNFTCollection
         console.log("Setting Level NFT Collection on the factory...");
         factory.setW3PassAddress(address(w3pass));
+        w3pass.setFactoryAddress(address(factory));
 
         vm.stopBroadcast();
         
