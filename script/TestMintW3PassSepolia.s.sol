@@ -155,9 +155,9 @@ contract TestMintW3Pass is Script {
         console.log("Balance before:", anotherMinter.balance);
 
 
-        // vm.startBroadcast(anotherMinterPrivateKey);
-        // factory.mintW3Pass{value: price}(DISCOUNT_TIER, merkleProof, signature);
-        // vm.stopBroadcast();
+        vm.startBroadcast(anotherMinterPrivateKey);
+        factory.mintW3Pass{value: price}(DISCOUNT_TIER, merkleProof, signature);
+        vm.stopBroadcast();
 
         console.log("Mint with discount successful!");
         console.log("Balance after:", anotherMinter.balance);

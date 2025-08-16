@@ -1,0 +1,76 @@
+{
+  "transactions": [
+    {
+      "hash": "0xcba01021b4f1f19ad663037917a6d4ec85ee2466a85416717fd66fa2fb1e2389",
+      "transactionType": "CALL",
+      "contractName": "AIBasedNFTFactory",
+      "contractAddress": "0x418737ec22f93e95dd1dde7860a718d3e3a4d886",
+      "function": "setW3PassAddress(address)",
+      "arguments": [
+        "0xA6ae907380a8A4BcfC3312a809f1761B9f03D12f"
+      ],
+      "transaction": {
+        "from": "0xc2d98bc812d41df994fa67601e576e4380c1739f",
+        "to": "0x418737ec22f93e95dd1dde7860a718d3e3a4d886",
+        "gas": "0xaccf",
+        "value": "0x0",
+        "input": "0x806acdbd000000000000000000000000a6ae907380a8a4bcfc3312a809f1761b9f03d12f",
+        "nonce": "0x9e",
+        "chainId": "0x2105"
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [
+    {
+      "status": "0x1",
+      "cumulativeGasUsed": "0xd4f76d",
+      "logs": [
+        {
+          "address": "0x418737ec22f93e95dd1dde7860a718d3e3a4d886",
+          "topics": [
+            "0x7385b7560f5405dff81649e6c766532edc2772c415bfe8ba2b8100d288b665d9",
+            "0x000000000000000000000000a6ae907380a8a4bcfc3312a809f1761b9f03d12f"
+          ],
+          "data": "0x",
+          "blockHash": "0x47aa8f83be3db8a3a40d602985fc1a648318ea90df9002514132d507367201a9",
+          "blockNumber": "0x20751df",
+          "blockTimestamp": "0x689900a1",
+          "transactionHash": "0xcba01021b4f1f19ad663037917a6d4ec85ee2466a85416717fd66fa2fb1e2389",
+          "transactionIndex": "0x5a",
+          "logIndex": "0x176",
+          "removed": false
+        }
+      ],
+      "logsBloom": "0x00000000000000000000000080000000000002000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000001000000000000000000000000020000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000",
+      "type": "0x2",
+      "transactionHash": "0xcba01021b4f1f19ad663037917a6d4ec85ee2466a85416717fd66fa2fb1e2389",
+      "transactionIndex": "0x5a",
+      "blockHash": "0x47aa8f83be3db8a3a40d602985fc1a648318ea90df9002514132d507367201a9",
+      "blockNumber": "0x20751df",
+      "gasUsed": "0x7629",
+      "effectiveGasPrice": "0x5ac409",
+      "from": "0xc2d98bc812d41df994fa67601e576e4380c1739f",
+      "to": "0x418737ec22f93e95dd1dde7860a718d3e3a4d886",
+      "contractAddress": null,
+      "l1BaseFeeScalar": "0x8dd",
+      "l1BlobBaseFee": "0x1",
+      "l1BlobBaseFeeScalar": "0x101c12",
+      "l1Fee": "0x5f940bd2",
+      "l1GasPrice": "0x1a53c3f6",
+      "l1GasUsed": "0x640"
+    }
+  ],
+  "libraries": [],
+  "pending": [],
+  "returns": {
+    "0": {
+      "internal_type": "contract AIBasedNFTFactory",
+      "value": "0x418737EC22F93e95dD1dDE7860A718D3E3a4d886"
+    }
+  },
+  "timestamp": 1754857631478,
+  "chain": 8453,
+  "commit": "ac9b14a"
+}
