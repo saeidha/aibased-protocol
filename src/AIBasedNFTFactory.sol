@@ -418,7 +418,6 @@ contract AIBasedNFTFactory is Ownable {
      * It forwards the payment, signature, and Merkle proof.
      * The signature here authorizes the user to *attempt* a mint.
      * The Merkle proof authorizes the *discount*.*/
-     
     function mintW3Pass(
         uint256 _discountTier,
         bytes32[] calldata _merkleProof,
