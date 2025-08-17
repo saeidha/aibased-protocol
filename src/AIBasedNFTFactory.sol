@@ -464,7 +464,7 @@ contract AIBasedNFTFactory is Ownable {
         emit W3PassMinted(msg.sender);
     }
 
-
+    /// Public for GUILD
     function getUserMintCount(address user) external view returns (uint256) {
         return _usersMint[user].length;
     }
