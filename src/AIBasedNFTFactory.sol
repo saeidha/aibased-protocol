@@ -465,7 +465,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getUserMintCount(address user) external view returns (uint256) {
-
+        
         return _usersMint[user].length;
     }
 
@@ -475,7 +475,6 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
-        
         return _userGenerationFeeCount[user];
     }
 }
