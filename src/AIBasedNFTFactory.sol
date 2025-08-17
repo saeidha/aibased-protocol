@@ -414,6 +414,11 @@ contract AIBasedNFTFactory is Ownable {
         emit W3PassAddressSet(_newAddress);
     }
 
+        /*** @dev Mints a W3PASS NFT by calling the dedicated contract.
+     * It forwards the payment, signature, and Merkle proof.
+     * The signature here authorizes the user to *attempt* a mint.
+     * The Merkle proof authorizes the *discount*.*/
+     
     function mintW3Pass(
         uint256 _discountTier,
         bytes32[] calldata _merkleProof,
