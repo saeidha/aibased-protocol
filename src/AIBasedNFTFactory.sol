@@ -469,9 +469,14 @@ contract AIBasedNFTFactory is Ownable {
     function getUserMintCount(address user) external view returns (uint256) {
         return _usersMint[user].length;
     }
-    
+
     ///  Get User Collections Count
     function getUserCollectionsCount(address user) external view returns (uint256) {
         return _usersCollections[user].length;
+    }
+    
+    ///  Get User Generate Count
+    function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
+        return _userGenerationFeeCount[user];
     }
 }
