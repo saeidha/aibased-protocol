@@ -1,4 +1,5 @@
 [profile.default]
+license = "UNLICENSED"
 src = 'src'
 out = 'out'
 libs = ['lib']
