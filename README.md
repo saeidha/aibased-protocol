@@ -1,115 +1,67 @@
 # AI-Based NFT Creator Factory and W3Pass
 
-This project contains the smart contracts for an NFT creator factory and the W3Pass NFT logic. It serves as your gateway to the full AIbased experience—from earning XP and leveling up, to claiming rewards, minting NFTs, and accessing premium tools.
+This project contains the smart contracts for an NFT creator factory and the W3Pass NFT logic. It's the core of the full aibased.app experience, enabling users to earn XP, level up, claim rewards, mint NFTs, and access premium tools.
 
-## License
+## ⚠️ License
 
 This project is private and proprietary to aibased.app. All rights are reserved. The code is for internal use by aibased.app developers and is not licensed for any other use, distribution, or modification.
 
-## Deploys commands
+**Copyright (c) 2024 aibased.app**
 
-### ABI
+All rights reserved.
 
-forge inspect src/AIBasedNFTFactory.sol:AIBasedNFTFactory abi --json > AIBasedNFTFactory.json
+This software is the confidential and proprietary information of aibased.app ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement you entered into with aibased.app.
 
-forge inspect src/NFTCollection.sol:NFTCollection abi --json > NFTCollection.json
+---
 
-forge inspect src/LevelNFTCollection.sol:LevelNFTCollection abi --json > LevelNFTCollection.json
+## Deploy Commands
 
-forge inspect src/W3PASS.sol:W3PASS abi --json > W3PASS.json
+### ABI Generation
 
-ok factory done
+Use these commands to generate the necessary ABI files for each smart contract.
 
-### Deply FACTROY TESTNET:
+* `forge inspect src/AIBasedNFTFactory.sol:AIBasedNFTFactory abi --json > AIBasedNFTFactory.json`
+* `forge inspect src/NFTCollection.sol:NFTCollection abi --json > NFTCollection.json`
+* `forge inspect src/LevelNFTCollection.sol:LevelNFTCollection abi --json > LevelNFTCollection.json`
+* `forge inspect src/W3PASS.sol:W3PASS abi --json > W3PASS.json`
 
-forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
+### Testnet (Sepolia) Deployment
 
-### SET FEE:
+These commands are for deploying and testing the contracts on the Sepolia testnet.
 
-forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+#### Factory and Fees
+* **Deploy Factory:** `forge script script/DeployFactorySepolia.s.sol:DeployFactory --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv`
+* **Set Fee:** `forge script script/SetFeeSepolia.s.sol:SetFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
+* **Test Mint and Create Collection:** `forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv`
+* **Test Fee Payment:** `forge script script/TestFeesSepolia.s.sol:PayFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
+* **Test Change Fee:** `forge script script/TestFeeLogicSepolia.s.sol:TestFeeLogic --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
 
-### TEST MINT AND CREATE COLLECTION:
+#### Level and W3Pass
+* **Deploy Level NFT:** `forge script script/DeployAndLinkLevelNFTSepolia.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv`
+* **Test Mint Level:** `forge script script/TestMintLevelSepolia.s.sol:MintLevel --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
+* **Deploy W3Pass:** `forge script script/DeployW3PassSepolia.s.sol:DeployW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv`
+* **Set Merkle Root:** `forge script script/SetMerkleRootSepolia.s.sol:SetMerkleRoot --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
+* **Test Mint W3Pass:** `forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
 
-forge script script/TestMintAndCollectionSepolia.s.sol:TestMintAndCollection --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
+#### Example
+* **Log Example:** `forge script script/example/SignAndVerifyScript.s.sol:SignAndVerifyScript --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv`
 
-### TEST FEE:
+### Mainnet Deployment
 
-forge script script/TestFeesSepolia.s.sol:PayFee --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
+These commands are for deploying the contracts on the Ethereum mainnet.
 
-### DEPLOY LEVEL:
+#### Initial Deployment
+* **Deploy Factory:** `forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv`
+* **Deploy Level NFT:** `forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL --broadcast --verify -vvvv`
+* **Deploy W3Pass:** `forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv`
+* **Set W3Pass Price:** `forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $RPC_URL --broadcast -vvvv`
+* **Set Level in Factory:** `forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv`
+* **Set W3Pass in Factory:** `forge script script/Main/SetW3PassInFactory.s.sol:SetW3PassInFactory --rpc-url $RPC_URL --broadcast --verify -vvvv`
+* **Deploy AIBasedBadge:** `forge script script/Main/DeployAIBasedBadge.s.sol:DeployAIBasedBadge --rpc-url $RPC_URL --broadcast --verify -vvvv`
 
-forge script script/DeployAndLinkLevelNFTSepolia.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
-
-### TEST MINT LEVEL:
-
-forge script script/TestMintLevelSepolia.s.sol:MintLevel --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
-
-### DEPLOY W3PASS:
-
-forge script script/DeployW3PassSepolia.s.sol:DeployW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast --verify -vvvv
-
-### SET MARKLET ROOT:
-
-forge script script/SetMerkleRootSepolia.s.sol:SetMerkleRoot --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
-
-### TEST MINT W3PASS:
-
-forge script script/TestMintW3PassSepolia.s.sol:TestMintW3Pass --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
-
-### ExampleLog:
-
-forge script script/example/SignAndVerifyScript.s.sol:SignAndVerifyScript --rpc-url $RPC_URL_SEPOLIA --broadcast  -vvvv
-
-### TEST CHANGE FEE:
-
-forge script script/TestFeeLogicSepolia.s.sol:TestFeeLogic --rpc-url $RPC_URL_SEPOLIA --broadcast -vvvv
-
-### ////////TEST MAIN
-
-### Deply FACTROY:
-
-forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### ReDeply FACTROY:
-
-forge script script/Main/ReDeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### DEPLOY LEVEL:
-
-forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### DEPLOY W3PASS:
-
-forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### TEST MINT W3PASS:
-
-forge script script/Main/TestMintW3Pass.s.sol:TestMintW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### SET W3Pass New Price:
-
-forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $RPC_URL --broadcast  -vvvv
-
-### Set LEVEL in factory:
-
-forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-forge script script/Main/SetW3PassInFactory.s.sol:SetW3PassInFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### DEPLOY AIBasedBadge:
-
-forge script script/Main/DeployAIBasedBadge.s.sol:DeployAIBasedBadge --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-### <!------------------------ REDEPLOY FACTORY FLOW: ------------------------------>
-
-forge script script/Main/ReDeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-forge script script/Main/SetW3PassInFactory.s.sol:SetW3PassInFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-forge script script/Main/DeployAIBasedBadge.s.sol:DeployAIBasedBadge --rpc-url $RPC_URL --broadcast --verify -vvvv
-
-<!-- TEST MINT AND CREATE COLLECTION:
-
-forge script script/Main/TestMintAndCollection.s.sol:TestMintAndCollection --rpc-url $RPC_URL --broadcast --verify -vvvv -->
+#### Factory Redeployment Flow
+Follow these steps to redeploy the factory and relink all dependencies.
+1.  **Redeploy Factory:** `forge script script/Main/ReDeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv`
+2.  **Set Factory in Level NFT:** `forge script script/Main/SetFactoryAddressForLevel.s.sol:SetFactoryAddressForLevel --rpc-url $RPC_URL --broadcast --verify -vvvv`
+3.  **Set Factory in W3Pass:** `forge script script/Main/SetW3PassInFactory.s.s.sol:SetW3PassInFactory --rpc-url $RPC_URL --broadcast --verify -vvvv`
+4.  **Deploy AIBasedBadge:** `forge script script/Main/DeployAIBasedBadge.s.sol:DeployAIBasedBadge --rpc-url $RPC_URL --broadcast --verify -vvvv`
