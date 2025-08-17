@@ -412,7 +412,20 @@ contract AIBasedNFTFactory is Ownable {
         // It must match exactly: keccak256(abi.encodePacked(msg.sender, level))
         bytes32 messageHash = keccak256(abi.encodePacked(msg.sender, level));
         
+        // Add the standard Ethereum message prefix and recover the signer's address.
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        address recoveredSigner = ethSignedMessageHash.recover(signature);
 
+        // Verify that the signer is the authorized address.
+        require(recoveredSigner == authorizer, "Invalid signature");
+
+        // If all checks pass, mint the NFT by calling the LevelNFTCollection contract.
+        hasMintedLevel[msg.sender][level] = true;
+        uint256 newTokenId = ILevelNFTCollection(levelNFTCollection).mint(msg.sender, level);
+
+        // A signature can only be used once across the entire contract.
+        usedSignatures[sigHash] = true;
+        emit LevelNFTMinted(levelNFTCollection, msg.sender, level, newTokenId);
     }
 
 
