@@ -15,7 +15,7 @@ contract W3PASS is ERC721, Ownable, ReentrancyGuard {
     // --- State Variables ---
 
     // The address of the AIBasedNFTFactory, the only contract allowed to mint.
-    address public immutable factoryAddress;
+    address public factoryAddress;
 
     // The root of the Merkle Tree containing whitelisted addresses and their discount tiers.
     bytes32 public merkleRoot;
@@ -44,6 +44,7 @@ contract W3PASS is ERC721, Ownable, ReentrancyGuard {
     error NotFactory();
     error ProofRequiredForDiscount();
     error NonTransferable();
+    error TransferFailed();
 
 
     // --- Constructor ---
@@ -100,15 +101,28 @@ constructor(
 
         if (msg.value < finalPrice) revert InsufficientPayment();
 
+        // Transfer the revenue to the owner's address.
+        if (finalPrice > 0) {
+            (bool success, ) = payable(owner()).call{value: finalPrice}("");
+            if (!success) {
+                revert TransferFailed();
+            }
+        }
+        
+        // Refund any excess payment to the user who initiated the transaction.
+        if (msg.value > finalPrice) {
+            (bool success, ) = payable(_to).call{value: msg.value - finalPrice}("");
+            if (!success) {
+                revert TransferFailed();
+            }
+        }
+
+
         _hasMinted[_to] = true;
         uint256 tokenId = _nextTokenId++;
         _safeMint(_to, tokenId);
 
-        emit PassMinted(_to, tokenId, msg.value);
-
-        if (msg.value > finalPrice) {
-            payable(_to).transfer(msg.value - finalPrice);
-        }
+        emit PassMinted(_to, tokenId, finalPrice);
     }
 
     // --- FINAL CORRECTED V5 OVERRIDE: Make tokens non-transferable ---
@@ -182,5 +196,10 @@ constructor(
     function setBaseURI(string memory _newURI) external onlyOwner {
         _baseTokenURI = _newURI;
         emit BaseURIUpdated(_newURI);
+    }
+
+    function setFactoryAddress(address _newFactory) external onlyOwner {
+        require(_newFactory != address(0), "Factory address cannot be zero");
+        factoryAddress = _newFactory;
     }
 }

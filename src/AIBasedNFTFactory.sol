@@ -29,6 +29,7 @@ contract AIBasedNFTFactory is Ownable {
 
     mapping(address => address[]) private _usersCollections;
     mapping(address => address[]) private _usersMint;
+    mapping(address => uint256) private _userGenerationFeeCount;
 
     uint256 private generateFee = 0 ether;
 
@@ -63,9 +64,9 @@ contract AIBasedNFTFactory is Ownable {
 
     constructor() Ownable(msg.sender) {
 
-        modelGenerationFee["v1"] = 0.00001 ether;
-        modelGenerationFee["v2"] = 0.00001 ether;
-        basePlatformFee = 0.00005 ether;
+        modelGenerationFee["v1"] = 0.000003 ether;
+        modelGenerationFee["v2"] = 0.000003 ether;
+        basePlatformFee = 0.000003 ether;
         maxBasePlatformFee = 0.002 ether;
         percentagePlatformFee = 5;
     }
@@ -86,7 +87,7 @@ contract AIBasedNFTFactory is Ownable {
         address owner
     );
     event ChangeGenerateFee(uint256 indexed newFee);
-    event PayGenerateFee(uint256 indexed amount);
+    event PayGenerateFee(address indexed payer, uint256 indexed amount);
     event EtherWithdrawn(address indexed recipient, uint256 indexed amount);
     event NFTMinted(address indexed collectionAddress, address indexed to, uint256 indexed quantity);
 
@@ -189,6 +190,10 @@ contract AIBasedNFTFactory is Ownable {
         string memory symbol,
         string memory initialBaseURI
     ) external payable {
+
+        // Step 1: Validate the minting fee.
+        require(msg.value == basePlatformFee, "Invalid minting fee sent");
+
         uint256 maxTime = block.timestamp + 1 hours;
         uint256 maxSupply = 1;
 
@@ -228,6 +233,8 @@ contract AIBasedNFTFactory is Ownable {
             0,
             msg.sender
         );
+
+
         collection.mint{value: msg.value}(msg.sender, 1);
 
         emit NFTMinted(collectionAddress, msg.sender, 1);
@@ -235,7 +242,20 @@ contract AIBasedNFTFactory is Ownable {
 
     function mintNFT(address collectionAddress, address to, uint256 quantity) external payable {
         NFTCollection collection = NFTCollection(collectionAddress);
+
+        uint256 initialPrice = collection.initialPrice();
+
+        uint256 currentPlatformFee = getPlatformFee(initialPrice);
+        uint256 ownerPayment = initialPrice * quantity;
+        uint256 platformPayment = currentPlatformFee * quantity;
+        uint256 requiredPrice = ownerPayment + platformPayment;
+
+        // Step 2: Check if the sent ETH is enough.
+        require(msg.value == requiredPrice, "Invalid ETH amount sent");
+
         bool mintedBefore = collection.hasMinted(to);
+        
+
         collection.mint{value: msg.value}(to, quantity);
 
         if (!mintedBefore) {
@@ -258,9 +278,11 @@ contract AIBasedNFTFactory is Ownable {
     /*** @dev Allows a user to pay the generation fee for a specific model.
      * @param model The model identifier (e.g., "v1", "v2").*/
     function payGenerateFee(string calldata model) external payable {
+
         uint256 requiredFee = modelGenerationFee[model];
-        if (msg.value < requiredFee) revert InsufficientFee();
-        emit PayGenerateFee(msg.value);
+        require(msg.value == requiredFee, "Invalid ETH amount sent");
+        _userGenerationFeeCount[msg.sender] += 1;
+        emit PayGenerateFee(msg.sender, msg.value);
     }
 
     /*** @dev Adds a new model and sets its initial generation fee.
@@ -440,5 +462,17 @@ contract AIBasedNFTFactory is Ownable {
 
         // This line is executed only if the mint call above succeeds.
         emit W3PassMinted(msg.sender);
+    }
+
+    function getUserMintCount(address user) external view returns (uint256) {
+        return _usersMint[user].length;
+    }
+
+    function getUserCollectionsCount(address user) external view returns (uint256) {
+        return _usersCollections[user].length;
+    }
+
+    function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
+        return _userGenerationFeeCount[user];
     }
 }

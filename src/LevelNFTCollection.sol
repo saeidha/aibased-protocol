@@ -28,8 +28,13 @@ contract LevelNFTCollection is ERC721, Ownable {
     event BaseURISet(string newBaseURI);
 
     modifier onlyFactory() {
-        require(msg.sender == factoryAddress, "Caller is not the authorized factory");
+        _onlyFactory();
         _;
+    }
+
+    function _onlyFactory() internal {
+
+        require(msg.sender == factoryAddress, "Caller is not the authorized factory");
     }
 
     // Pass the factory address and the IPFS metadata URI during deployment.

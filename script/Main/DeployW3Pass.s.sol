@@ -16,7 +16,7 @@ contract DeployW3Pass is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address authorizer = vm.envAddress("AUTHORIZER_ADDRESS");
         bytes32 initialMerkleRoot = vm.envBytes32("INITIAL_MERKLE_ROOT");
-        uint256 initialPrice = 1000000000000000;//vm.envUint("INITIAL_W3PASS_PRICE");
+        uint256 initialPrice = 1200000000000000;//vm.envUint("INITIAL_W3PASS_PRICE");
         string memory initialBaseURI = vm.envString("W3PASS_BASE_URI");
         address factoryAddress = vm.envAddress("FACTORY_ADDRESS");
         // Validate configuration
