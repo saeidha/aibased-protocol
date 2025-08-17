@@ -413,4 +413,28 @@ contract AIBasedNFTFactory is Ownable {
         w3PassAddress = _newAddress;
         emit W3PassAddressSet(_newAddress);
     }
+
+    function mintW3Pass(
+        uint256 _discountTier,
+        bytes32[] calldata _merkleProof,
+        bytes calldata _signature
+    ) external payable {
+        require(w3PassAddress != address(0), "W3PASS address not set");
+        require(authorizer != address(0), "Authorizer not set");
+
+        // --- Signature Verification ---
+        // The signature proves the user is authorized by the backend to mint.
+        // We can simplify the signed message to just the user's address.
+        bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        address recoveredSigner = ethSignedMessageHash.recover(_signature);
+        require(recoveredSigner == authorizer, "Invalid authorizer signature");
+        
+        // --- Call the W3PASS Contract ---
+        // Forward the payment and all necessary data.
+        IW3PASS(w3PassAddress).mint{value: msg.value}(msg.sender,_discountTier,_merkleProof);
+
+        // This line is executed only if the mint call above succeeds.
+        emit W3PassMinted(msg.sender);
+    }
 }
