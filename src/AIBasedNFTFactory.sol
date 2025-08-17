@@ -423,7 +423,6 @@ contract AIBasedNFTFactory is Ownable {
         bytes32[] calldata _merkleProof,
         bytes calldata _signature
     ) external payable {
-
         require(w3PassAddress != address(0), "W3PASS address not set");
         require(authorizer != address(0), "Authorizer not set");
 
