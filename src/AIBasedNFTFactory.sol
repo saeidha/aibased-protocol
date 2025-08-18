@@ -356,6 +356,12 @@ contract AIBasedNFTFactory is Ownable {
         return deployedCollections;
     }
 
+    ///  get minpad collections
+    function getMintPadCollections() external view returns (address[] memory) {
+        return mintPadCollections;
+    }
+
+
 
     /**
      * @dev Sets the address of the authorizer. Only the owner can call this.
