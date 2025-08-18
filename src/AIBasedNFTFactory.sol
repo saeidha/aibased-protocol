@@ -361,6 +361,11 @@ contract AIBasedNFTFactory is Ownable {
         return mintPadCollections;
     }
 
+    ///  get minpad collectio
+    function getUserCollection(address user) external view returns (address[] memory) {
+
+        return _usersCollections[user];
+    }
 
 
     /**
