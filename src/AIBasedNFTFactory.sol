@@ -381,6 +381,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
 
+
     /**
      * @dev Mints a Level NFT for the caller (`msg.sender`).
      * This function requires a valid signature from the `authorizer`.
