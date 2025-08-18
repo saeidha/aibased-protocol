@@ -386,7 +386,8 @@ contract AIBasedNFTFactory is Ownable {
      */
     function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
         require(_collectionAddress != address(0), "Cannot set collection to zero address");
-
+        levelNFTCollection = _collectionAddress;
+        emit LevelNFTCollectionSet(_collectionAddress);
     }
 
 
