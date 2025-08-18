@@ -380,16 +380,6 @@ contract AIBasedNFTFactory is Ownable {
         emit AuthorizerSet(_newAuthorizer);
     }
 
-    /**
-     * @dev Sets the address of the LevelNFTCollection contract. Only the owner can call this.
-     * @param _collectionAddress The deployed address of the Level NFT contract.
-     */
-    function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
-        require(_collectionAddress != address(0), "Cannot set collection to zero address");
-        levelNFTCollection = _collectionAddress;
-        emit LevelNFTCollectionSet(_collectionAddress);
-    }
-
 
     /**
      * @dev Mints a Level NFT for the caller (`msg.sender`).
