@@ -385,6 +385,7 @@ contract AIBasedNFTFactory is Ownable {
      * @param _collectionAddress The deployed address of the Level NFT contract.
      */
     function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
+        require(_collectionAddress != address(0), "Cannot set collection to zero address");
 
     }
 
