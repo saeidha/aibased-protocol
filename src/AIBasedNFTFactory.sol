@@ -367,6 +367,11 @@ contract AIBasedNFTFactory is Ownable {
         return _usersCollections[user];
     }
 
+    /// het mint collection
+    function getMintCollection(address user) external view returns (address[] memory) {
+
+        return _usersMint[user];
+    }
 
     /**
      * @dev Sets the address of the authorizer. Only the owner can call this.
