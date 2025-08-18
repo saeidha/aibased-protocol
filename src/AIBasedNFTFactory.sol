@@ -367,7 +367,7 @@ contract AIBasedNFTFactory is Ownable {
         return _usersCollections[user];
     }
 
-    /// het mint collection
+    /// get mint collection by user
     function getMintCollection(address user) external view returns (address[] memory) {
 
         return _usersMint[user];
