@@ -99,6 +99,8 @@ function getMintPadCollections() internal view returns (address[] memory) {
             //     return detail;
             // }
         }
+        console.log("Collection not found for address:", contractAddress);
+        console.log("Sender:", sender);
         return _emptyCollectionDetails();
     }
 
