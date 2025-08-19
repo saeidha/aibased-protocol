@@ -11,7 +11,7 @@ contract SetW3PassInFactory is Script {
 
         AIBasedNFTFactory factory = AIBasedNFTFactory(vm.envAddress("FACTORY_ADDRESS"));
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address authorizer = vm.envAddress("AUTHORIZER_ADDRESS");
+        // address authorizer = vm.envAddress("AUTHORIZER_ADDRESS");
         W3PASS w3pass = W3PASS(vm.envAddress("W3PASS_ADDRESS"));
         require(deployerPrivateKey != 0, "PRIVATE_KEY not set in .env");
 
