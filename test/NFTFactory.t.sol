@@ -793,7 +793,7 @@ function testAdminFunctionsAccessControl() public {
         uint256 mintPrice = 0.01 ether;
         bool isUltimateMintTime = false;
         bool isUltimateMintQuantity = false;
-        uint256 mintPriceWithFee = 0.0105 ether;
+        // uint256 mintPriceWithFee = 0.0105 ether;
         // Create a new collection
         address collectionAddress = factory.createCollection(
             name,
