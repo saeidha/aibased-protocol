@@ -406,10 +406,8 @@ function testCalculatePlatformFee() public {
         100, defaultMaxTime, false, 0.003 ether, false, false
     );
     
-    NFTCollection low = NFTCollection(lowPriceCollection);
-    NFTCollection high = NFTCollection(highPriceCollection);
-    console.log("Low Price Collection Address:", low._baseTokenURI);
-    console.log("High Price Collection Address:", high._baseTokenURI);
+    // NFTCollection low = NFTCollection(lowPriceCollection);
+    // NFTCollection high = NFTCollection(highPriceCollection);
     
     // Should return 0.0001 ether for <= 0.002 ether
     // assertEq(low.mintPrice(), 0.001 ether + 0.0001 ether, "Low price fee miscalculation");
