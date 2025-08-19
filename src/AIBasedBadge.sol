@@ -51,6 +51,6 @@ contract AIBasedBadge is Ownable {
         for (uint256 i = 0; i < factories.length; i++) {
             totalFeeCount += AIBasedNFTFactory(factories[i]).getUserPayGenerateFeeCount(user);
         }
-        
+        return totalFeeCount;
     }
 }
