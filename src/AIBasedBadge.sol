@@ -9,4 +9,6 @@ interface AIBasedNFTFactory {
     function getUserPayGenerateFeeCount(address user) external view returns (uint256);
 }
 
+contract AIBasedBadge is Ownable {
+    
 }
