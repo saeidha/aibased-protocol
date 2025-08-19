@@ -85,6 +85,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
             //     return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
             // }
         }
+        console.log("Collection not found for address:", contractAddress);
         return _emptyCollectionDetails();
     }
 
