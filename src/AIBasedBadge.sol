@@ -20,4 +20,15 @@ contract AIBasedBadge is Ownable {
         factories.push(_factory);
     }
 
+    function removeFactory(address _factory) external onlyOwner {
+        for (uint256 i = 0; i < factories.length; i++) {
+            if (factories[i] == _factory) {
+                factories[i] = factories[factories.length - 1];
+                factories.pop();
+                break;
+            }
+        }
+    }
+
+    
 }
