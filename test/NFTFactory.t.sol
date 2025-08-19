@@ -51,6 +51,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
         uint256 count = 0;
+        console.log("MintPad Collections Length:", sender);
         // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
         //     NFTCollection collection = NFTCollection(factory.getMintPadCollections()[i]);
         //     if (!collection.canNotToShow()) {
@@ -66,6 +67,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         address[] memory usersCollections = factory.getUserCollection(sender);
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        console.log("User Collections Length:", usersCollections.length);
         // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
         //     NFTCollection collection = NFTCollection(usersCollections[i]);
         //     details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
@@ -83,6 +85,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
             //     return _getCollectionDetails(collection, factory.getCollections()[i], true, mintPrice, mintPrice);
             // }
         }
+        console.log("Collection not found for address:", contractAddress);
         return _emptyCollectionDetails();
     }
 
@@ -96,6 +99,8 @@ function getMintPadCollections() internal view returns (address[] memory) {
             //     return detail;
             // }
         }
+        console.log("Collection not found for address:", contractAddress);
+        console.log("Sender:", sender);
         return _emptyCollectionDetails();
     }
 
@@ -401,8 +406,10 @@ function testCalculatePlatformFee() public {
         100, defaultMaxTime, false, 0.003 ether, false, false
     );
     
-    NFTCollection low = NFTCollection(lowPriceCollection);
-    NFTCollection high = NFTCollection(highPriceCollection);
+    console.log("Low Price Collection Address:", lowPriceCollection);
+    console.log("High Price Collection Address:", highPriceCollection);
+    // NFTCollection low = NFTCollection(lowPriceCollection);
+    // NFTCollection high = NFTCollection(highPriceCollection);
     
     // Should return 0.0001 ether for <= 0.002 ether
     // assertEq(low.mintPrice(), 0.001 ether + 0.0001 ether, "Low price fee miscalculation");
@@ -788,7 +795,7 @@ function testAdminFunctionsAccessControl() public {
         uint256 mintPrice = 0.01 ether;
         bool isUltimateMintTime = false;
         bool isUltimateMintQuantity = false;
-        uint256 mintPriceWithFee = 0.0105 ether;
+        // uint256 mintPriceWithFee = 0.0105 ether;
         // Create a new collection
         address collectionAddress = factory.createCollection(
             name,
