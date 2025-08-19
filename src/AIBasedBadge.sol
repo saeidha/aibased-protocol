@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface AIBasedNFTFactory {
     function getUserMintCount(address user) external view returns (uint256);
+    function getUserCollectionsCount(address user) external view returns (uint256);
     
 }
 
