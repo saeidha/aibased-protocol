@@ -406,6 +406,8 @@ function testCalculatePlatformFee() public {
         100, defaultMaxTime, false, 0.003 ether, false, false
     );
     
+    console.log("Low Price Collection Address:", lowPriceCollection);
+    console.log("High Price Collection Address:", highPriceCollection);
     // NFTCollection low = NFTCollection(lowPriceCollection);
     // NFTCollection high = NFTCollection(highPriceCollection);
     
