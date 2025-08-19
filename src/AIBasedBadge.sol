@@ -10,5 +10,11 @@ interface AIBasedNFTFactory {
 }
 
 contract AIBasedBadge is Ownable {
+    address[] public factories;
+
+    constructor(address[] memory _factories) Ownable(msg.sender) {
+        factories = _factories;
+    }
+
     
 }
