@@ -67,6 +67,7 @@ function getMintPadCollections() internal view returns (address[] memory) {
         uint256 mintPadCollectionsLength = factory.getMintPadCollections().length;
         address[] memory usersCollections = factory.getUserCollection(sender);
         AIBasedNFTFactory.CollectionDetails[] memory details = new AIBasedNFTFactory.CollectionDetails[](mintPadCollectionsLength);
+        console.log("User Collections Length:", usersCollections.length);
         // for (uint256 i = 0; i < mintPadCollectionsLength; i++) {
         //     NFTCollection collection = NFTCollection(usersCollections[i]);
         //     details[i] = _getCollectionDetails(collection, usersCollections[i], false, collection.mintPrice(),  collection.mintPriceForUser(sender));
