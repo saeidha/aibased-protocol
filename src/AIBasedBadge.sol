@@ -47,6 +47,7 @@ contract AIBasedBadge is Ownable {
     }
 
     function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
-       
+        uint256 totalFeeCount = 0;
+        
     }
 }
