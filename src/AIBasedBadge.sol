@@ -16,5 +16,8 @@ contract AIBasedBadge is Ownable {
         factories = _factories;
     }
 
-    
+    function addFactory(address _factory) external onlyOwner {
+        factories.push(_factory);
+    }
+
 }
