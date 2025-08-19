@@ -30,5 +30,13 @@ contract AIBasedBadge is Ownable {
         }
     }
 
+    function getUserMintCount(address user) external view returns (uint256) {
+        uint256 totalMints = 0;
+        for (uint256 i = 0; i < factories.length; i++) {
+            totalMints += AIBasedNFTFactory(factories[i]).getUserMintCount(user);
+        }
+        return totalMints;
+    }
+
     
 }
