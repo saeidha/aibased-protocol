@@ -60,5 +60,8 @@ contract AIBLockedXpTokenTest is Test {
         token.addToWhitelist(users);
         vm.prank(user1);
         token.claim();
+        vm.prank(user1);
+        vm.expectRevert("Already claimed");
+        token.claim();
     }
 }
