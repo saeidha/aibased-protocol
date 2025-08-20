@@ -30,6 +30,10 @@ contract AIBLockedXpTokenTest is Test {
         users[0] = user1;
         users[1] = user2;
 
-        
+        vm.prank(owner);
+        token.addToWhitelist(users);
+
+        assertTrue(token.whitelist(user1));
+        assertTrue(token.whitelist(user2));
     }
 }
