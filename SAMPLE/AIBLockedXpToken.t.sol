@@ -86,5 +86,8 @@ contract AIBLockedXpTokenTest is Test {
         token.addToWhitelist(users);
         vm.prank(user1);
         token.claim();
+        vm.prank(user1);
+        vm.expectRevert("Token is non-transferable");
+        token.transfer(user2, 10 * 10**18);
     }
 }
