@@ -33,6 +33,8 @@ contract AIBLockedXpToken is ERC20, Ownable {
     }
 
     function addToWhitelist(address[] calldata addresses) external onlyOwner {
-        
+        for (uint256 i = 0; i < addresses.length; i++) {
+            whitelist[addresses[i]] = true;
+        }
     }
 }
