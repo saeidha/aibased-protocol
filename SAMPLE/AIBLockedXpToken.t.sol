@@ -90,4 +90,8 @@ contract AIBLockedXpTokenTest is Test {
         vm.expectRevert("Token is non-transferable");
         token.transfer(user2, 10 * 10**18);
     }
+
+    function test_update_max_supply() public {
+
+    }
 }
