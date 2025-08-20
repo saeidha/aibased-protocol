@@ -78,4 +78,8 @@ contract AIBLockedXpTokenTest is Test {
         vm.expectRevert("Max supply reached");
         token.claim();
     }
+
+    function test_non_transferable() public {
+
+    }
 }
