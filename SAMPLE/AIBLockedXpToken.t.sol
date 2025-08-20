@@ -26,5 +26,10 @@ contract AIBLockedXpTokenTest is Test {
 
     function test_add_to_whitelist() public {
 
+        address[] memory users = new address[](2);
+        users[0] = user1;
+        users[1] = user2;
+
+        
     }
 }
