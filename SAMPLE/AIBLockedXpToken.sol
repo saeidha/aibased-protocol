@@ -12,4 +12,8 @@ contract AIBLockedXpToken is ERC20, Ownable {
     uint256 public constant CLAIM_AMOUNT = 10 * 10**18;
     mapping(address => bool) public whitelist;
     mapping(address => bool) public hasClaimed;
+
+    constructor(address initialOwner) ERC20("AIBLockedXpToken", "AIBLXP") Ownable(initialOwner) {
+        maxSupply = MAX_CLAIMS * CLAIM_AMOUNT;
+    }
 }
