@@ -11,5 +11,9 @@ contract AIBLockedXpTokenTest is Test {
     address public user1 = address(0x456);
     address public user2 = address(0x789);
 
-
+    function setUp() public {
+        vm.startPrank(owner);
+        token = new AIBLockedXpToken(owner);
+        vm.stopPrank();
+    }
 }
