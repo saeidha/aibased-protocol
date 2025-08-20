@@ -36,6 +36,7 @@ contract AIBLockedXpTokenTest is Test {
     }
 
     function test_claim() public {
-
+        address[] memory users = new address[](1);
+        users[0] = user1;
     }
 }
