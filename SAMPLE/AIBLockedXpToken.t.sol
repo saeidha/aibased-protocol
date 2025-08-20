@@ -104,4 +104,8 @@ contract AIBLockedXpTokenTest is Test {
         vm.expectRevert(abi.encodeWithSelector(bytes4(keccak256("OwnableUnauthorizedAccount(address)")), user1));
         token.updateMaxSupply(newMaxSupply);
     }
+
+    function test_update_max_supply_less_than_total_supply() public {
+
+    }
 }
