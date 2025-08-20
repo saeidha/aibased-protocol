@@ -92,6 +92,8 @@ contract AIBLockedXpTokenTest is Test {
     }
 
     function test_update_max_supply() public {
+        uint256 newMaxSupply = 200 * 10**18;
+        vm.prank(owner);
 
     }
 }
