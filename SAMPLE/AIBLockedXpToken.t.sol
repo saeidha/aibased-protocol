@@ -50,5 +50,6 @@ contract AIBLockedXpTokenTest is Test {
     function test_claim_not_whitelisted() public {
         vm.prank(user1);
         vm.expectRevert("Not whitelisted");
+        token.claim();
     }
 }
