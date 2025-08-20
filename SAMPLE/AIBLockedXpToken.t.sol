@@ -97,4 +97,8 @@ contract AIBLockedXpTokenTest is Test {
         token.updateMaxSupply(newMaxSupply);
         assertEq(token.maxSupply(), newMaxSupply);
     }
+
+    function test_update_max_supply_not_owner() public {
+
+    }
 }
