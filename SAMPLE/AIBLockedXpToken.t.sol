@@ -84,5 +84,7 @@ contract AIBLockedXpTokenTest is Test {
         users[0] = user1;
         vm.prank(owner);
         token.addToWhitelist(users);
+        vm.prank(user1);
+        token.claim();
     }
 }
