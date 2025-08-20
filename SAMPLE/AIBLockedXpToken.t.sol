@@ -42,5 +42,8 @@ contract AIBLockedXpTokenTest is Test {
         token.addToWhitelist(users);
         vm.prank(user1);
         token.claim();
+        assertEq(token.balanceOf(user1), 10 * 10**18);
+        assertTrue(token.hasClaimed(user1));
+        assertEq(token.totalClaims(), 1);
     }
 }
