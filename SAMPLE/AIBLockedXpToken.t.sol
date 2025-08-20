@@ -74,5 +74,8 @@ contract AIBLockedXpTokenTest is Test {
         newUser[0] = user1;
         vm.prank(owner);
         token.addToWhitelist(newUser);
+        vm.prank(user1);
+        vm.expectRevert("Max supply reached");
+        token.claim();
     }
 }
