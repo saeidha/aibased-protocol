@@ -31,4 +31,8 @@ contract AIBLockedXpToken is ERC20, Ownable {
         hasClaimed[msg.sender] = true;
         _mint(msg.sender, CLAIM_AMOUNT);
     }
+
+    function addToWhitelist(address[] calldata addresses) external onlyOwner {
+        
+    }
 }
