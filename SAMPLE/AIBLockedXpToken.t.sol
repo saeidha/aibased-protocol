@@ -46,4 +46,8 @@ contract AIBLockedXpTokenTest is Test {
         assertTrue(token.hasClaimed(user1));
         assertEq(token.totalClaims(), 1);
     }
+
+    function test_claim_not_whitelisted() public {
+
+    }
 }
