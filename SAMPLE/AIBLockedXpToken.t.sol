@@ -66,6 +66,9 @@ contract AIBLockedXpTokenTest is Test {
     }
 
     function test_max_supply_limit() public {
-
+        // Set max supply to current total supply
+        vm.startPrank(owner);
+        token.updateMaxSupply(token.totalSupply());
+        vm.stopPrank();
     }
 }
