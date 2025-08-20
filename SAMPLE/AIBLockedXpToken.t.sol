@@ -106,6 +106,7 @@ contract AIBLockedXpTokenTest is Test {
     }
 
     function test_update_max_supply_less_than_total_supply() public {
-
+        address[] memory users = new address[](1);
+        users[0] = user1;
     }
 }
