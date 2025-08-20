@@ -21,4 +21,14 @@ contract AIBLockedXpToken is ERC20, Ownable {
         require(from == address(0) || to == address(0), "Token is non-transferable");
         super._update(from, to, value);
     }
+
+    function claim() external {
+        require(whitelist[msg.sender], "Not whitelisted");
+        require(!hasClaimed[msg.sender], "Already claimed");
+        require(totalSupply() + CLAIM_AMOUNT <= maxSupply, "Max supply reached");
+
+        totalClaims++;
+        hasClaimed[msg.sender] = true;
+        _mint(msg.sender, CLAIM_AMOUNT);
+    }
 }
