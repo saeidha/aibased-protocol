@@ -70,5 +70,9 @@ contract AIBLockedXpTokenTest is Test {
         vm.startPrank(owner);
         token.updateMaxSupply(token.totalSupply());
         vm.stopPrank();
+        address[] memory newUser = new address[](1);
+        newUser[0] = user1;
+        vm.prank(owner);
+        token.addToWhitelist(newUser);
     }
 }
