@@ -56,5 +56,7 @@ contract AIBLockedXpTokenTest is Test {
     function test_claim_already_claimed() public {
         address[] memory users = new address[](1);
         users[0] = user1;
+        vm.prank(owner);
+        token.addToWhitelist(users);
     }
 }
