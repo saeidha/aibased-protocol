@@ -114,5 +114,7 @@ contract AIBLockedXpTokenTest is Test {
         token.claim();
         uint256 newMaxSupply = 5 * 10**18; // Less than total supply
         vm.prank(owner);
+        vm.expectRevert("New max supply is less than total supply");
+        token.updateMaxSupply(newMaxSupply);
     }
 }
