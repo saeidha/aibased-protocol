@@ -82,5 +82,7 @@ contract AIBLockedXpTokenTest is Test {
     function test_non_transferable() public {
         address[] memory users = new address[](1);
         users[0] = user1;
+        vm.prank(owner);
+        token.addToWhitelist(users);
     }
 }
