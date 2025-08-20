@@ -16,4 +16,11 @@ contract AIBLockedXpTokenTest is Test {
         token = new AIBLockedXpToken(owner);
         vm.stopPrank();
     }
+
+    function test_initial_state() public {
+        assertEq(token.name(), "AIBLockedXpToken");
+        assertEq(token.symbol(), "AIBLXP");
+        assertEq(token.owner(), owner);
+        assertEq(token.maxSupply(), 100 * 10 * 10**18);
+    }
 }
