@@ -23,4 +23,8 @@ contract AIBLockedXpTokenTest is Test {
         assertEq(token.owner(), owner);
         assertEq(token.maxSupply(), 100 * 10 * 10**18);
     }
+
+    function test_add_to_whitelist() public {
+
+    }
 }
