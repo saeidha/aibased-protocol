@@ -16,4 +16,9 @@ contract AIBLockedXpToken is ERC20, Ownable {
     constructor(address initialOwner) ERC20("AIBLockedXpToken", "AIBLXP") Ownable(initialOwner) {
         maxSupply = MAX_CLAIMS * CLAIM_AMOUNT;
     }
+
+    function _update(address from, address to, uint256 value) internal override {
+        require(from == address(0) || to == address(0), "Token is non-transferable");
+        super._update(from, to, value);
+    }
 }
