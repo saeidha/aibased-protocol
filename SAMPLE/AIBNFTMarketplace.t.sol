@@ -13,4 +13,9 @@ contract AIBNFTMarketplaceTest is Test {
     address owner = makeAddr("owner");
     address seller = makeAddr("seller");
     address buyer = makeAddr("buyer");
+
+     uint256 constant LISTING_FEE = 0.01 ether;
+    uint256 constant NFT_PRICE = 1 ether;
+    uint256 constant TOKEN_ID = 0;
+    uint256 constant TOKEN_ID_s = 0;
     
