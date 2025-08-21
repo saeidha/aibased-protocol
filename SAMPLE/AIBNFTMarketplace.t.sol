@@ -24,4 +24,7 @@ contract AIBNFTMarketplaceTest is Test {
     /// @notice This function runs before each test case
     function setUp() public {
         // Deploy contracts as the
-        
+        vm.startPrank(owner);
+        mockNft = new MockNFT();
+        marketplace = new AIBNFTMarketplace(LISTING_FEE);
+        vm.stopPrank();
