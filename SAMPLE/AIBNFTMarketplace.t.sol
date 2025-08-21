@@ -157,3 +157,7 @@ vm.prank(seller);
 
         vm.expectRevert(expectedRevert);
         marketplace.withdrawFees();
+
+        vm.expectRevert(expectedRevert);
+        marketplace.pause();
+    }
