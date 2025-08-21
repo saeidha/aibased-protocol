@@ -33,3 +33,6 @@ contract AIBNFTMarketplaceTest is Test {
 // Seller must approve the marketplace to manage the NFT
         vm.prank(seller);
         mockNft.approve(address(marketplace), TOKEN_ID);
+ // Give the buyer some ETH for tests
+        vm.deal(buyer, 5 ether);
+    }
