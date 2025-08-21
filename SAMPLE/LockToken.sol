@@ -140,3 +140,7 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
     function pause() external onlyOwner {
         _pause();
     }
+    /**
+     * @notice Unpauses the contract, re-enabling functionality.
+     * @dev Can only be called by the owner.
+     */
