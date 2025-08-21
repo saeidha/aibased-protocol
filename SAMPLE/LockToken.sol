@@ -91,3 +91,6 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
      * @param _lockId The ID of the lock to extend.
      * @param _extraDuration The additional time in seconds to add to the lock.
      */
+    function extendLock(uint256 _lockId, uint256 _extraDuration) external {
+        Lock storage userLock = locks[_lockId];
+        
