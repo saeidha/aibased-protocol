@@ -5,3 +5,17 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+
+
+/**
+ * @title AIBNFTMarketplace
+ * @dev A simple marketplace for listing, buying, and selling ERC721 NFTs.
+ */
+contract AIBNFTMarketplace is Pausable, Ownable, ERC721Holder {
+
+//=========== State Variables ===========//
+
+    struct Listing {
+        address seller;
+        uint256 price;
+    }
