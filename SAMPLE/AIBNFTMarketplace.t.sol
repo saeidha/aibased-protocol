@@ -100,4 +100,5 @@ vm.prank(seller);
 
         vm.prank(buyer);
         vm.expectEmit(true, true, true, true);
-       
+        emit NFTSold(seller, buyer, address(mockNft), TOKEN_ID, NFT_PRICE);
+        marketplace.buyNFT{value: NFT_PRICE}(address(mockNft), TOKEN_ID);
