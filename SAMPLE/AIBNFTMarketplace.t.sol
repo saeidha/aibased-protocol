@@ -40,3 +40,5 @@ contract AIBNFTMarketplaceTest is Test {
     //=========== Test Functions ===========//
 
     // --- Deployment Tests ---
+    function test_Deployment_SetsCorrectOwnerAndFee() public {
+    }
