@@ -10,3 +10,7 @@ contract AIBNFTMarketplaceTest is Test {
     //=========== State Variables ===========//
     AIBNFTMarketplace marketplace;
     MockNFT mockNft;
+    address owner = makeAddr("owner");
+    address seller = makeAddr("seller");
+    address buyer = makeAddr("buyer");
+    
