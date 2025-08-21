@@ -102,3 +102,10 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
 
         emit LockExtended(_lockId, userLock.unlockTime);
     }
+    // --- View Functions ---
+
+    /**
+     * @notice Gets the details of a specific lock.
+     * @param _lockId The ID of the lock.
+     * @return The lock details: owner, amount, unlockTime, and active status.
+     */
