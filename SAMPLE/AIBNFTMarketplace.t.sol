@@ -171,3 +171,6 @@ vm.prank(seller);
         
         assertEq(contractBalance, LISTING_FEE);
         
+        vm.prank(owner);
+        marketplace.withdrawFees();
+        
