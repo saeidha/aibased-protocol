@@ -50,5 +50,6 @@ contract AIBNFTMarketplaceTest is Test {
 
          vm.prank(owner);
         marketplace.pause();
-
+vm.prank(seller);
+        bytes memory expectedRevert = abi.encodeWithSelector(Pausable.EnforcedPause.selector);
     }
