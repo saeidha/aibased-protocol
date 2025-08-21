@@ -176,3 +176,9 @@ event NFTListingCancelled(
     function getListingFee() external view returns (uint256) {
         return s_listingFee;
     }
+
+    function getContractBalance() external view onlyOwner returns (uint256) {
+
+            return address(this).balance;
+        }
+}
