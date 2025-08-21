@@ -49,3 +49,6 @@ event NFTListingCancelled(
         uint256 indexed tokenId,
         uint256 newPrice
     );
+
+    event ListingFeeUpdated(uint256 newFee);
+    event FeesWithdrawn(address indexed owner, uint256 amount);
