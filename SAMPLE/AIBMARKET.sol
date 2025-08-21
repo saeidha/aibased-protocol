@@ -19,3 +19,8 @@ contract AIBNFTMarketplace is Pausable, Ownable, ERC721Holder {
         address seller;
         uint256 price;
     }
+    // Mapping: NFT Contract Address -> Token ID -> Listing Details
+    mapping(address => mapping(uint256 => Listing)) private s_listings;
+    uint256 private s_listingFee;
+
+    //=========== Events ===========//
