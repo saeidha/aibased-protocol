@@ -159,3 +159,7 @@ event NFTListingCancelled(
         require(success, "Withdrawal failed.");
         emit FeesWithdrawn(owner(), balance);
     }
+
+    function pause() external onlyOwner {
+        _pause();
+    }
