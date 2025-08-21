@@ -52,4 +52,6 @@ contract AIBNFTMarketplaceTest is Test {
         marketplace.pause();
 vm.prank(seller);
         bytes memory expectedRevert = abi.encodeWithSelector(Pausable.EnforcedPause.selector);
+          vm.expectRevert(expectedRevert);
+        marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
     }
