@@ -81,3 +81,7 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
         userLock.active = false;
         userTotalLockedAmount[msg.sender] -= amount;
         totalLocked -= amount;
+    emit TokensWithdrawn(msg.sender, _lockId, amount);
+        // Interactions
+        lockToken.safeTransfer(msg.sender, amount);
+    }
