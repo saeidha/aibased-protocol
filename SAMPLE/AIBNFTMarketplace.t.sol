@@ -44,3 +44,7 @@ contract AIBNFTMarketplaceTest is Test {
         assertEq(marketplace.owner(), owner, "Owner should be set correctly");
         assertEq(marketplace.getListingFee(), LISTING_FEE, "Listing fee should be set correctly");
     }
+
+         // --- Listing Tests ---
+    function test_Fail_ListNFT_WhenPaused() public {
+    }
