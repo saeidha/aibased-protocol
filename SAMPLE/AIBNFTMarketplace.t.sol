@@ -142,5 +142,7 @@ vm.prank(seller);
 
         vm.expectEmit(true, true, true, true);
         emit NFTPriceUpdated(seller, address(mockNft), TOKEN_ID, newPrice);
-       
+        marketplace.updatePrice(address(mockNft), TOKEN_ID, newPrice);
+
+
     }
