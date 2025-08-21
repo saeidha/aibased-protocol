@@ -152,4 +152,5 @@ vm.prank(seller);
     function test_Fail_AdminFunctions_NotOwner() public {
         vm.prank(seller);
         bytes memory expectedRevert = abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, seller);
-        
+         vm.expectRevert(expectedRevert);
+        marketplace.updateListingFee(0.05 ether);
