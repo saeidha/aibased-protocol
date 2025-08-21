@@ -115,4 +115,7 @@ vm.prank(seller);
         vm.prank(seller);
         marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
 
+        vm.prank(buyer); // A different address tries to cancel
+        vm.expectRevert("You are not the seller of this NFT.");
+        marketplace.cancelListing(address(mockNft), TOKEN_ID);
     }
