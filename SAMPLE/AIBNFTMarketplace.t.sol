@@ -19,3 +19,9 @@ contract AIBNFTMarketplaceTest is Test {
     uint256 constant TOKEN_ID = 0;
     uint256 constant TOKEN_ID_s = 0;
     
+    //=========== Setup ===========//
+
+    /// @notice This function runs before each test case
+    function setUp() public {
+        // Deploy contracts as the
+        
