@@ -125,4 +125,6 @@ event NFTListingCancelled(
      * @param _nftContract The address of the NFT contract.
      * @param _tokenId The ID of the token to delist.
      */
-    
+    function cancelListing(address _nftContract, uint256 _tokenId) 
+        external whenNotPaused isListed(_nftContract, _tokenId) isSeller(_nftContract, _tokenId, msg.sender) 
+    {
