@@ -109,3 +109,4 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
      * @param _lockId The ID of the lock.
      * @return The lock details: owner, amount, unlockTime, and active status.
      */
+    function getLockDetails(uint256 _lockId) external view returns (address, uint256, uint256, bool) {
