@@ -152,3 +152,5 @@ event NFTListingCancelled(
         s_listingFee = _newFee;
         emit ListingFeeUpdated(_newFee);
     }
+    function withdrawFees() external onlyOwner {
+    }
