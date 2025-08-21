@@ -87,3 +87,6 @@ event NFTListingCancelled(
         require(_price > 0, "Price must be greater than zero.");
         require(msg.value == s_listingFee, "Incorrect listing fee paid.");
 
+ IERC721 nft = IERC721(_nftContract);
+        require(nft.ownerOf(_tokenId) == msg.sender, "You do not own this NFT.");
+        require(nft.getApproved(_tokenId) == address(this), "Marketplace not approved for this NFT.");
