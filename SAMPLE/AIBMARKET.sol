@@ -68,3 +68,9 @@ event NFTListingCancelled(
         }
         _;
     }
+
+    //=========== Constructor ===========//
+
+    constructor(uint256 initialListingFee) Ownable(msg.sender) {
+        s_listingFee = initialListingFee;
+    }
