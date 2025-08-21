@@ -128,3 +128,7 @@ event NFTListingCancelled(
     function cancelListing(address _nftContract, uint256 _tokenId) 
         external whenNotPaused isListed(_nftContract, _tokenId) isSeller(_nftContract, _tokenId, msg.sender) 
     {
+        delete s_listings[_nftContract][_tokenId];
+        IERC721(_nftContract).safeTransferFrom(address(this), msg.sender, _tokenId);
+        emit NFTListingCancelled(msg.sender, _nftContract, _tokenId);
+    }
