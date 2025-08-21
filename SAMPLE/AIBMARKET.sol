@@ -166,3 +166,9 @@ event NFTListingCancelled(
     function unpause() external onlyOwner {
         _unpause();
     }
+
+    //=========== View Functions ===========//
+    
+    function getListing(address _nftContract, uint256 _tokenId) external view returns (Listing memory) {
+        return s_listings[_nftContract][_tokenId];
+    }
