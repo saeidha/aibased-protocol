@@ -120,3 +120,9 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
      * @return An array of lock IDs owned by the user.
      */
         function getLocksForUser(address _user) external view returns (uint256[] memory) {
+            return userLockIds[_user];
+    }
+    
+    /**
+     * @notice Returns the total number of locks created.
+     */
