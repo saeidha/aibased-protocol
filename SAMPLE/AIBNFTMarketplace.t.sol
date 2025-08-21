@@ -166,3 +166,6 @@ vm.prank(seller);
         vm.prank(seller);
         marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
         
+        uint256 ownerInitialBalance = owner.balance;
+        uint256 contractBalance = address(marketplace).balance;
+        
