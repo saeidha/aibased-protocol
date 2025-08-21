@@ -107,3 +107,5 @@ event NFTListingCancelled(
         Listing memory listing = s_listings[_nftContract][_tokenId];
         require(msg.value >= listing.price, "Insufficient funds to purchase.");
          delete s_listings[_nftContract][_tokenId];
+        (bool success, ) = listing.seller.call{value: listing.price}("");
+        require(success, "Failed to transfer funds to seller.");
