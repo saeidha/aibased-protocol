@@ -153,4 +153,6 @@ event NFTListingCancelled(
         emit ListingFeeUpdated(_newFee);
     }
     function withdrawFees() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No fees to withdraw.");
     }
