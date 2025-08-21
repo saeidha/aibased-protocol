@@ -92,3 +92,7 @@ event NFTListingCancelled(
         require(nft.getApproved(_tokenId) == address(this), "Marketplace not approved for this NFT.");
 // Lock the NFT by transferring it to this contract
         nft.safeTransferFrom(msg.sender, address(this), _tokenId);
+
+        s_listings[_nftContract][_tokenId] = Listing(msg.sender, _price);
+        emit NFTListed(msg.sender, _nftContract, _tokenId, _price);
+    }
