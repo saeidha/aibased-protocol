@@ -172,3 +172,7 @@ event NFTListingCancelled(
     function getListing(address _nftContract, uint256 _tokenId) external view returns (Listing memory) {
         return s_listings[_nftContract][_tokenId];
     }
+
+    function getListingFee() external view returns (uint256) {
+        return s_listingFee;
+    }
