@@ -169,3 +169,5 @@ vm.prank(seller);
         uint256 ownerInitialBalance = owner.balance;
         uint256 contractBalance = address(marketplace).balance;
         
+        assertEq(contractBalance, LISTING_FEE);
+        
