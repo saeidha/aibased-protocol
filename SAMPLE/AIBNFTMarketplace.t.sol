@@ -133,3 +133,11 @@ vm.prank(seller);
         ( , uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
         assertEq(listedPrice, 0, "Listing should be deleted");
     }
+
+    // --- Price Update Tests ---
+    function test_UpdatePrice_Success() public {
+        uint256 newPrice = 2 ether;
+        vm.prank(seller);
+        marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
+
+    }
