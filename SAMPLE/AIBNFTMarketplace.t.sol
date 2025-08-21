@@ -28,3 +28,5 @@ contract AIBNFTMarketplaceTest is Test {
         mockNft = new MockNFT();
         marketplace = new AIBNFTMarketplace(LISTING_FEE);
         vm.stopPrank();
+ // Mint an NFT (Token ID 0) to the seller
+        mockNft.mint(seller);
