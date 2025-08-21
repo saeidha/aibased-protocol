@@ -154,3 +154,6 @@ vm.prank(seller);
         bytes memory expectedRevert = abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, seller);
          vm.expectRevert(expectedRevert);
         marketplace.updateListingFee(0.05 ether);
+
+        vm.expectRevert(expectedRevert);
+        marketplace.withdrawFees();
