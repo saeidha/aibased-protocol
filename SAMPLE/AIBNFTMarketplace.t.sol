@@ -74,4 +74,8 @@ vm.prank(seller);
         vm.expectEmit(true, true, true, true);
         emit NFTListed(seller, address(mockNft), TOKEN_ID, NFT_PRICE);
         marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
+
+        // Verify NFT is now owned (locked) by the marketplace
+        assertEq(mockNft.ownerOf(TOKEN_ID), address(marketplace), "Marketplace should own the NFT");
+        
     }
