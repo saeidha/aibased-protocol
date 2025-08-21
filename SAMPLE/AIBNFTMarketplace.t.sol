@@ -66,3 +66,4 @@ vm.prank(seller);
          vm.prank(seller);
          vm.expectRevert("Marketplace not approved for this NFT.");
         marketplace.listNFT{value: LISTING_FEE}(address(mockNft), newTokenId, NFT_PRICE);
+    }
