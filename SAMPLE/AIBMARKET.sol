@@ -143,3 +143,6 @@ event NFTListingCancelled(
         external whenNotPaused isListed(_nftContract, _tokenId) isSeller(_nftContract, _tokenId, msg.sender) 
     {
         require(_newPrice > 0, "Price must be greater than zero.");
+        s_listings[_nftContract][_tokenId].price = _newPrice;
+        emit NFTPriceUpdated(msg.sender, _nftContract, _tokenId, _newPrice);
+    }
