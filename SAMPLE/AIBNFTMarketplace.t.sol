@@ -73,4 +73,5 @@ vm.prank(seller);
         
         vm.expectEmit(true, true, true, true);
         emit NFTListed(seller, address(mockNft), TOKEN_ID, NFT_PRICE);
+        marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
     }
