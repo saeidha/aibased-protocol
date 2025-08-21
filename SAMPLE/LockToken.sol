@@ -126,3 +126,6 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
     /**
      * @notice Returns the total number of locks created.
      */
+        function getLockCount() external view returns (uint256) {
+        return locks.length;
+    }
