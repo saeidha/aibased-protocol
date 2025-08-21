@@ -109,3 +109,11 @@ event NFTListingCancelled(
          delete s_listings[_nftContract][_tokenId];
         (bool success, ) = listing.seller.call{value: listing.price}("");
         require(success, "Failed to transfer funds to seller.");
+         IERC721(_nftContract).safeTransferFrom(address(this), msg.sender, _tokenId);
+
+        // Refund excess ETH, if any
+        if (msg.value > listing.price) {
+            (bool refundSuccess, ) = msg.sender.call{value: msg.value - listing.price}("");
+            // We do not require refund success to prevent transaction failure
+        }
+    }
