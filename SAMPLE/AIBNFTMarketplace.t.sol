@@ -147,3 +147,9 @@ vm.prank(seller);
         ( , uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
         assertEq(listedPrice, newPrice, "Price should be updated");
     }
+
+         // --- Admin Tests ---
+    function test_Fail_AdminFunctions_NotOwner() public {
+        vm.prank(seller);
+        bytes memory expectedRevert = abi.encodeWithSelector(Ownable.OwnableUnauthorizedAccount.selector, seller);
+        
