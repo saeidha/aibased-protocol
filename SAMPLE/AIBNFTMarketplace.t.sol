@@ -7,3 +7,6 @@ import "../src/AIBNFTMarketplace.sol"; // Adjust path if needed
 import "../src/MockNFT.sol"; // Adjust path if needed
 
 contract AIBNFTMarketplaceTest is Test {
+    //=========== State Variables ===========//
+    AIBNFTMarketplace marketplace;
+    MockNFT mockNft;
