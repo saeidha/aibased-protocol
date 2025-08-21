@@ -126,5 +126,7 @@ vm.prank(seller);
         
         vm.prank(seller);
         vm.expectEmit(true, true, true, true);
+        emit NFTListingCancelled(seller, address(mockNft), TOKEN_ID);
+        marketplace.cancelListing(address(mockNft), TOKEN_ID);
         
     }
