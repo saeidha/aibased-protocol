@@ -1,0 +1,9 @@
+// File: test/AIBNFTMarketplace.t.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "forge-std/Test.sol";
+import "../src/AIBNFTMarketplace.sol"; // Adjust path if needed
+import "../src/MockNFT.sol"; // Adjust path if needed
+
+contract AIBNFTMarketplaceTest is Test {
