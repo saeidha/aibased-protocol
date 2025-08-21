@@ -144,3 +144,6 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
      * @notice Unpauses the contract, re-enabling functionality.
      * @dev Can only be called by the owner.
      */
+    function unpause() external onlyOwner {
+        _unpause();
+    }
