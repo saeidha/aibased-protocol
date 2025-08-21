@@ -80,4 +80,5 @@ vm.prank(seller);
         // Verify listing details
         (address listedSeller, uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
         assertEq(listedSeller, seller);
+        assertEq(listedPrice, NFT_PRICE);
     }
