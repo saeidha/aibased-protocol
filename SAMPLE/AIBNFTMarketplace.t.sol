@@ -174,3 +174,8 @@ vm.prank(seller);
         vm.prank(owner);
         marketplace.withdrawFees();
         
+        assertEq(owner.balance, ownerInitialBalance + contractBalance, "Owner should receive the fees");
+        assertEq(address(marketplace).balance, 0, "Marketplace balance should be zero");
+    }
+
+}
