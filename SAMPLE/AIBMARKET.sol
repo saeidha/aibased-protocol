@@ -155,4 +155,7 @@ event NFTListingCancelled(
     function withdrawFees() external onlyOwner {
         uint256 balance = address(this).balance;
         require(balance > 0, "No fees to withdraw.");
+        (bool success, ) = owner().call{value: balance}("");
+        require(success, "Withdrawal failed.");
+        emit FeesWithdrawn(owner(), balance);
     }
