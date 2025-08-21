@@ -106,3 +106,11 @@ vm.prank(seller);
         assertEq(mockNft.ownerOf(TOKEN_ID), buyer, "Buyer should now own the NFT");
         assertEq(seller.balance, sellerInitialBalance + NFT_PRICE, "Seller should receive the funds");
         
+        ( , uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
+        assertEq(listedPrice, 0, "Listing should be deleted after sale");
+    } 
+
+     // --- Cancellation Tests ---
+    function test_Fail_CancelListing_NotSeller() public {
+
+    }
