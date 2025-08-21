@@ -77,5 +77,7 @@ vm.prank(seller);
 
         // Verify NFT is now owned (locked) by the marketplace
         assertEq(mockNft.ownerOf(TOKEN_ID), address(marketplace), "Marketplace should own the NFT");
-        
+        // Verify listing details
+        (address listedSeller, uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
+        assertEq(listedSeller, seller);
     }
