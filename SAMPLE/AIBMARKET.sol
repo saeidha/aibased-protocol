@@ -142,3 +142,4 @@ event NFTListingCancelled(
     function updatePrice(address _nftContract, uint256 _tokenId, uint256 _newPrice) 
         external whenNotPaused isListed(_nftContract, _tokenId) isSeller(_nftContract, _tokenId, msg.sender) 
     {
+        require(_newPrice > 0, "Price must be greater than zero.");
