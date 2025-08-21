@@ -106,3 +106,4 @@ event NFTListingCancelled(
     function buyNFT(address _nftContract, uint256 _tokenId) external payable whenNotPaused isListed(_nftContract, _tokenId) {
         Listing memory listing = s_listings[_nftContract][_tokenId];
         require(msg.value >= listing.price, "Insufficient funds to purchase.");
+         delete s_listings[_nftContract][_tokenId];
