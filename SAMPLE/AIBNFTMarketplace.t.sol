@@ -93,5 +93,6 @@ vm.prank(seller);
     }
 
     function test_BuyNFT_Success() public {
-
-    } 
+        vm.prank(seller);
+        marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
+        
