@@ -119,3 +119,7 @@ vm.prank(seller);
         vm.expectRevert("You are not the seller of this NFT.");
         marketplace.cancelListing(address(mockNft), TOKEN_ID);
     }
+
+     function test_CancelListing_Success() public {
+
+    }
