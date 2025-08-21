@@ -63,3 +63,4 @@ vm.prank(seller);
 
     function test_Fail_ListNFT_WithoutApproval() public {
          uint256 newTokenId = mockNft.mint(seller); // A new token without approval
+         vm.prank(seller);
