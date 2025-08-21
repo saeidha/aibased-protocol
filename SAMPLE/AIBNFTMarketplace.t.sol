@@ -144,5 +144,6 @@ vm.prank(seller);
         emit NFTPriceUpdated(seller, address(mockNft), TOKEN_ID, newPrice);
         marketplace.updatePrice(address(mockNft), TOKEN_ID, newPrice);
 
-
+        ( , uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
+        assertEq(listedPrice, newPrice, "Price should be updated");
     }
