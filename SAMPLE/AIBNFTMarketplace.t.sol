@@ -129,4 +129,7 @@ vm.prank(seller);
         emit NFTListingCancelled(seller, address(mockNft), TOKEN_ID);
         marketplace.cancelListing(address(mockNft), TOKEN_ID);
         
+        assertEq(mockNft.ownerOf(TOKEN_ID), seller, "NFT should be returned to seller");
+        ( , uint256 listedPrice) = marketplace.getListing(address(mockNft), TOKEN_ID);
+        assertEq(listedPrice, 0, "Listing should be deleted");
     }
