@@ -112,5 +112,7 @@ vm.prank(seller);
 
      // --- Cancellation Tests ---
     function test_Fail_CancelListing_NotSeller() public {
+        vm.prank(seller);
+        marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
 
     }
