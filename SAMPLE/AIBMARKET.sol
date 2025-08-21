@@ -83,3 +83,7 @@ event NFTListingCancelled(
      * @param _tokenId The ID of the token to list.
      * @param _price The selling price in wei (must be > 0).
      */
+        function listNFT(address _nftContract, uint256 _tokenId, uint256 _price) external payable whenNotPaused {
+        require(_price > 0, "Price must be greater than zero.");
+        require(msg.value == s_listingFee, "Incorrect listing fee paid.");
+
