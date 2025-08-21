@@ -30,3 +30,6 @@ contract AIBNFTMarketplaceTest is Test {
         vm.stopPrank();
  // Mint an NFT (Token ID 0) to the seller
         mockNft.mint(seller);
+// Seller must approve the marketplace to manage the NFT
+        vm.prank(seller);
+        mockNft.approve(address(marketplace), TOKEN_ID);
