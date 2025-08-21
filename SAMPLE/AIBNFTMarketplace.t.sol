@@ -161,3 +161,5 @@ vm.prank(seller);
         vm.expectRevert(expectedRevert);
         marketplace.pause();
     }
+
+     function test_Admin_WithdrawFees_Success() public {
