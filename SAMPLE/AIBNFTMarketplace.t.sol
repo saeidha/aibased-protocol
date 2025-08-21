@@ -102,3 +102,7 @@ vm.prank(seller);
         vm.expectEmit(true, true, true, true);
         emit NFTSold(seller, buyer, address(mockNft), TOKEN_ID, NFT_PRICE);
         marketplace.buyNFT{value: NFT_PRICE}(address(mockNft), TOKEN_ID);
+
+        assertEq(mockNft.ownerOf(TOKEN_ID), buyer, "Buyer should now own the NFT");
+        assertEq(seller.balance, sellerInitialBalance + NFT_PRICE, "Seller should receive the funds");
+        
