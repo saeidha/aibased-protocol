@@ -158,3 +158,5 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
         IERC20 stuckToken = IERC20(_tokenAddress);
         uint256 balance = stuckToken.balanceOf(address(this));
         require(_amount <= balance, "Insufficient balance");
+        emit EmergencyWithdrawal(_tokenAddress, owner(), _amount);
+        stuckToken.safeTransfer(owner(), _amount);
