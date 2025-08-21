@@ -90,3 +90,5 @@ event NFTListingCancelled(
  IERC721 nft = IERC721(_nftContract);
         require(nft.ownerOf(_tokenId) == msg.sender, "You do not own this NFT.");
         require(nft.getApproved(_tokenId) == address(this), "Marketplace not approved for this NFT.");
+// Lock the NFT by transferring it to this contract
+        nft.safeTransferFrom(msg.sender, address(this), _tokenId);
