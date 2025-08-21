@@ -55,3 +55,5 @@ vm.prank(seller);
           vm.expectRevert(expectedRevert);
         marketplace.listNFT{value: LISTING_FEE}(address(mockNft), TOKEN_ID, NFT_PRICE);
     }
+    function test_Fail_ListNFT_WithoutListingFee() public {
+    }
