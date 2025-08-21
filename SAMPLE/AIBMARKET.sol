@@ -116,4 +116,5 @@ event NFTListingCancelled(
             (bool refundSuccess, ) = msg.sender.call{value: msg.value - listing.price}("");
             // We do not require refund success to prevent transaction failure
         }
+        emit NFTSold(listing.seller, msg.sender, _nftContract, _tokenId, listing.price);
     }
