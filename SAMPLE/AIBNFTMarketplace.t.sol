@@ -91,3 +91,7 @@ vm.prank(seller);
         vm.expectRevert("Insufficient funds to purchase.");
         marketplace.buyNFT{value: NFT_PRICE - 0.1 ether}(address(mockNft), TOKEN_ID);
     }
+
+    function test_BuyNFT_Success() public {
+
+    } 
