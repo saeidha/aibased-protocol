@@ -47,4 +47,8 @@ contract AIBNFTMarketplaceTest is Test {
 
          // --- Listing Tests ---
     function test_Fail_ListNFT_WhenPaused() public {
+
+         vm.prank(owner);
+        marketplace.pause();
+
     }
