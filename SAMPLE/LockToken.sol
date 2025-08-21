@@ -66,3 +66,7 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
 
         lockToken.safeTransferFrom(msg.sender, address(this), _amount);
     }
+     /**
+     * @notice Withdraws the tokens from a specific lock after it has expired.
+     * @param _lockId The ID of the lock to withdraw from.
+     */
