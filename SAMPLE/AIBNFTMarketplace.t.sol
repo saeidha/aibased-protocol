@@ -36,3 +36,7 @@ contract AIBNFTMarketplaceTest is Test {
  // Give the buyer some ETH for tests
         vm.deal(buyer, 5 ether);
     }
+
+    //=========== Test Functions ===========//
+
+    // --- Deployment Tests ---
