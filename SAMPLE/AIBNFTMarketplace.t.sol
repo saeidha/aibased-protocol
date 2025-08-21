@@ -60,3 +60,5 @@ vm.prank(seller);
          vm.expectRevert("Incorrect listing fee paid.");
         marketplace.listNFT(address(mockNft), TOKEN_ID, NFT_PRICE);
     }
+
+    function test_Fail_ListNFT_WithoutApproval() public {
