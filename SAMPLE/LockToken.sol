@@ -160,3 +160,5 @@ emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
         require(_amount <= balance, "Insufficient balance");
         emit EmergencyWithdrawal(_tokenAddress, owner(), _amount);
         stuckToken.safeTransfer(owner(), _amount);
+         }
+}
