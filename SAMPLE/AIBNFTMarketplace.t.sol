@@ -69,4 +69,8 @@ vm.prank(seller);
     }
 
     function test_ListNFT_Success() public {
+          vm.prank(seller);
+        
+        vm.expectEmit(true, true, true, true);
+        emit NFTListed(seller, address(mockNft), TOKEN_ID, NFT_PRICE);
     }
