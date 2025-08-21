@@ -118,3 +118,11 @@ event NFTListingCancelled(
         }
         emit NFTSold(listing.seller, msg.sender, _nftContract, _tokenId, listing.price);
     }
+
+    /**
+     * @notice Cancels an active NFT listing.
+     * @dev The locked NFT is returned to the seller.
+     * @param _nftContract The address of the NFT contract.
+     * @param _tokenId The ID of the token to delist.
+     */
+    
