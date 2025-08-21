@@ -82,3 +82,6 @@ vm.prank(seller);
         assertEq(listedSeller, seller);
         assertEq(listedPrice, NFT_PRICE);
     }
+
+    // --- Buying Tests ---
+    function test_Fail_BuyNFT_InsufficientFunds() public {
