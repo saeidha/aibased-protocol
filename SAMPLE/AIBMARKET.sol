@@ -139,3 +139,6 @@ event NFTListingCancelled(
      * @param _tokenId The ID of the token.
      * @param _newPrice The new price for the NFT in wei.
      */
+    function updatePrice(address _nftContract, uint256 _tokenId, uint256 _newPrice) 
+        external whenNotPaused isListed(_nftContract, _tokenId) isSeller(_nftContract, _tokenId, msg.sender) 
+    {
