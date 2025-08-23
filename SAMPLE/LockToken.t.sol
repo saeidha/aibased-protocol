@@ -97,3 +97,10 @@ contract LockToken is Ownable, Pausable {
 
         emit LockExtended(_lockId, userLock.unlockTime);
     }
+    // --- View Functions ---
+
+    /**
+     * @notice Gets the details of a specific lock.
+     * @param _lockId The ID of the lock.
+     * @return The lock details: owner, amount, unlockTime, and active status.
+     */
