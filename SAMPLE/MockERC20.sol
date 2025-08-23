@@ -25,3 +25,5 @@ function balanceOf(address account) external view returns (uint256) {
         emit Approval(msg.sender, spender, amount);
           return true;
     }
+
+        function transfer(address to, uint256 amount) external returns (bool) {
