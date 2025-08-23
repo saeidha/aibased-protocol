@@ -90,3 +90,4 @@ contract LockToken is Ownable, Pausable {
      */
     function extendLock(uint256 _lockId, uint256 _extraDuration) external {
         Lock storage userLock = locks[_lockId];
+        
