@@ -27,3 +27,5 @@ function balanceOf(address account) external view returns (uint256) {
     }
 
         function transfer(address to, uint256 amount) external returns (bool) {
+            balances[msg.sender] -= amount;
+        balances[to] += amount;
