@@ -108,3 +108,8 @@ contract LockToken is Ownable, Pausable {
         Lock memory userLock = locks[_lockId];
         return (userLock.owner, userLock.amount, userLock.unlockTime, userLock.active);
     }
+ /**
+     * @notice Gets all lock IDs for a given user.
+     * @param _user The address of the user.
+     * @return An array of lock IDs owned by the user.
+     */
