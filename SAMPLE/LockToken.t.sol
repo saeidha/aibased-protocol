@@ -121,3 +121,4 @@ contract LockToken is Ownable, Pausable {
     /**
      * @notice Returns the total number of locks created.
      */
+    function getLockCount() external view returns (uint256) {
