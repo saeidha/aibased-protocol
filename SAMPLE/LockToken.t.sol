@@ -124,3 +124,5 @@ contract LockToken is Ownable, Pausable {
     function getLockCount() external view returns (uint256) {
         return locks.length;
     }
+
+        // --- Admin Functions ---
