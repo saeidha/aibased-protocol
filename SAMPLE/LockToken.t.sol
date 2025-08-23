@@ -43,3 +43,4 @@ contract LockToken is Ownable, Pausable {
      * @param _amount The amount of tokens to lock.
      * @param _duration The lock duration in seconds.
      */
+        function lock(uint256 _amount, uint256 _duration) external whenNotPaused {
