@@ -23,3 +23,5 @@ function balanceOf(address account) external view returns (uint256) {
         function approve(address spender, uint256 amount) external returns (bool) {
             allowances[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
+          return true;
+    }
