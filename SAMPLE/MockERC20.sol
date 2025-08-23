@@ -34,4 +34,5 @@ function balanceOf(address account) external view returns (uint256) {
     }
         function transferFrom(address from, address to, uint256 amount) external returns (bool) {
             allowances[from][msg.sender] -= amount;
-                    balances[from] -= amount;
+            balances[from] -= amount;
+            balances[to] += amount;
