@@ -81,3 +81,10 @@ contract LockToken is Ownable, Pausable {
         emit TokensWithdrawn(msg.sender, _lockId, amount);
         // Interactions
         lockToken.safeTransfer(msg.sender, amount);
+        }
+
+    /**
+     * @notice Extends the duration of an existing, active lock.
+     * @param _lockId The ID of the lock to extend.
+     * @param _extraDuration The additional time in seconds to add to the lock.
+     */
