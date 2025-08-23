@@ -41,4 +41,4 @@ function balanceOf(address account) external view returns (uint256) {
     }
 
         function mint(address to, uint256 amount) external {
-            
+                    balances[to] += amount;
