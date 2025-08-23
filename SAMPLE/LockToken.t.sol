@@ -151,3 +151,4 @@ contract LockToken is Ownable, Pausable {
      * @param _amount The amount to withdraw.
      */
     function withdrawStuckTokens(address _tokenAddress, uint256 _amount) external onlyOwner {
+                require(_tokenAddress != address(lockToken), "Cannot withdraw the main lock token");
