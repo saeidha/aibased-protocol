@@ -60,3 +60,5 @@ contract LockToken is Ownable, Pausable {
         totalLocked += _amount;
 
         emit TokensLocked(msg.sender, lockId, _amount, unlockTime);
+         lockToken.safeTransferFrom(msg.sender, address(this), _amount);
+    }
