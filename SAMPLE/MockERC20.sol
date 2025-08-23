@@ -16,3 +16,6 @@ contract MockERC20 is IERC20 {
 function balanceOf(address account) external view returns (uint256) {
         return balances[account];
     }
+    function allowance(address owner, address spender) external view returns (uint256) {
+        return allowances[owner][spender];
+    }
