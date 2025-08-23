@@ -74,3 +74,7 @@ contract LockToken is Ownable, Pausable {
         require(userLock.active, "Lock already withdrawn");
         require(block.timestamp >= userLock.unlockTime, "Lock period not over yet");
         uint256 amount = userLock.amount;
+        // Effects
+        userLock.active = false;
+        userTotalLockedAmount[msg.sender] -= amount;
+        totalLocked -= amount;
