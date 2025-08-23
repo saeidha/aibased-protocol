@@ -115,3 +115,5 @@ contract LockToken is Ownable, Pausable {
      * @return An array of lock IDs owned by the user.
      */
     function getLocksForUser(address _user) external view returns (uint256[] memory) {
+        return userLockIds[_user];
+    }
