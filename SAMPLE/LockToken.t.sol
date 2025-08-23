@@ -56,3 +56,4 @@ contract LockToken is Ownable, Pausable {
         }));
 
         userLockIds[msg.sender].push(lockId);
+        userTotalLockedAmount[msg.sender] += _amount;
