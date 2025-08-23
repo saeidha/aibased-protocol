@@ -135,3 +135,8 @@ contract LockToken is Ownable, Pausable {
         function pause() external onlyOwner {
             _pause();
     }
+
+    /**
+     * @notice Unpauses the contract, re-enabling functionality.
+     * @dev Can only be called by the owner.
+     */
