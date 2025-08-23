@@ -79,3 +79,5 @@ contract LockToken is Ownable, Pausable {
         userTotalLockedAmount[msg.sender] -= amount;
         totalLocked -= amount;
         emit TokensWithdrawn(msg.sender, _lockId, amount);
+        // Interactions
+        lockToken.safeTransfer(msg.sender, amount);
