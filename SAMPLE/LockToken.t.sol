@@ -126,3 +126,8 @@ contract LockToken is Ownable, Pausable {
     }
 
         // --- Admin Functions ---
+
+        /**
+     * @notice Pauses the contract, preventing new locks and withdrawals.
+     * @dev Can only be called by the owner.
+     */
