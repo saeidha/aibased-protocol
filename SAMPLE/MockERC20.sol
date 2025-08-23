@@ -39,3 +39,6 @@ function balanceOf(address account) external view returns (uint256) {
             emit Transfer(from, to, amount);
             return true;
     }
+
+        function mint(address to, uint256 amount) external {
+            
