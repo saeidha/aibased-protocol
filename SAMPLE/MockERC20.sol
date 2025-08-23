@@ -13,3 +13,6 @@ contract MockERC20 is IERC20 {
     string public name = "Mock Token";
     string public symbol = "MCK";
     uint8 public decimals = 18;
+function balanceOf(address account) external view returns (uint256) {
+        return balances[account];
+    }
