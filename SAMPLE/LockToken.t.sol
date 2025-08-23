@@ -104,4 +104,4 @@ contract LockToken is Ownable, Pausable {
      * @param _lockId The ID of the lock.
      * @return The lock details: owner, amount, unlockTime, and active status.
      */
-        function getLockDetails(uint256 _lockId) external view returns (address, uint256, uint256, bool) {
+    function getLockDetails(uint256 _lockId) external view returns (address, uint256, uint256, bool) {
