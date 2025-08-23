@@ -44,3 +44,5 @@ function balanceOf(address account) external view returns (uint256) {
                 balances[to] += amount;
                 totalSupply += amount;
                 emit Transfer(address(0), to, amount);
+        }
+}
