@@ -105,4 +105,4 @@ contract LockToken is Ownable, Pausable {
      * @return The lock details: owner, amount, unlockTime, and active status.
      */
     function getLockDetails(uint256 _lockId) external view returns (address, uint256, uint256, bool) {
-                Lock memory userLock = locks[_lockId];
+        Lock memory userLock = locks[_lockId];
