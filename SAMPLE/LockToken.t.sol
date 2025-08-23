@@ -54,3 +54,5 @@ contract LockToken is Ownable, Pausable {
             unlockTime: unlockTime,
             active: true
         }));
+
+        userLockIds[msg.sender].push(lockId);
