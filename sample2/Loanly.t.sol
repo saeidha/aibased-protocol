@@ -50,3 +50,7 @@ contract LoanlyTest is Test {
         assertEq(l, lender);
         assertTrue(funded);
     }
+    /**
+     * @dev Tests the loan repayment functionality.
+     */
+    
