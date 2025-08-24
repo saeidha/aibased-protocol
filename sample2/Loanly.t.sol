@@ -63,3 +63,7 @@ contract LoanlyTest is Test {
 
         uint256 interest = loanly.calculateInterest(1);
         uint256 totalRepayment = LOAN_AMOUNT + interest;
+        uint256 lenderInitialBalance = lender.balance;
+
+        vm.prank(borrower);
+        loanly.repayLoan{value: totalRepayment}(1);
