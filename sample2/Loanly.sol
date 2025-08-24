@@ -35,6 +35,6 @@ contract Loanly {
      * @param _duration The duration of the loan in seconds.
      */
         function requestLoan(uint256 _amount, uint256 _interest, uint256 _duration) public {
-                    require(_amount > 0, "Loan amount must be greater than zero");
+            require(_amount > 0, "Loan amount must be greater than zero");
             require(_interest > 0, "Interest rate must be greater than zero");
             require(_duration > 0, "Loan duration must be greater than zero");
