@@ -127,3 +127,7 @@ contract Loanly {
         Loan storage loan = loans[_id];
         require(loan.repaid, "Loan not repaid yet");
         require(msg.sender == loan.lender, "Only lender can withdraw");
+        uint256 amountToWithdraw = loan.amount + calculateInterest(_id);
+        (bool success, ) = loan.lender.call{value: amountToWithdraw}("");
+        require(success, "Withdrawal failed");
+    }
