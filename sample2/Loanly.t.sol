@@ -130,3 +130,6 @@ vm.warp(block.timestamp + DURATION);
         uint256 calculatedInterest = loanly.calculateInterest(1);
         assertEq(calculatedInterest, expectedInterest);
     }
+    /**
+     * @dev Tests getting the current time.
+     */
