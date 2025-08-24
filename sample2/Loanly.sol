@@ -61,4 +61,4 @@ contract Loanly {
      */
 
     function fundLoan(uint256 _id) public payable {
-        
+        Loan storage loan = loans[_id];
