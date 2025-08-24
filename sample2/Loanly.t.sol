@@ -10,3 +10,7 @@ contract LoanlyTest is Test {
     uint256 public constant LOAN_AMOUNT = 1 ether;
     uint256 public constant INTEREST_RATE = 500; // 5%
     uint256 public constant DURATION = 30 days;
+
+    /**
+     * @dev Sets up the testing environment before each test.
+     */
