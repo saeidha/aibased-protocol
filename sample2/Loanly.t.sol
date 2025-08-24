@@ -45,3 +45,4 @@ contract LoanlyTest is Test {
 
         vm.prank(lender);
         loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        
