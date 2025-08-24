@@ -47,3 +47,4 @@ contract StakeAndLoan is Ownable {
      */
 
         constructor(address _collateralTokenAddress, address _loanTokenAddress) Ownable(msg.sender) {
+            
