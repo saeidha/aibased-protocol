@@ -95,9 +95,9 @@ contract LoanlyTest is Test {
      * @dev Tests failure case for funding own loan.
      */
     function testFailFundOwnLoan() public {
-    vm.prank(borrower);
-    loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
-    vm.prank(borrower);
-    vm.expectRevert("Cannot fund your own loan");
-    loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        vm.prank(borrower);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        vm.prank(borrower);
+        vm.expectRevert("Cannot fund your own loan");
+        loanly.fundLoan{value: LOAN_AMOUNT}(1);
     }
