@@ -128,4 +128,5 @@ vm.warp(block.timestamp + DURATION);
 
         uint256 expectedInterest = (LOAN_AMOUNT * INTEREST_RATE) / 10000;
         uint256 calculatedInterest = loanly.calculateInterest(1);
-        
+        assertEq(calculatedInterest, expectedInterest);
+    }
