@@ -101,3 +101,7 @@ contract Loanly {
      * @return The calculated interest amount.
      */
     function calculateInterest(uint256 _id) public view returns (uint256) {
+        Loan storage loan = loans[_id];
+        if (!loan.funded) {
+            return 0;
+        }
