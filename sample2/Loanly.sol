@@ -154,3 +154,6 @@ contract Loanly {
      * @param _id The ID of the loan.
      * @return A boolean indicating if the loan is repaid.
      */
+    function isLoanRepaid(uint256 _id) public view returns (bool) {
+        return loans[_id].repaid;
+    }
