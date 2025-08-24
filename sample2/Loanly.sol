@@ -105,3 +105,6 @@ contract Loanly {
         if (!loan.funded) {
             return 0;
         }
+        uint256 timeElapsed = block.timestamp - loan.startTime;
+        return (loan.amount * loan.interest * timeElapsed) / (10000 * loan.duration);
+    }
