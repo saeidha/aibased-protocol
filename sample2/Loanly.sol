@@ -94,3 +94,4 @@ contract Loanly {
 
         emit LoanRepaid(_id, totalAmount);
     }
+    
