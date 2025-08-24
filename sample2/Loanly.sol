@@ -166,3 +166,4 @@ contract Loanly {
     function getLoanCount() public view returns (uint256) {
         return loanCounter;
     }
+}
