@@ -139,3 +139,9 @@ contract Loanly {
     function getCurrentTime() public view returns (uint256) {
         return block.timestamp;
     }
+
+    /**
+     * @dev A simple check to see if a loan is funded.
+     * @param _id The ID of the loan.
+     * @return A boolean indicating if the loan is funded.
+     */
