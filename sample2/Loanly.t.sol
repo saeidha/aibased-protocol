@@ -16,5 +16,4 @@ contract LoanlyTest is Test {
      */
     function setUp() public {
         loanly = new Loanly();
-
         
