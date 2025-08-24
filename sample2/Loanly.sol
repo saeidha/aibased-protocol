@@ -86,3 +86,5 @@ contract Loanly {
         require(!loan.repaid, "Loan has already been repaid");
         require(msg.sender == loan.borrower, "Only the borrower can repay the loan");
 
+        uint256 interestAmount = calculateInterest(_id);
+        uint256 totalAmount = loan.amount + interestAmount;
