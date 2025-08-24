@@ -122,3 +122,8 @@ contract Loanly {
      * @dev Allows the lender to withdraw their funds if the loan is repaid.
      * @param _id The ID of the loan to withdraw from.
      */
+
+    function withdraw(uint256 _id) public {
+        Loan storage loan = loans[_id];
+        require(loan.repaid, "Loan not repaid yet");
+        require(msg.sender == loan.lender, "Only lender can withdraw");
