@@ -100,3 +100,4 @@ contract Loanly {
      * @param _id The ID of the loan.
      * @return The calculated interest amount.
      */
+    function calculateInterest(uint256 _id) public view returns (uint256) {
