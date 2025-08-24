@@ -94,4 +94,9 @@ contract Loanly {
 
         emit LoanRepaid(_id, totalAmount);
     }
-    
+
+    /**
+     * @dev Calculates the interest for a loan.
+     * @param _id The ID of the loan.
+     * @return The calculated interest amount.
+     */
