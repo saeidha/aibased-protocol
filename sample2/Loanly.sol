@@ -157,3 +157,8 @@ contract Loanly {
     function isLoanRepaid(uint256 _id) public view returns (bool) {
         return loans[_id].repaid;
     }
+
+    /**
+     * @dev Gets the total number of loans created.
+     * @return The total loan count.
+     */
