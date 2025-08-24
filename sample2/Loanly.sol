@@ -83,4 +83,6 @@ contract Loanly {
     function repayLoan(uint256 _id) public payable {
         Loan storage loan = loans[_id];
         require(loan.funded, "Loan is not funded");
-        
+        require(!loan.repaid, "Loan has already been repaid");
+        require(msg.sender == loan.borrower, "Only the borrower can repay the loan");
+
