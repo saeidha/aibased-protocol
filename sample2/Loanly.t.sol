@@ -60,3 +60,6 @@ contract LoanlyTest is Test {
         loanly.fundLoan{value: LOAN_AMOUNT}(1);
         // Advance time to simulate interest accrual
         vm.warp(block.timestamp + DURATION);
+
+        uint256 interest = loanly.calculateInterest(1);
+        uint256 totalRepayment = LOAN_AMOUNT + interest;
