@@ -54,4 +54,4 @@ contract Loanly {
 
         emit LoanRequested(loanCounter, msg.sender, _amount, _interest);
 
-        
+    }
