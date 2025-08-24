@@ -131,3 +131,8 @@ contract Loanly {
         (bool success, ) = loan.lender.call{value: amountToWithdraw}("");
         require(success, "Withdrawal failed");
     }
+
+    /**
+     * @dev A simple function to get the current timestamp of the blockchain.
+     * @return The current block timestamp.
+     */
