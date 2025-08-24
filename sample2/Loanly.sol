@@ -59,3 +59,6 @@ contract Loanly {
      * @dev Funds an existing loan request.
      * @param _id The ID of the loan to fund.
      */
+
+    function fundLoan(uint256 _id) public payable {
+    
