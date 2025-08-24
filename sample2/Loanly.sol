@@ -108,3 +108,8 @@ contract Loanly {
         uint256 timeElapsed = block.timestamp - loan.startTime;
         return (loan.amount * loan.interest * timeElapsed) / (10000 * loan.duration);
     }
+    /**
+     * @dev Retrieves the details of a specific loan.
+     * @param _id The ID of the loan.
+     * @return All the loan's details.
+     */
