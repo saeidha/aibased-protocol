@@ -93,4 +93,4 @@ contract Loanly {
         loan.lender.transfer(totalAmount);
 
         emit LoanRepaid(_id, totalAmount);
-        
+    }
