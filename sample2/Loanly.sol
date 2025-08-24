@@ -145,3 +145,6 @@ contract Loanly {
      * @param _id The ID of the loan.
      * @return A boolean indicating if the loan is funded.
      */
+    function isLoanFunded(uint256 _id) public view returns (bool) {
+        return loans[_id].funded;
+    }
