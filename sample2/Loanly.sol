@@ -88,4 +88,4 @@ contract Loanly {
 
         uint256 interestAmount = calculateInterest(_id);
         uint256 totalAmount = loan.amount + interestAmount;
-                require(msg.value == totalAmount, "Incorrect repayment amount");
+        require(msg.value == totalAmount, "Incorrect repayment amount");
