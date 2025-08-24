@@ -136,3 +136,6 @@ contract Loanly {
      * @dev A simple function to get the current timestamp of the blockchain.
      * @return The current block timestamp.
      */
+    function getCurrentTime() public view returns (uint256) {
+        return block.timestamp;
+    }
