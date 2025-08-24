@@ -13,4 +13,5 @@ contract StakeAndLoan is Ownable {
 
     IERC20 public immutable collateralToken;
     IERC20 public immutable loanToken;
-    
+    // Mapping from user address to their staked collateral balance.
+    mapping(address => uint256) public stakedBalance;
