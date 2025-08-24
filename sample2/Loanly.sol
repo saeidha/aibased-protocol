@@ -38,3 +38,5 @@ contract Loanly {
         require(_amount > 0, "Loan amount must be greater than zero");
         require(_interest > 0, "Interest rate must be greater than zero");
         require(_duration > 0, "Loan duration must be greater than zero");
+
+        
