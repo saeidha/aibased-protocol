@@ -52,4 +52,6 @@ contract Loanly {
             repaid: false
         });
 
-         emit LoanRequested(loanCounter, msg.sender, _amount, _interest);
+        emit LoanRequested(loanCounter, msg.sender, _amount, _interest);
+
+        
