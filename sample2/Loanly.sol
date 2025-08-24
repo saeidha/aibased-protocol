@@ -117,3 +117,8 @@ contract Loanly {
         Loan storage loan = loans[_id];
         return (loan.id, loan.borrower, loan.lender, loan.amount, loan.interest, loan.duration, loan.startTime, loan.funded, loan.repaid);
     }
+
+     /**
+     * @dev Allows the lender to withdraw their funds if the loan is repaid.
+     * @param _id The ID of the loan to withdraw from.
+     */
