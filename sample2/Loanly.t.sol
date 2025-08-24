@@ -100,4 +100,4 @@ contract LoanlyTest is Test {
     vm.prank(borrower);
     vm.expectRevert("Cannot fund your own loan");
     loanly.fundLoan{value: LOAN_AMOUNT}(1);
-    
+    }
