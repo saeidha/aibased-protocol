@@ -14,3 +14,6 @@ contract LoanlyTest is Test {
     /**
      * @dev Sets up the testing environment before each test.
      */
+    function setUp() public {
+        loanly = new Loanly();
+        
