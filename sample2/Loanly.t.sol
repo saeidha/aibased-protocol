@@ -111,3 +111,6 @@ contract LoanlyTest is Test {
 
         vm.prank(lender);
         loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        vm.prank(borrower);
+        vm.expectRevert("Incorrect repayment amount");
+        loanly.repayLoan{value: 1 wei}(1);
