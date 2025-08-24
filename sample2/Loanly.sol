@@ -148,3 +148,9 @@ contract Loanly {
     function isLoanFunded(uint256 _id) public view returns (bool) {
         return loans[_id].funded;
     }
+
+    /**
+     * @dev A simple check to see if a loan is repaid.
+     * @param _id The ID of the loan.
+     * @return A boolean indicating if the loan is repaid.
+     */
