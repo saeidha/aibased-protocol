@@ -13,3 +13,4 @@ contract StakeAndLoan is Ownable {
 
     IERC20 public immutable collateralToken;
     IERC20 public immutable loanToken;
+    
