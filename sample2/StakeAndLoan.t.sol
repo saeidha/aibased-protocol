@@ -135,3 +135,4 @@ contract StakeAndLoanTest is Test {
 /**
      * @dev Tests that a user cannot borrow more than the collateralization ratio allows.
      */
+        function testFailBorrowExceedsRatio() public {
