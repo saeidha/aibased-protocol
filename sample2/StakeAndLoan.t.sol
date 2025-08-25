@@ -149,3 +149,6 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests the ability to get loan details.
      */
+    function testGetLoanDetails() public {
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 1 ether);
