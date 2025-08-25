@@ -44,3 +44,8 @@ contract StakeAndLoanTest is Test {
         assertEq(stakeAndLoan.getUserStakedBalance(user), 10 ether);
         vm.stopPrank();
     }
+
+    /**
+     * @dev Tests borrowing functionality.
+     */
+    
