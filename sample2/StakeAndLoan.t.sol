@@ -31,3 +31,5 @@ contract StakeAndLoanTest is Test {
         stakeAndLoan = new StakeAndLoan(address(collateralToken), address(loanToken));
         // Mint tokens for the user and the contract (to be loaned out)
         collateralToken.mint(user, 100 ether);
+        loanToken.mint(address(stakeAndLoan), 50000 ether);
+    }
