@@ -110,3 +110,6 @@ contract StakeAndLoanTest is Test {
         vm.stopPrank();
     }
     
+    /**
+     * @dev Tests liquidation of an undercollateralized position.
+     */
