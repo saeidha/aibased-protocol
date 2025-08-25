@@ -173,3 +173,5 @@ contract StakeAndLoanTest is Test {
      * @dev Tests the owner's ability to change the collateralization ratio.
      */
     function testSetCollateralizationRatio() public {
+        stakeAndLoan.setCollateralizationRatio(2000);
+        assertEq(stakeAndLoan.collateralizationRatio(), 2000);
