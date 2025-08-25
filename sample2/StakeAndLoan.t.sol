@@ -33,3 +33,7 @@ contract StakeAndLoanTest is Test {
         collateralToken.mint(user, 100 ether);
         loanToken.mint(address(stakeAndLoan), 50000 ether);
     }
+
+    /**
+     * @dev Tests staking functionality.
+     */
