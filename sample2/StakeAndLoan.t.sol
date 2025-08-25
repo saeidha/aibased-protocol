@@ -56,3 +56,4 @@ contract StakeAndLoanTest is Test {
         assertEq(stakeAndLoan.getUserLoanBalance(user), 100 ether);
         assertEq(loanToken.balanceOf(user), 100 ether);
         vm.stopPrank();
+    }
