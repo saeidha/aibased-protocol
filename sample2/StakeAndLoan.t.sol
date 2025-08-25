@@ -27,4 +27,5 @@ contract StakeAndLoanTest is Test {
      */
     function setUp() public {
         collateralToken = new MockERC20("Collateral", "COL");
-        
+        loanToken = new MockERC20("Loan Token", "LOAN");
+        stakeAndLoan = new StakeAndLoan(address(collateralToken), address(loanToken));
