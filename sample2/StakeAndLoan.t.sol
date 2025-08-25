@@ -152,3 +152,5 @@ contract StakeAndLoanTest is Test {
     function testGetLoanDetails() public {
         vm.startPrank(user);
         collateralToken.approve(address(stakeAndLoan), 1 ether);
+        stakeAndLoan.stake(1 ether);
+        stakeAndLoan.borrow(100 ether);
