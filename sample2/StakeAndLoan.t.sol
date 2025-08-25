@@ -82,4 +82,4 @@ contract StakeAndLoanTest is Test {
         loanToken.approve(address(stakeAndLoan), totalOwed);
 
         stakeAndLoan.repay();
-        
+        (uint256 principal, , ) = stakeAndLoan.getLoanDetails(user);
