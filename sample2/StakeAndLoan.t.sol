@@ -154,3 +154,5 @@ contract StakeAndLoanTest is Test {
         collateralToken.approve(address(stakeAndLoan), 1 ether);
         stakeAndLoan.stake(1 ether);
         stakeAndLoan.borrow(100 ether);
+        (uint256 p, uint256 r, uint256 t) = stakeAndLoan.getLoanDetails(user);
+        assertEq(p, 100 ether);
