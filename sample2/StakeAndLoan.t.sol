@@ -113,3 +113,7 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests liquidation of an undercollateralized position.
      */
+
+    function testLiquidate() public {
+        // User stakes and borrows
+        vm.startPrank(user);
