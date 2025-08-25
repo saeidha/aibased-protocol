@@ -160,7 +160,7 @@ contract StakeAndLoanTest is Test {
         assertTrue(t > 0);
         vm.stopPrank();
     }
-    
+
     /**
      * @dev Tests the owner's ability to change the collateral price.
      */
@@ -172,3 +172,4 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests the owner's ability to change the collateralization ratio.
      */
+    function testSetCollateralizationRatio() public {
