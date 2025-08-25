@@ -29,3 +29,5 @@ contract StakeAndLoanTest is Test {
         collateralToken = new MockERC20("Collateral", "COL");
         loanToken = new MockERC20("Loan Token", "LOAN");
         stakeAndLoan = new StakeAndLoan(address(collateralToken), address(loanToken));
+        // Mint tokens for the user and the contract (to be loaned out)
+        collateralToken.mint(user, 100 ether);
