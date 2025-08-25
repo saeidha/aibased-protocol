@@ -121,3 +121,6 @@ contract StakeAndLoanTest is Test {
         stakeAndLoan.stake(10 ether);
         stakeAndLoan.borrow(15000 ether); // Borrow a large amount
         vm.stopPrank();
+
+        // Price of collateral drops, making the position undercollateralized
+        stakeAndLoan.setCollateralPrice(800);
