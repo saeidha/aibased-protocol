@@ -160,6 +160,7 @@ contract StakeAndLoanTest is Test {
         assertTrue(t > 0);
         vm.stopPrank();
     }
+    
     /**
      * @dev Tests the owner's ability to change the collateral price.
      */
