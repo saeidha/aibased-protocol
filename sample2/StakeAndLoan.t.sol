@@ -41,8 +41,6 @@ contract StakeAndLoanTest is Test {
         vm.startPrank(user);
         collateralToken.approve(address(stakeAndLoan), 10 ether);
         stakeAndLoan.stake(10 ether);
+        assertEq(stakeAndLoan.getUserStakedBalance(user), 10 ether);
         vm.stopPrank();
-
-        (uint256 stakedAmount, ) = stakeAndLoan.stakes(user);
-        assertEq(stakedAmount, 10 ether);
     }
