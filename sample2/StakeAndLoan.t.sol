@@ -45,3 +45,4 @@ contract StakeAndLoanTest is Test {
 
         (uint256 stakedAmount, ) = stakeAndLoan.stakes(user);
         assertEq(stakedAmount, 10 ether);
+    }
