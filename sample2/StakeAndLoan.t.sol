@@ -178,3 +178,4 @@ contract StakeAndLoanTest is Test {
         // Ensure that borrowing respects the new ratio
         vm.startPrank(user);
         collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
