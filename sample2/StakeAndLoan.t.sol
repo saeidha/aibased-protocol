@@ -156,3 +156,7 @@ contract StakeAndLoanTest is Test {
         stakeAndLoan.borrow(100 ether);
         (uint256 p, uint256 r, uint256 t) = stakeAndLoan.getLoanDetails(user);
         assertEq(p, 100 ether);
+        assertEq(r, 500);
+        assertTrue(t > 0);
+        vm.stopPrank();
+    }
