@@ -37,3 +37,4 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests staking functionality.
      */
+    function testStake() public {
