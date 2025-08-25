@@ -179,3 +179,4 @@ contract StakeAndLoanTest is Test {
         vm.startPrank(user);
         collateralToken.approve(address(stakeAndLoan), 10 ether);
         stakeAndLoan.stake(10 ether);
+        
