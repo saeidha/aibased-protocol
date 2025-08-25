@@ -83,3 +83,4 @@ contract StakeAndLoanTest is Test {
 
         stakeAndLoan.repay();
         (uint256 principal, , ) = stakeAndLoan.getLoanDetails(user);
+        assertEq(principal, 0);
