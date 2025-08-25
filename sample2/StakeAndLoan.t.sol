@@ -48,4 +48,4 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests borrowing functionality.
      */
-    
+    function testBorrow() public {
