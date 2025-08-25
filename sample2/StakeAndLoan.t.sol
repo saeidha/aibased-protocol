@@ -136,3 +136,7 @@ contract StakeAndLoanTest is Test {
      * @dev Tests that a user cannot borrow more than the collateralization ratio allows.
      */
         function testFailBorrowExceedsRatio() public {
+            vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+        
