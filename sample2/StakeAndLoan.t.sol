@@ -124,3 +124,11 @@ contract StakeAndLoanTest is Test {
 
         // Price of collateral drops, making the position undercollateralized
         stakeAndLoan.setCollateralPrice(800);
+
+// Liquidator steps in
+        vm.startPrank(liquidator);
+        stakeAndLoan.liquidate(user);
+        assertEq(collateralToken.balanceOf(liquidator), 10 ether);
+        assertEq(stakeAndLoan.getUserStakedBalance(user), 0);
+        vm.stopPrank();
+    }
