@@ -132,3 +132,6 @@ contract StakeAndLoanTest is Test {
         assertEq(stakeAndLoan.getUserStakedBalance(user), 0);
         vm.stopPrank();
     }
+/**
+     * @dev Tests that a user cannot borrow more than the collateralization ratio allows.
+     */
