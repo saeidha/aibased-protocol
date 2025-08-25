@@ -38,3 +38,5 @@ contract StakeAndLoanTest is Test {
      * @dev Tests staking functionality.
      */
     function testStake() public {
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
