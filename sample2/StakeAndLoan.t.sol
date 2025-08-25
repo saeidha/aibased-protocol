@@ -163,3 +163,8 @@ contract StakeAndLoanTest is Test {
     /**
      * @dev Tests the owner's ability to change the collateral price.
      */
+    function testSetCollateralPrice() public {
+        stakeAndLoan.setCollateralPrice(2500);
+        assertEq(stakeAndLoan.collateralPrice(), 2500);
+    }
+    
