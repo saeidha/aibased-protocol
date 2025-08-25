@@ -49,3 +49,10 @@ contract StakeAndLoanTest is Test {
      * @dev Tests borrowing functionality.
      */
     function testBorrow() public {
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 20 ether);
+        stakeAndLoan.stake(20 ether);
+        stakeAndLoan.borrow(100 ether);
+        assertEq(stakeAndLoan.getUserLoanBalance(user), 100 ether);
+        assertEq(loanToken.balanceOf(user), 100 ether);
+        vm.stopPrank();
