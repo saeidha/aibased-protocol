@@ -145,3 +145,7 @@ contract StakeAndLoanTest is Test {
         stakeAndLoan.borrow(maxBorrowable + 1);
         vm.stopPrank();
     }
+
+    /**
+     * @dev Tests the ability to get loan details.
+     */
