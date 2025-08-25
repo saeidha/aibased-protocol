@@ -6,4 +6,6 @@ import "../src/StakeAndLoan.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract MockERC20 is ERC20 {
-    constructor
+    constructor() ERC20("Mock Token", "MTK") {
+        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    }
