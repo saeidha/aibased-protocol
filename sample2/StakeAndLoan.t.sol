@@ -185,3 +185,4 @@ contract StakeAndLoanTest is Test {
                             // 1 ether * 2000 / 1e18 = 2000
                                     assertEq(value, 2000);
         }
+}
