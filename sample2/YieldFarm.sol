@@ -90,4 +90,7 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         emit Staked(msg.sender, _amount, _tier);
     }
 
-    
+    /**
+     * @dev Unstakes tokens and claims any pending rewards.
+     * @param _amount The amount to unstake.
+     */
