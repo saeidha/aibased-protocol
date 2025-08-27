@@ -15,3 +15,4 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     IERC20 public immutable stakingToken;
     IERC20 public immutable rewardToken;
 
+    uint256 public totalStaked;
