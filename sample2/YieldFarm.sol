@@ -114,4 +114,6 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         emit Unstaked(msg.sender, _amount);
     }
 
-    
+    /**
+     * @dev Claims pending rewards without unstaking.
+     */
