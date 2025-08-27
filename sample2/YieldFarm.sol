@@ -81,4 +81,7 @@ contract YieldFarm is Ownable, ReentrancyGuard {
                 userStake.lockupEndTime = block.timestamp + 90 days;
             }
         }
-        
+
+        userStake.amount += _amount;
+        userStake.since = block.timestamp;
+        totalStaked += _amount;
