@@ -181,3 +181,6 @@ contract RaffleTest is Test {
             address player = address(uint160(i));
             hoax(player, STARTING_USER_BALANCE); // hoax is prank + deal in one
             raffle.enterRaffle{value: entranceFee}();
+        }
+
+        uint256 prize = entranceFee * (additionalEntrants + 1);
