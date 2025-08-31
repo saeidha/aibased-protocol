@@ -98,3 +98,6 @@ contract Raffle is VRFConsumerBaseV2 {
         return (upkeepNeeded, "0x0");
     }
 
+    /**
+     * @notice This function is called by Chainlink Automation to initiate the winner selection process.
+     * @dev It requests a random number from the Chainlink VRF.
