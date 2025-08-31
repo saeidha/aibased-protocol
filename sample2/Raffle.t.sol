@@ -98,3 +98,5 @@ contract RaffleTest is Test {
         (bool upkeepNeeded,) = raffle.checkUpkeep("");
 
         // Assert
+        assert(!upkeepNeeded);
+    }
