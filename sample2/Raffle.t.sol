@@ -184,3 +184,4 @@ contract RaffleTest is Test {
         }
 
         uint256 prize = entranceFee * (additionalEntrants + 1);
+
