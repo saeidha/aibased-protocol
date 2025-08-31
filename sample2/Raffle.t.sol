@@ -59,3 +59,5 @@ contract RaffleTest is Test {
         vm.expectRevert(Raffle.Raffle__SendMoreToEnterRaffle.selector);
         raffle.enterRaffle();
     }
+
+    function testRaffleRecordsPlayerWhenTheyEnter() public {
