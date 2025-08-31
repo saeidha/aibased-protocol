@@ -148,3 +148,6 @@ contract RaffleTest is Test {
     function testPerformUpkeepRevertsIfCheckUpkeepIsFalse() public {
         // Arrange
         uint256 currentBalance = 0;
+        uint256 numPlayers = 0;
+        uint256 raffleState = 0;
+        vm.expectRevert(abi.encodeWithSelector(Raffle.Raffle__UpkeepNotNeeded.selector, currentBalance, numPlayers, raffleState));
