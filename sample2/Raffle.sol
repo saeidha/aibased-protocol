@@ -78,3 +78,5 @@ contract Raffle is VRFConsumerBaseV2 {
     }
 
     /**
+     * @notice This is the function that Chainlink Automation nodes call to see if it's time to pick a winner.
+     * @dev The following conditions must be met for this to return true:
