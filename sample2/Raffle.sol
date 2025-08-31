@@ -12,3 +12,4 @@ import {VRFConsumerBaseV2} from "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2
  */
 contract Raffle is VRFConsumerBaseV2 {
     /* Errors */
+    error Raffle__NotOpen();
