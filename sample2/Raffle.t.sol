@@ -190,3 +190,4 @@ contract RaffleTest is Test {
 
         // We are going to pretend to be the Chainlink VRF
         // and pick a winner.
+        // The winner should be player at index 1 (address(1))
