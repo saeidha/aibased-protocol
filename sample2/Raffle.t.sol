@@ -102,3 +102,6 @@ contract RaffleTest is Test {
     }
 
     function testCheckUpkeepReturnsFalseIfRaffleIsntOpen() public {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
