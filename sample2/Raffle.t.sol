@@ -37,3 +37,5 @@ contract RaffleTest is Test {
             // We are funding with a ridiculously high number to avoid running out
             vrfCoordinatorV2Mock.fundSubscription(subscriptionId, 100 ether);
         }
+
+        raffle = new Raffle(vrfCoordinator, subscriptionId, gasLane, callbackGasLimit, entranceFee, interval);
