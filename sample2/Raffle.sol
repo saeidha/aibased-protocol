@@ -148,3 +148,4 @@ contract Raffle is VRFConsumerBaseV2 {
         return s_raffleState;
     }
 
+    function getNumPlayers() public view returns (uint256) {
