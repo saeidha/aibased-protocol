@@ -40,3 +40,4 @@ contract Raffle is VRFConsumerBaseV2 {
     address[] private s_players;
     address private s_recentWinner;
 
+    /* Events */
