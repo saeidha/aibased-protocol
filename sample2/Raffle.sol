@@ -157,3 +157,5 @@ contract Raffle is VRFConsumerBaseV2 {
     }
 
     function getRecentWinner() public view returns (address) {
+        return s_recentWinner;
+    }
