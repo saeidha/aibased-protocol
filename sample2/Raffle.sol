@@ -84,3 +84,5 @@ contract Raffle is VRFConsumerBaseV2 {
      * 2. The lottery has at least one player and has ETH.
      * 3. Our subscription is funded with LINK.
      * 4. The lottery is in an "open" state.
+     */
+    function checkUpkeep(bytes memory /* checkData */)
