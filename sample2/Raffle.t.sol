@@ -187,3 +187,6 @@ contract RaffleTest is Test {
 
         vm.warp(block.timestamp + interval + 1);
         vm.roll(block.number + 1);
+
+        // We are going to pretend to be the Chainlink VRF
+        // and pick a winner.
