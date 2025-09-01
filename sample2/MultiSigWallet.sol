@@ -121,3 +121,6 @@ contract MultiSigWallet {
      * @param _value The amount of Ether to send with the transaction.
      * @param _data The calldata to be sent with the transaction.
      * @return txIndex The index of the newly created transaction.
+     */
+    function submitTransaction(address _destination, uint256 _value, bytes memory _data)
+        public
