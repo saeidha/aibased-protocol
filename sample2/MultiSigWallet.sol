@@ -224,3 +224,5 @@ contract MultiSigWallet {
                 owners[i] = owners[owners.length - 1];
                 break;
             }
+        }
+        owners.pop();
