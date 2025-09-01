@@ -34,3 +34,7 @@ contract MultiSigWalletTest is Test {
     // 1. Deployment Tests
     //================================================================================
 
+    function test_InitialState() public {
+        assertEq(wallet.requiredConfirmations(), REQUIRED_CONFIRMATIONS);
+        address[] memory deployedOwners = wallet.getOwners();
+        assertEq(deployedOwners.length, 3);
