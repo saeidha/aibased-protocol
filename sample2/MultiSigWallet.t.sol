@@ -168,3 +168,5 @@ contract MultiSigWalletTest is Test {
         wallet.executeTransaction(txIndex);
     }
 
+    function test_Fail_ExecuteAlreadyExecuted() public {
+        vm.prank(owner1);
