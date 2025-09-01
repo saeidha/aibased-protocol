@@ -220,3 +220,4 @@ describe("MultiSigWallet", function () {
 
             expect(await multiSigWallet.isOwner(newOwner)).to.be.true;
         });
+
