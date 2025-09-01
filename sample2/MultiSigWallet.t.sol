@@ -38,3 +38,4 @@ contract MultiSigWalletTest is Test {
         assertEq(wallet.requiredConfirmations(), REQUIRED_CONFIRMATIONS);
         address[] memory deployedOwners = wallet.getOwners();
         assertEq(deployedOwners.length, 3);
+        assertEq(deployedOwners[0], owner1);
