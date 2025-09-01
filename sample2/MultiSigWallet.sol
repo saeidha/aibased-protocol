@@ -33,3 +33,4 @@ contract MultiSigWallet {
     struct Transaction {
         address destination;
         uint256 value;
+        bytes data;
