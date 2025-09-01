@@ -164,3 +164,5 @@ contract MultiSigWallet {
     function revokeConfirmation(uint256 _txIndex)
         public
         onlyOwner
+        txExists(_txIndex)
+        notExecuted(_txIndex)
