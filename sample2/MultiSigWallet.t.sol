@@ -203,3 +203,5 @@ contract MultiSigWalletTest is Test {
         wallet.executeTransaction(txIndex);
 
         assertTrue(wallet.isOwner(newOwner));
+        assertEq(wallet.getOwners().length, 4);
+    }
