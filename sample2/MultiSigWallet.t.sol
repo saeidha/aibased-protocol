@@ -83,3 +83,7 @@ contract MultiSigWalletTest is Test {
         vm.prank(nonOwner);
         vm.expectRevert("MultiSigWallet: Not an owner");
         wallet.submitTransaction(destination, 1 ether, "");
+    }
+
+    //================================================================================
+    // 3. Confirmation and Revocation Tests
