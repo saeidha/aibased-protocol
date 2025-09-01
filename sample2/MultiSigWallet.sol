@@ -124,3 +124,6 @@ contract MultiSigWallet {
      */
     function submitTransaction(address _destination, uint256 _value, bytes memory _data)
         public
+        onlyOwner
+        returns (uint256 txIndex)
+    {
