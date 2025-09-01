@@ -7,3 +7,6 @@ pragma solidity ^0.8.20;
  * This contract is a foundational DeFi primitive, designed for security and gas efficiency.
  */
 contract MultiSigWallet {
+    //================================================================================
+    // Events
+    //================================================================================
