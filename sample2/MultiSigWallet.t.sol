@@ -15,3 +15,4 @@ describe("MultiSigWallet", function () {
         requiredConfirmations = 2;
 
         // Deploy the contract
+        MultiSigWallet = await ethers.getContractFactory("MultiSigWallet");
