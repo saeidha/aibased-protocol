@@ -159,3 +159,5 @@ contract MultiSigWalletTest is Test {
         assertEq(destination.balance, initialBalance + 1 ether);
     }
 
+    function test_Fail_ExecuteWithoutEnoughConfirmations() public {
+        vm.prank(owner1);
