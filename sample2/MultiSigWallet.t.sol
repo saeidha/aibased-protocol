@@ -6,3 +6,5 @@ import {MultiSigWallet} from "../src/MultiSigWallet.sol";
 
 contract MultiSigWalletTest is Test {
     MultiSigWallet wallet;
+    address[] public owners;
+    address public owner1 = address(0x1);
