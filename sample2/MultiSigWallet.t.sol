@@ -114,3 +114,5 @@ contract MultiSigWalletTest is Test {
     function test_OwnerCanRevokeConfirmation() public {
         vm.prank(owner1);
         uint256 txIndex = wallet.submitTransaction(destination, 1 ether, ""); // owner1 confirms
+        
+        vm.prank(owner1);
