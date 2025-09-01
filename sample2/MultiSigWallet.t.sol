@@ -92,3 +92,5 @@ describe("MultiSigWallet", function () {
             await multiSigWallet.connect(owner1).submitTransaction(to, value, data);
         });
 
+        it("should allow another owner to confirm a transaction", async function () {
+            await expect(multiSigWallet.connect(owner2).confirmTransaction(0))
