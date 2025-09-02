@@ -254,3 +254,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
      * @param _beneficiary The address of the beneficiary.
      * @return The amount of tokens yet to be released.
      */
+    function getRemainingAmount(address _beneficiary) public view returns (uint256) {
+        return vestingSchedules[_beneficiary].totalAmount - vestingSchedules[_beneficiary].releasedAmount;
