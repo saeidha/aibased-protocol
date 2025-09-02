@@ -64,3 +64,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         require(_startTime >= block.timestamp, "TokenVesting: Start time must be in the future");
 
         vestingSchedules[_beneficiary] = VestingSchedule({
+            beneficiary: _beneficiary,
+            startTime: _startTime,
