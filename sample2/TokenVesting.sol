@@ -268,3 +268,6 @@ contract TokenVesting is Ownable, ReentrancyGuard {
 
     // --- Internal Functions ---
 
+    /**
+     * @dev Internal function to calculate the vested amount at a specific time.
+     * @param _schedule The vesting schedule.
