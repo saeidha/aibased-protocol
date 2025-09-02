@@ -210,3 +210,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         return vestedAmount - schedule.releasedAmount;
     }
     
+    /**
+     * @notice Calculates the vested amount at a specific timestamp.
