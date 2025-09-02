@@ -114,3 +114,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
 
         vestingSchedules[beneficiary].releasedAmount += releasableAmount;
 
+        emit TokensReleased(beneficiary, releasableAmount);
+
