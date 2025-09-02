@@ -203,3 +203,4 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     function getReleasableAmount(address _beneficiary) public view returns (uint256) {
         VestingSchedule memory schedule = vestingSchedules[_beneficiary];
         if (schedule.totalAmount == 0) {
+            return 0;
