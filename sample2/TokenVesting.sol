@@ -42,3 +42,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     }
 
     /**
+     * @notice Creates a new vesting schedule for a single beneficiary.
+     * @param _beneficiary The address of the beneficiary.
