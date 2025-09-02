@@ -221,3 +221,7 @@ contract TestTokenVesting is Test {
         tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
         
         vm.warp(startTime - 1 days); // Before vesting starts
+        
+        vm.prank(beneficiary1);
+        vm.expectRevert("TokenVesting: No tokens available for release");
+        tokenVesting.release();
