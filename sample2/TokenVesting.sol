@@ -75,3 +75,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         beneficiaries.push(_beneficiary);
 
         emit VestingScheduleCreated(_beneficiary, _totalAmount, _startTime, _duration, _cliffDuration);
+    }
+    
