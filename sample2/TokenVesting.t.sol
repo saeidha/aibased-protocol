@@ -81,3 +81,7 @@ contract TestTokenVesting is Test {
         tokenVesting.createVestingSchedule(address(0), VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
     }
     
+    function test_05_Fail_CreateVestingSchedule_AlreadyExists() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
