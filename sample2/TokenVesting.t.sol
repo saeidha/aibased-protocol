@@ -140,3 +140,4 @@ contract TestTokenVesting is Test {
         tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
 
         // First release
+        uint64 firstReleaseTime = startTime + CLIFF + 30 days;
