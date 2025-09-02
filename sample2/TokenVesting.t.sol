@@ -53,3 +53,7 @@ contract TestTokenVesting is Test {
         assertEq(address(tokenVesting.token()), address(mockToken));
         assertEq(tokenVesting.owner(), owner);
     }
+
+    function test_02_CreateVestingSchedule_Success() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
