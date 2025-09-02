@@ -208,3 +208,5 @@ contract TestTokenVesting is Test {
 
         uint64 futureTime = startTime + CLIFF + 100 days;
         uint256 expectedVested = (VESTING_AMOUNT_1 * (futureTime - startTime)) / DURATION;
+        
+        assertEq(tokenVesting.getVestedAmountAt(beneficiary1, futureTime), expectedVested);
