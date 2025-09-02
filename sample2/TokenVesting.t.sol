@@ -152,3 +152,4 @@ contract TestTokenVesting is Test {
         vm.warp(secondReleaseTime);
         uint256 totalVested = (VESTING_AMOUNT_1 * (secondReleaseTime - startTime)) / DURATION;
         uint256 secondExpectedVested = totalVested - firstExpectedVested;
+        vm.prank(beneficiary1);
