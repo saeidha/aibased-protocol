@@ -212,3 +212,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     
     /**
      * @notice Calculates the vested amount at a specific timestamp.
+     * @param _beneficiary The address of the beneficiary.
+     * @param _timestamp The timestamp to calculate the vested amount at.
