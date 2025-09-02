@@ -286,3 +286,4 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         uint256 timeElapsed = _timestamp - _schedule.startTime;
         return (_schedule.totalAmount * timeElapsed) / _schedule.duration;
     }
+}
