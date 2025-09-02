@@ -13,3 +13,4 @@ contract MockToken is ERC20 {
     }
 }
 
+contract TestTokenVesting is Test {
