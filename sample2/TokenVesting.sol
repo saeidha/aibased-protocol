@@ -241,3 +241,7 @@ contract TokenVesting is Ownable, ReentrancyGuard {
 
     /**
      * @notice Returns the end time of the cliff period for a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The Unix timestamp of when the cliff period ends.
+     */
+    function getCliffEndTime(address _beneficiary) public view returns (uint64) {
