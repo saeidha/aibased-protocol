@@ -245,3 +245,5 @@ contract TokenVesting is Ownable, ReentrancyGuard {
      * @return The Unix timestamp of when the cliff period ends.
      */
     function getCliffEndTime(address _beneficiary) public view returns (uint64) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        return schedule.startTime + schedule.cliffDuration;
