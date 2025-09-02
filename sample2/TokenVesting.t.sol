@@ -33,3 +33,5 @@ contract TestTokenVesting is Test {
     function setUp() public {
         owner = makeAddr("owner");
         beneficiary1 = makeAddr("beneficiary1");
+        beneficiary2 = makeAddr("beneficiary2");
+        randomUser = makeAddr("randomUser");
