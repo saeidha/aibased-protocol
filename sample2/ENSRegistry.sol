@@ -252,3 +252,6 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     /**
      * @dev Pauses all state-changing functions in the contract.
      */
+    function pause() external onlyOwner {
+        _pause();
+    }
