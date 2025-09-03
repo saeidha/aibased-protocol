@@ -5,3 +5,4 @@ import "forge-std/Test.sol";
 import "../contracts/ENSRegistry.sol";
 import "../contracts/PublicResolver.sol";
 
+contract TestENSRegistry is Test {
