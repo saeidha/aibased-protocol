@@ -22,3 +22,5 @@ contract TestENSRegistry is Test {
         registry = new ENSRegistry();
         
         vm.prank(owner);
+        resolver = new PublicResolver();
+        
