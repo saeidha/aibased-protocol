@@ -41,3 +41,4 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     event NodeBurnt(bytes32 indexed node);
 
 
+    modifier authorised(bytes32 node) {
