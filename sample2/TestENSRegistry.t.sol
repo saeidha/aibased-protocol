@@ -185,3 +185,4 @@ contract TestENSRegistry is Test {
         assertTrue(resolver.supportsInterface(0x691f3431)); // NAME
         assertTrue(resolver.supportsInterface(0x01ffc9a7)); // ERC165
     }
+}
