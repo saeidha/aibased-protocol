@@ -157,3 +157,7 @@ contract TestENSRegistry is Test {
     }
     
     // --- Resolver Tests ---
+    
+    function test_resolver_setAddr() public {
+        vm.prank(user1);
+        resolver.setAddr(testNode, user1);
