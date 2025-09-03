@@ -271,3 +271,6 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     }
 
     /**
+     * @inheritdoc IERC165
+     */
+    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
