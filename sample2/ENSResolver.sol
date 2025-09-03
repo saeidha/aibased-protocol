@@ -69,3 +69,6 @@ contract PublicResolver is ERC165 {
      * @param key The key of the text record.
      * @param value The value of the text record.
      */
+    function setText(bytes32 node, string calldata key, string calldata value) external authorised(node) {
+        texts[node][key] = value;
+        emit TextChanged(node, key, key, value);
