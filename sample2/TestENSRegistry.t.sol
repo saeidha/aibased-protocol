@@ -81,3 +81,6 @@ contract TestENSRegistry is Test {
         registry.transferFrom(user1, user2, testNode);
         assertEq(registry.owner(testNode), user2);
     }
+    
+    function test_transferFromByOperator() public {
+        vm.prank(user1);
