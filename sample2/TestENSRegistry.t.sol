@@ -165,3 +165,7 @@ contract TestENSRegistry is Test {
     }
     
     function test_resolver_setText() public {
+        string memory key = "url";
+        string memory value = "https://my.domain";
+        vm.prank(user1);
+        resolver.setText(testNode, key, value);
