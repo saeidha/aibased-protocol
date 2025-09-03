@@ -263,3 +263,6 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         _unpause();
     }
     
+    /**
+     * @dev Internal function to set the owner of a node.
+     */
