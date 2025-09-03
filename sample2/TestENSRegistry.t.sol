@@ -178,3 +178,4 @@ contract TestENSRegistry is Test {
         resolver.setName(testNode, name);
         assertEq(resolver.name(testNode), name);
     }
+
