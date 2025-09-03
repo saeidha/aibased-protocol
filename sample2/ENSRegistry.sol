@@ -146,3 +146,5 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
      * @param _approved True if the operator is approved, false to revoke approval.
      */
     function setApprovalForAll(address operator, bool _approved) external {
+        operators[msg.sender][operator] = _approved;
+        emit ApprovalForAll(msg.sender, operator, _approved);
