@@ -57,3 +57,4 @@ contract TestENSRegistry is Test {
         registry.setResolver(testNode, newResolver);
         assertEq(registry.resolver(testNode), newResolver);
     }
+    
