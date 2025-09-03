@@ -63,3 +63,6 @@ contract PublicResolver is ERC165 {
         return addresses[node];
     }
     
+    /**
+     * @dev Sets a text record for a node.
+     * @param node The node to update.
