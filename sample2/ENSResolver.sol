@@ -41,3 +41,4 @@ contract PublicResolver is ERC165 {
         // In a real system:
         // ENS ens = ENS(ensAddress);
         // require(ens.owner(node) == msg.sender);
+        _;
