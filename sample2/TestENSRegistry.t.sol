@@ -117,3 +117,4 @@ contract TestENSRegistry is Test {
         assertEq(registry.resolver(testSubNode), address(resolver));
         assertEq(registry.ttl(testSubNode), 1800);
     }
+    
