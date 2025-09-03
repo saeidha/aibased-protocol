@@ -145,3 +145,4 @@ contract TestENSRegistry is Test {
         registry.pause();
         
         vm.prank(user1);
+        vm.expectRevert("Pausable: paused");
