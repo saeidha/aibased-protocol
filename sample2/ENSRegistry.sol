@@ -99,3 +99,4 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
      * @param _resolver The address of the resolver.
      */
     function setResolver(bytes32 node, address _resolver) external whenNotPaused authorised(node) {
+        records[node].resolver = _resolver;
