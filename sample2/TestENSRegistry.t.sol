@@ -63,3 +63,7 @@ contract TestENSRegistry is Test {
         vm.prank(user1);
         registry.setTTL(testNode, newTtl);
         assertEq(registry.ttl(testNode), newTtl);
+    }
+    
+    function test_exists() public {
+        assertTrue(registry.exists(testNode));
