@@ -38,3 +38,6 @@ contract PublicResolver is ERC165 {
     modifier authorised(bytes32 node) {
         // This is a simplified authorization check. A real implementation would check against the ENSRegistry.
         // For this example, we will allow anyone to set records.
+        // In a real system:
+        // ENS ens = ENS(ensAddress);
+        // require(ens.owner(node) == msg.sender);
