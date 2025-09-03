@@ -255,3 +255,5 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     function pause() external onlyOwner {
         _pause();
     }
+    
+    /**
