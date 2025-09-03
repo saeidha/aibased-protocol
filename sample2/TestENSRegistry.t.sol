@@ -53,3 +53,7 @@ contract TestENSRegistry is Test {
     
     function test_setResolver() public {
         address newResolver = address(0x4);
+        vm.prank(user1);
+        registry.setResolver(testNode, newResolver);
+        assertEq(registry.resolver(testNode), newResolver);
+    }
