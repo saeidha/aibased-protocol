@@ -151,3 +151,7 @@ contract TestEnglishAuction is Test {
         
         vm.prank(randomUser); // Anyone can end the auction
         auction.endAuction();
+        
+        assertEq(uint(auction.getAuctionState()), uint(EnglishAuction.AuctionState.ENDED));
+        assertEq(mockNft.ownerOf(NFT_ID), bidder2);
+        assertEq(seller.balance, sellerInitialBalance + winningBid);
