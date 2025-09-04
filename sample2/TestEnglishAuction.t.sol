@@ -227,3 +227,5 @@ contract TestEnglishAuction is Test {
         assertEq(auction.getNftOwner(), bidder2);
         assertFalse(auction.isAuctionActive());
         assertEq(auction.getTimeLeft(), 0);
+    }
+
