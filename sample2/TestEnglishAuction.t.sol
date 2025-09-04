@@ -256,3 +256,5 @@ contract TestEnglishAuction is Test {
         auction.bid{value: 1 ether}();
         
         vm.deal(bidder2, 5 ether);
+        vm.prank(bidder2);
+        // Bid must be 1 + 0.05 = 1.05 ether. 1.04 is too low.
