@@ -198,3 +198,7 @@ contract EnglishAuction is ReentrancyGuard {
         if (amount == 0) {
             revert NoFundsToWithdraw();
         }
+
+        pendingWithdrawals[msg.sender] = 0;
+        payable(msg.sender).transfer(amount);
+
