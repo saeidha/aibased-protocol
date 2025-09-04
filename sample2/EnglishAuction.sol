@@ -106,3 +106,5 @@ contract EnglishAuction is ReentrancyGuard {
         auction.endTime = block.timestamp + auction.duration;
 
         emit AuctionStarted(auction.endTime);
+    }
+
