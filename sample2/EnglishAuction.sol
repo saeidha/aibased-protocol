@@ -97,3 +97,5 @@ contract EnglishAuction is ReentrancyGuard {
         }
         if (auction.state != AuctionState.CREATED) {
             revert AuctionAlreadyStarted();
+        }
+        
