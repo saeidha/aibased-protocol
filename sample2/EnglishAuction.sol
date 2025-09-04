@@ -108,3 +108,5 @@ contract EnglishAuction is ReentrancyGuard {
         emit AuctionStarted(auction.endTime);
     }
 
+    /**
+     * @notice Places a bid on the item.
