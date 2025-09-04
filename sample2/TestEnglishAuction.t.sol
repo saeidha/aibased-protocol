@@ -33,3 +33,4 @@ contract TestEnglishAuction is Test {
 
     function setUp() public {
         auction = new EnglishAuction();
+        mockNft = new MockNFT();
