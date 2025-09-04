@@ -115,3 +115,5 @@ contract EnglishAuction is ReentrancyGuard {
      */
     function bid() external payable nonReentrant {
         if (auction.state != AuctionState.STARTED) {
+            revert AuctionNotStarted();
+        }
