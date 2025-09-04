@@ -10,3 +10,5 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
  * This contract incorporates the withdrawal pattern for enhanced security.
  */
 contract EnglishAuction is ReentrancyGuard {
+
+    enum AuctionState { CREATED, STARTED, ENDED, CANCELED }
