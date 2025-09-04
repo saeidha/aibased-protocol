@@ -51,3 +51,6 @@ contract EnglishAuction is ReentrancyGuard {
     error BidTooLow();
     error InvalidDuration();
     error NoFundsToWithdraw();
+
+    /**
+     * @notice Creates the auction with specified parameters.
