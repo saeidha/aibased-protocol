@@ -65,3 +65,5 @@ contract TestEnglishAuction is Test {
         vm.prank(seller);
         auction.startAuction();
         assertEq(uint(auction.getAuctionState()), uint(EnglishAuction.AuctionState.STARTED));
+        assertEq(mockNft.ownerOf(NFT_ID), address(auction));
+    }
