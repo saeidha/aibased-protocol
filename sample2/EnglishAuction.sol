@@ -152,3 +152,5 @@ contract EnglishAuction is ReentrancyGuard {
      * @dev Transfers the NFT to the winner and the funds to the seller.
      */
     function endAuction() external nonReentrant {
+        if (auction.state != AuctionState.STARTED) {
+            revert AuctionNotStarted();
