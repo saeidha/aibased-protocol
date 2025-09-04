@@ -49,3 +49,5 @@ contract TestEnglishAuction is Test {
         vm.prank(seller);
         auction.createAuction(address(mockNft), NFT_ID, STARTING_BID, DURATION);
         assertEq(uint(auction.getAuctionState()), uint(EnglishAuction.AuctionState.CREATED));
+        assertEq(auction.getSeller(), seller);
+    }
