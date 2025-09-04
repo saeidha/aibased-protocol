@@ -184,3 +184,5 @@ contract EnglishAuction is ReentrancyGuard {
         if (auction.highestBidder != address(0)) revert("Cannot cancel with active bids");
         if (block.timestamp >= auction.endTime) revert AuctionAlreadyEnded();
 
+        auction.state = AuctionState.CANCELED;
+        auction.nftContract.safeTransferFrom(address(this), auction.seller, auction.tokenId);
