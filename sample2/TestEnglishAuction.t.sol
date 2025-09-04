@@ -166,3 +166,5 @@ contract TestEnglishAuction is Test {
         vm.expectRevert(EnglishAuction.AuctionInProgress.selector);
         auction.endAuction();
     }
+
+    function test_12_EndAuction_NoBids() public {
