@@ -78,3 +78,4 @@ contract EnglishAuction is ReentrancyGuard {
             nftContract: IERC721(_nftContract),
             tokenId: _tokenId,
             startingBid: _startingBid,
+            highestBid: 0,
