@@ -218,3 +218,5 @@ contract EnglishAuction is ReentrancyGuard {
     function getDuration() public view returns (uint256) { return auction.duration; }
     function isAuctionActive() public view returns (bool) { return auction.state == AuctionState.STARTED && block.timestamp < auction.endTime; }
     function getPendingWithdrawal(address user) public view returns (uint256) { return pendingWithdrawals[user]; }
+    function getTimeLeft() public view returns (uint256) {
+        if (!isAuctionActive()) return 0;
