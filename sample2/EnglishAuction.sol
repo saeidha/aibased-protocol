@@ -159,3 +159,6 @@ contract EnglishAuction is ReentrancyGuard {
             revert AuctionInProgress();
         }
         
+        auction.state = AuctionState.ENDED;
+        
+        if (auction.highestBidder != address(0)) {
