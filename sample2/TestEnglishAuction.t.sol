@@ -202,3 +202,6 @@ contract TestEnglishAuction is Test {
         auction.cancelAuction();
     }
     
+    // --- View Functions ---
+    function test_15_ViewFunctions_Initial() public {
+        vm.prank(seller);
