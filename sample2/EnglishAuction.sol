@@ -186,3 +186,4 @@ contract EnglishAuction is ReentrancyGuard {
 
         auction.state = AuctionState.CANCELED;
         auction.nftContract.safeTransferFrom(address(this), auction.seller, auction.tokenId);
+
