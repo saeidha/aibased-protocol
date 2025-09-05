@@ -155,3 +155,5 @@ contract DAO is Ownable {
         
         p.executed = true;
 
+        for (uint i = 0; i < p.targets.length; i++) {
+            (bool success, ) = p.targets[i].call{value: p.values[i]}(p.calldatas[i]);
