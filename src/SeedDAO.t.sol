@@ -200,3 +200,5 @@ contract TestDAO is Test {
     function getTargets() internal view returns (address[] memory) {
         address[] memory targets = new address[](1);
         targets[0] = address(target);
+        return targets;
+    }
