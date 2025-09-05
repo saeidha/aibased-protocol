@@ -189,3 +189,5 @@ contract TestDAO is Test {
         dao.execute(1);
     }
 
+    function test_12_Fail_Execute_TimelockActive() public {
+        test_07_State_Succeeded();
