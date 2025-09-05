@@ -208,3 +208,4 @@ contract DAO is Ownable {
         p.executionEta = block.timestamp + executionDelay;
     }
 
+    // --- Admin Functions ---
