@@ -126,3 +126,6 @@ contract TestDAO is Test {
     }
 
     function test_06_Fail_Vote_DoubleVote() public {
+        test_03_CastVote_Success();
+        vm.prank(voterA);
+        vm.expectRevert("DAO: Voter has already voted");
