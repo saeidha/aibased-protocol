@@ -94,3 +94,6 @@ contract TestDAO is Test {
         assertEq(uint(dao.state(proposalId)), uint(DAO.ProposalState.Pending));
     }
 
+    function test_02_Fail_Propose_BelowThreshold() public {
+        vm.prank(voterC);
+        vm.expectRevert("DAO: Proposer does not meet proposal threshold");
