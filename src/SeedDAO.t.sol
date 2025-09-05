@@ -148,3 +148,6 @@ contract TestDAO is Test {
     function test_08_State_Defeated_Quorum() public {
         test_01_Propose_Success();
         vm.roll(block.number + VOTING_DELAY + 1);
+        vm.prank(proposer); dao.castVote(1, 1);
+        
+        vm.roll(block.number + VOTING_PERIOD + 1);
