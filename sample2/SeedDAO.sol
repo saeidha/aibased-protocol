@@ -58,3 +58,4 @@ contract DAO is Ownable {
     event GovernanceParametersUpdated();
     
     constructor(
+        address _tokenAddress,
