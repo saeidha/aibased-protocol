@@ -32,3 +32,5 @@ contract DAO is Ownable {
         bool canceled;
         mapping(address => Receipt) receipts;
     }
+
+    struct Receipt {
