@@ -25,3 +25,4 @@ contract MockGovToken is Test {
     struct Checkpoint { uint32 fromBlock; uint96 votes; }
 
     function mint(address to, uint amount) public {
+        balanceOf[to] += amount;
