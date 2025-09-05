@@ -49,3 +49,6 @@ contract DAO is Ownable {
     uint public executionDelay; // timelock in seconds
 
     mapping(uint => Proposal) public proposals;
+    uint public proposalCount;
+
+    event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, bytes[] calldatas, uint startBlock, uint endBlock, string description);
