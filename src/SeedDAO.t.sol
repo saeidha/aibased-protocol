@@ -108,3 +108,5 @@ contract TestDAO is Test {
         vm.prank(voterA);
         dao.castVote(1, uint8(DAO.VoteType.For));
         assertTrue(dao.hasVoted(1, voterA));
+    }
+    
