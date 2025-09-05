@@ -140,3 +140,7 @@ contract DAO is Ownable {
         } else {
             p.abstainVotes += votes;
         }
+
+        emit VoteCast(voter, proposalId, support, votes, reason);
+    }
+
