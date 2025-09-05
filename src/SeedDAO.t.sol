@@ -45,3 +45,5 @@ contract MockGovToken is Test {
     }
     function _add(uint a, uint b) internal pure returns (uint) { return a + b; }
 }
+
+// Mock target for proposals
