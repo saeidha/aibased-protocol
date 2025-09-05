@@ -221,3 +221,4 @@ contract DAO is Ownable {
     function hasVoted(uint proposalId, address account) external view returns (bool) { return proposals[proposalId].receipts[account].hasVoted; }
     function getVotes(address account, uint blockNumber) external view returns (uint) { return governanceToken.getPastVotes(account, blockNumber); }
     function getTreasuryBalance() external view returns (uint) { return address(this).balance; }
+
