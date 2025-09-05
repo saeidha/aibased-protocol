@@ -104,3 +104,7 @@ contract TestDAO is Test {
     function test_03_CastVote_Success() public {
         test_01_Propose_Success();
         vm.roll(block.number + VOTING_DELAY + 1);
+        
+        vm.prank(voterA);
+        dao.castVote(1, uint8(DAO.VoteType.For));
+        assertTrue(dao.hasVoted(1, voterA));
