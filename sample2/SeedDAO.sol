@@ -71,3 +71,4 @@ contract DAO is Ownable {
         setProposalThreshold(_proposalThreshold);
         setQuorumPercentage(_quorumPercentage);
         setExecutionDelay(_executionDelay);
+    }
