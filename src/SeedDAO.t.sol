@@ -102,3 +102,5 @@ contract TestDAO is Test {
 
     // --- Test Voting ---
     function test_03_CastVote_Success() public {
+        test_01_Propose_Success();
+        vm.roll(block.number + VOTING_DELAY + 1);
