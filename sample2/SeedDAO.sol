@@ -55,3 +55,6 @@ contract DAO is Ownable {
     event VoteCast(address indexed voter, uint proposalId, uint8 support, uint votes, string reason);
     event ProposalCanceled(uint id);
     event ProposalExecuted(uint id);
+    event GovernanceParametersUpdated();
+    
+    constructor(
