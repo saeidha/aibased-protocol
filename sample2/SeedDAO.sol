@@ -74,3 +74,6 @@ contract DAO is Ownable {
     }
 
     /**
+     * @notice Creates a new governance proposal.
+     * @param targets The target addresses for the proposal's transactions.
+     * @param values The ETH values to be sent in each transaction.
