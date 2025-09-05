@@ -29,3 +29,6 @@ contract DAO is Ownable {
         uint againstVotes;
         uint abstainVotes;
         bool executed;
+        bool canceled;
+        mapping(address => Receipt) receipts;
+    }
