@@ -15,3 +15,4 @@ contract DAO is Ownable {
     enum VoteType { Against, For, Abstain }
 
     struct Proposal {
+        uint id;
