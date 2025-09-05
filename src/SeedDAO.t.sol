@@ -72,3 +72,4 @@ contract TestDAO is Test {
     uint constant EXECUTION_DELAY = 3 days;
 
     function setUp() public {
+        vm.startPrank(owner);
