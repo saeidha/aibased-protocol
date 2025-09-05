@@ -97,3 +97,4 @@ contract TestDAO is Test {
     function test_02_Fail_Propose_BelowThreshold() public {
         vm.prank(voterC);
         vm.expectRevert("DAO: Proposer does not meet proposal threshold");
+        dao.propose(getTargets(), getValues(), getCalldatas(), "Proposal Fail");
