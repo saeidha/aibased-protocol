@@ -129,3 +129,5 @@ contract TestDAO is Test {
         test_03_CastVote_Success();
         vm.prank(voterA);
         vm.expectRevert("DAO: Voter has already voted");
+        dao.castVote(1, 0);
+    }
