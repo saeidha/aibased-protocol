@@ -20,3 +20,4 @@ contract DAO is Ownable {
         address[] targets;
         uint[] values;
         bytes[] calldatas;
+        string description;
