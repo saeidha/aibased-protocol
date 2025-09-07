@@ -88,3 +88,4 @@ contract W3SchoolSign is Ownable {
      * @param _admin The address to revoke admin privileges from.
      */
     function removeAdmin(address _admin) external onlyOwner {
+        admins[_admin] = false;
