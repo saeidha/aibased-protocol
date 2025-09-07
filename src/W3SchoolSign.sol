@@ -14,3 +14,6 @@ contract W3SchoolSign is Ownable {
     //                           Structs
     // =============================================================
 
+    struct User {
+        string name;
+        bool isRegistered;
