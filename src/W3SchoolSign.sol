@@ -426,3 +426,4 @@ contract W3SchoolSign is Ownable {
     }
 
     /**
+     * @notice Updates the details of an existing course.
