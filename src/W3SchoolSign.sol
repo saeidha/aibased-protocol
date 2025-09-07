@@ -433,3 +433,5 @@ contract W3SchoolSign is Ownable {
         Course storage course = courses[_courseId];
         course.name = _name;
         course.description = _description;
+        emit CourseUpdated(_courseId, course.name, course.description, course.enrollmentFee);
+    }
