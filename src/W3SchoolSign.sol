@@ -470,3 +470,4 @@ contract W3SchoolSign is Ownable {
     // =============================================================
 
     /**
+     * @notice Allows a registered user to enroll in a course by sending the required fee.
