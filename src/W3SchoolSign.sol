@@ -502,3 +502,5 @@ contract W3SchoolSign is Ownable {
         require(success, "W3SS: Withdrawal failed");
         
         emit FundsWithdrawn(owner(), balance);
+    }
+
