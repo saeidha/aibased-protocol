@@ -112,3 +112,4 @@ contract W3SchoolSign is Ownable {
         
         emit UserRegistered(msg.sender, _name);
     }
+
