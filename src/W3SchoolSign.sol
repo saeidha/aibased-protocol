@@ -451,3 +451,6 @@ contract W3SchoolSign is Ownable {
     function toggleCourseActiveStatus(uint _courseId) external onlyAdmin courseExists(_courseId) {
         Course storage course = courses[_courseId];
         course.isActive = !course.isActive;
+        emit CourseStatusChanged(_courseId, course.isActive);
+    }
+
