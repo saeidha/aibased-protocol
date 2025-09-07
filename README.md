@@ -131,7 +131,7 @@ forge script script/Main/SetW3PassBasePrice.s.sol:SetW3PassBasePrice --rpc-url $
 
 -----
 
-## ❤️ Contributing
+## Contributing Guide
 
 We welcome contributions of all kinds\! If you'd like to help improve the project, please follow these steps:
 
