@@ -61,3 +61,4 @@ contract W3SchoolSign is Ownable {
 
     modifier onlyAdmin() {
         require(admins[msg.sender], "W3SS: Caller is not an admin");
+        _;
