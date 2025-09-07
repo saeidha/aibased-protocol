@@ -286,3 +286,5 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * Users "sign up" for the platform and then "sign" into courses by enrolling.
  */
 contract W3SchoolSign is Ownable {
+
+    // =============================================================
