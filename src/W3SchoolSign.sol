@@ -231,3 +231,5 @@ contract W3SchoolSign is Ownable {
     //                        View Functions
     // =============================================================
 
+    function isUserRegistered(address _user) external view returns (bool) {
+        return users[_user].isRegistered;
