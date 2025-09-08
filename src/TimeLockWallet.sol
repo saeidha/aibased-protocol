@@ -103,3 +103,6 @@ contract TimeLockWallet is Ownable, Pausable {
         beneficiaryCount++;
         emit BeneficiaryAdded(_beneficiary, _amount, _unlockTimestamp);
     }
+
+    /**
+     * @notice Updates the allocated amount for an existing beneficiary.
