@@ -229,3 +229,4 @@ contract TimeLockWallet is Ownable, Pausable {
     //                     Beneficiary Functions
     // =============================================================
 
+    /**
