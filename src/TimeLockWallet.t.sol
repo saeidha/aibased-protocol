@@ -101,3 +101,5 @@ contract W3SchoolSignTest is Test {
         // 3. User 1 enrolls by sending the correct fee
         vm.prank(USER_1);
         w3s.enroll{value: COURSE_FEE}(1);
+
+        assertTrue(w3s.isEnrolled(USER_1, 1), "User 1 should be enrolled in course 1.");
