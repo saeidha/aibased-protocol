@@ -107,3 +107,5 @@ contract W3SchoolSignTest is Test {
     }
 
     function testFail_EnrollWithIncorrectFee() public {
+        vm.prank(ADMIN);
+        w3s.addCourse("Solidity 101", "Basics", COURSE_FEE);
