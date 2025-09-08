@@ -121,3 +121,5 @@ contract TimeLockWallet is Ownable, Pausable {
         Beneficiary storage b = beneficiaries[_beneficiary];
         require(_newAmount >= b.withdrawnAmount, "TLW: New amount cannot be less than withdrawn amount");
 
+        uint256 oldAmount = b.amountLocked;
+        if (_newAmount > oldAmount) {
