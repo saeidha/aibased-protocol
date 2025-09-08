@@ -14,3 +14,5 @@ contract W3SchoolSignTest is Test {
     address public constant USER_2 = address(0x4);
 
     uint256 public constant COURSE_FEE = 0.1 ether;
+
+    /**
