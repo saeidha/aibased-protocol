@@ -255,3 +255,6 @@ contract TimeLockWallet is Ownable, Pausable {
 
     /**
      * @notice Returns all details of a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return isActive True if active, false otherwise.
+     * @return amountLocked Total allocated amount.
