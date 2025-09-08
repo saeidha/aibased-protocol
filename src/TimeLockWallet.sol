@@ -172,3 +172,6 @@ contract TimeLockWallet is Ownable, Pausable {
         beneficiaries[_beneficiary].unlockTimestamp = _newUnlockTimestamp;
         emit UnlockTimeExtended(_beneficiary, oldUnlockTimestamp, _newUnlockTimestamp);
     }
+
+    /**
+     * @notice Deactivates a beneficiary, making their locked funds available to the owner (if not withdrawn).
