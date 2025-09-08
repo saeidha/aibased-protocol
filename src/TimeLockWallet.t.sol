@@ -24,3 +24,4 @@ contract W3SchoolSignTest is Test {
         w3s = new W3SchoolSign();
 
         // Grant the ADMIN address admin privileges for tests that need it.
+        vm.prank(OWNER);
