@@ -75,3 +75,4 @@ contract W3SchoolSignTest is Test {
 
     function test_AdminCanAddCourse() public {
         vm.prank(ADMIN);
+        w3s.addCourse("Solidity 101", "Basics of Solidity", COURSE_FEE);
