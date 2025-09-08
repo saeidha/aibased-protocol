@@ -52,3 +52,4 @@ contract TimeLockWallet is Ownable, Pausable {
         _;
     }
 
+    modifier notBeneficiary(address _addr) {
