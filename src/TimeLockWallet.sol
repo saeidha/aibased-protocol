@@ -106,3 +106,4 @@ contract TimeLockWallet is Ownable, Pausable {
 
     /**
      * @notice Updates the allocated amount for an existing beneficiary.
+     * @dev Can increase or decrease the amount. Adjusts totalLockedFunds accordingly.
