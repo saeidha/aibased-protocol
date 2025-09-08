@@ -60,3 +60,5 @@ contract TimeLockWallet is Ownable, Pausable {
     // =============================================================
     //                          Constructor
     // =============================================================
+
+    constructor() Ownable(msg.sender) {}
