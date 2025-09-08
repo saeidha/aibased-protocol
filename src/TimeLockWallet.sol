@@ -330,3 +330,5 @@ contract TimeLockWallet is Ownable, Pausable {
     /**
      * @notice Returns the total sum of all funds currently allocated to active beneficiaries.
      * @return The total amount of locked funds.
+     */
+    function getTotalLockedFunds() public view returns (uint256) {
