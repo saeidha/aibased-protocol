@@ -76,3 +76,5 @@ contract TimeLockWallet is Ownable, Pausable {
         emit DepositMade(msg.sender, msg.value, address(this).balance);
     }
 
+    /**
+     * @notice Adds a new beneficiary with a specified amount and unlock timestamp.
