@@ -270,3 +270,6 @@ contract TimeLockWallet is Ownable, Pausable {
         return (b.isActive, b.amountLocked, b.unlockTimestamp, b.withdrawnAmount);
     }
 
+    /**
+     * @notice Returns the total amount of funds currently locked for a specific beneficiary.
+     * @param _beneficiary The address of the beneficiary.
