@@ -262,3 +262,5 @@ contract TimeLockWallet is Ownable, Pausable {
      * @return withdrawnAmount Amount already withdrawn.
      */
     function getBeneficiaryDetails(address _beneficiary)
+        external
+        view
