@@ -88,3 +88,4 @@ contract W3SchoolSignTest is Test {
         vm.expectRevert("W3SS: Caller is not an admin");
         w3s.addCourse("Unauthorized Course", "...", 0);
     }
+
