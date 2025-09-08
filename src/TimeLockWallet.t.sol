@@ -20,3 +20,7 @@ contract W3SchoolSignTest is Test {
      */
     function setUp() public {
         // Start a prank to set msg.sender to OWNER for deployment
+        vm.prank(OWNER);
+        w3s = new W3SchoolSign();
+
+        // Grant the ADMIN address admin privileges for tests that need it.
