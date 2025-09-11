@@ -313,3 +313,5 @@ contract TitanCoreToken is
         require(
             hasRole(FEE_MANAGER_ROLE, _msgSender()),
             "Caller is not a fee manager"
+        );
+        require(newFeeBps <= 1000, "Fee cannot exceed 10%"); // Capped at 10%
