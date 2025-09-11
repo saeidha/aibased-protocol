@@ -335,3 +335,5 @@ contract TitanCoreToken is
         );
         _isExcludedFromFee[account] = false;
         emit FeeExclusionSet(account, false);
+    }
+
