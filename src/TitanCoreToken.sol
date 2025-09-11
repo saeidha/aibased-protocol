@@ -445,3 +445,5 @@ contract TitanCoreToken is
         super._transfer(address(this), schedule.beneficiary, releasable);
 
         emit VestingTokensReleased(scheduleId, releasable);
+    }
+
