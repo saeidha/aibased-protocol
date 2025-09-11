@@ -178,3 +178,6 @@ contract TitanCoreToken is
         // Grant all roles to the deployer for initial setup
         _grantRole(MINTER_ROLE, deployer);
         _grantRole(PAUSER_ROLE, deployer);
+        _grantRole(SNAPSHOT_ROLE, deployer);
+        _grantRole(BLACKLISTER_ROLE, deployer);
+        _grantRole(FEE_MANAGER_ROLE, deployer);
