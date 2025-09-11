@@ -77,3 +77,5 @@ contract TitanCoreToken is
     mapping(address => Lock[]) private _locks;
     mapping(address => uint256) private _lockedBalance;
 
+    // --- Advanced Burn ---
+    uint256 public autoBurnRateBps;
