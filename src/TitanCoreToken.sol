@@ -190,3 +190,5 @@ contract TitanCoreToken is
         // Exclude deployer and fee wallet from fees by default
         _isExcludedFromFee[deployer] = true;
         _isExcludedFromFee[feeWallet] = true;
+
+        if (initialSupply > 0) {
