@@ -287,3 +287,7 @@ contract TitanCoreToken is
     }
 
     function snapshot() public {
+        require(
+            hasRole(SNAPSHOT_ROLE, _msgSender()),
+            "Caller is not a snapshot creator"
+        );
