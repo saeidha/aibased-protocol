@@ -219,3 +219,6 @@ contract TitanCoreToken is
         }
         super._beforeTokenTransfer(from, to, amount);
     }
+
+    function _update(
+        address from,
