@@ -252,3 +252,6 @@ contract TitanCoreToken is
             uint256 feeAmount = amount.mul(transferFeeBps).div(10000);
             if (feeAmount > 0) {
                 super._transfer(from, feeWallet, feeAmount);
+                amountToTransfer = amountToTransfer.sub(feeAmount);
+            }
+        }
