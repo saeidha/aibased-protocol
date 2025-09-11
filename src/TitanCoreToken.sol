@@ -270,3 +270,6 @@ contract TitanCoreToken is
     }
 
     // Internal minting function to bypass role check for constructor
+    function _mintFor(address to, uint256 amount) internal {
+        super._mint(to, amount);
+    }
