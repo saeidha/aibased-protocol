@@ -362,3 +362,7 @@ contract TitanCoreToken is
         _isBlacklisted[account] = false;
         emit AccountUnblacklisted(account);
     }
+
+    function isBlacklisted(address account) public view returns (bool) {
+        return _isBlacklisted[account];
+    }
