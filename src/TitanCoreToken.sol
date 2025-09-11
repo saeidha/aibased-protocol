@@ -74,3 +74,6 @@ contract TitanCoreToken is
         uint256 amount;
         uint256 unlockTimestamp;
     }
+    mapping(address => Lock[]) private _locks;
+    mapping(address => uint256) private _lockedBalance;
+
