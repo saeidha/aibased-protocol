@@ -175,3 +175,6 @@ contract TitanCoreToken is
         address deployer = _msgSender();
         _setupRole(DEFAULT_ADMIN_ROLE, deployer);
 
+        // Grant all roles to the deployer for initial setup
+        _grantRole(MINTER_ROLE, deployer);
+        _grantRole(PAUSER_ROLE, deployer);
