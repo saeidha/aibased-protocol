@@ -372,3 +372,6 @@ contract TitanCoreToken is
     function createVestingSchedule(
         address beneficiary,
         uint256 totalAmount,
+        uint256 durationSeconds,
+        uint256 cliffDurationSeconds,
+        uint256 slicePeriodSeconds,
