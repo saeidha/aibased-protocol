@@ -398,3 +398,7 @@ contract TitanCoreToken is
             abi.encodePacked(
                 beneficiary,
                 startTimestamp,
+                totalAmount,
+                durationSeconds
+            )
+        );
