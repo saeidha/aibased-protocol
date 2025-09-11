@@ -452,3 +452,5 @@ contract TitanCoreToken is
             hasRole(VESTING_MANAGER_ROLE, _msgSender()),
             "Caller is not a vesting manager"
         );
+        VestingSchedule storage schedule = _vestingSchedules[scheduleId];
+        require(schedule.revocable, "Schedule is not revocable");
