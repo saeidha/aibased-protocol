@@ -64,3 +64,7 @@ contract TitanCoreToken is
         uint256 releasedAmount;
         bool revoked;
     }
+
+    bytes32[] private _vestingScheduleIds;
+    mapping(bytes32 => VestingSchedule) private _vestingSchedules;
+    mapping(address => bytes32[]) private _holderVestingScheduleIds;
