@@ -209,3 +209,6 @@ contract TitanCoreToken is
         require(
             balanceOf(from) - _lockedBalance[from] >= amount,
             "Insufficient unlocked balance"
+        );
+
+        if (maxTransferPerTx > 0) {
