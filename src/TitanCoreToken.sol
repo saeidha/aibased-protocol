@@ -51,3 +51,6 @@ contract TitanCoreToken is
 
     // --- Blacklist Properties ---
     mapping(address => bool) private _isBlacklisted;
+
+    // --- Vesting Properties ---
+    struct VestingSchedule {
