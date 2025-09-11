@@ -302,3 +302,5 @@ contract TitanCoreToken is
             "Caller is not a fee manager"
         );
         require(
+            newWallet != address(0),
+            "New fee wallet is the zero address"
