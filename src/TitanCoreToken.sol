@@ -29,3 +29,6 @@ contract TitanCoreToken is
     AccessControlEnumerable
 {
     using SafeMath for uint256;
+    using SafeERC20 for IERC20;
+    using ECDSA for bytes32;
+
