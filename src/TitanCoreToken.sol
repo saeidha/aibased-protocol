@@ -379,3 +379,6 @@ contract TitanCoreToken is
     ) public returns (bytes32) {
         require(
             hasRole(VESTING_MANAGER_ROLE, _msgSender()),
+            "Caller is not a vesting manager"
+        );
+        require(
