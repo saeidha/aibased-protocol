@@ -151,3 +151,5 @@ contract TitanCoreToken is
         address indexed token,
         uint256 snapshotId,
         uint256 totalAmount
+    );
+    event DividendWithdrawn(address indexed user, uint256 amount);
