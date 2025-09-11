@@ -425,3 +425,6 @@ contract TitanCoreToken is
             beneficiary,
             totalAmount,
             durationSeconds
+        );
+        return scheduleId;
+    }
