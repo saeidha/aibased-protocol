@@ -184,3 +184,7 @@ contract TitanCoreToken is
         _grantRole(VESTING_MANAGER_ROLE, deployer);
         _grantRole(GUARDIAN_ROLE, deployer);
         _grantRole(BURNER_ROLE, deployer);
+        _grantRole(SUPPLY_MANAGER_ROLE, deployer);
+        _grantRole(DIVIDEND_MANAGER_ROLE, deployer);
+
+        // Exclude deployer and fee wallet from fees by default
