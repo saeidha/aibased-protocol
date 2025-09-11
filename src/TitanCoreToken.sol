@@ -83,3 +83,7 @@ contract TitanCoreToken is
 
     // --- Supply Management (Inflation) ---
     uint256 public inflationRateBps;
+    uint256 public inflationPeriodSeconds;
+    uint256 public lastInflationTimestamp;
+
+    // --- Delegated Transfers (EIP-3009) ---
