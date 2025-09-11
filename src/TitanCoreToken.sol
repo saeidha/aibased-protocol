@@ -203,3 +203,5 @@ contract TitanCoreToken is
         address from,
         address to,
         uint256 amount
+    ) internal override(ERC20, ERC20Pausable, ERC20Snapshot) {
+        require(!_isBlacklisted[from], "Sender is blacklisted");
