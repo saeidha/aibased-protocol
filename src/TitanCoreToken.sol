@@ -148,3 +148,6 @@ contract TitanCoreToken is
     event TokensRedeemed(address indexed redeemer, uint256 amount);
     event TransferLimitsSet(uint256 maxPerTx);
     event DividendsDistributed(
+        address indexed token,
+        uint256 snapshotId,
+        uint256 totalAmount
