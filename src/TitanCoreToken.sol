@@ -201,3 +201,5 @@ contract TitanCoreToken is
 
     function _beforeTokenTransfer(
         address from,
+        address to,
+        uint256 amount
