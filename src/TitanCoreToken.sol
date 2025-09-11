@@ -142,3 +142,5 @@ contract TitanCoreToken is
     );
     event AuthorizationCanceled(
         address indexed authorizer,
+        bytes32 indexed nonce
+    );
