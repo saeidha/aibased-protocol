@@ -325,3 +325,6 @@ contract TitanCoreToken is
             "Caller is not a fee manager"
         );
         _isExcludedFromFee[account] = true;
+        emit FeeExclusionSet(account, true);
+    }
+
