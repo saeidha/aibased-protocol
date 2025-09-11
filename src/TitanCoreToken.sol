@@ -377,3 +377,5 @@ contract TitanCoreToken is
         uint256 slicePeriodSeconds,
         bool revocable
     ) public returns (bytes32) {
+        require(
+            hasRole(VESTING_MANAGER_ROLE, _msgSender()),
