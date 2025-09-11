@@ -416,3 +416,6 @@ contract TitanCoreToken is
         });
 
         _vestingScheduleIds.push(scheduleId);
+        _holderVestingScheduleIds[beneficiary].push(scheduleId);
+
+        _transfer(_msgSender(), address(this), totalAmount);
