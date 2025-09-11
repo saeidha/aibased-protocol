@@ -351,3 +351,6 @@ contract TitanCoreToken is
             "Caller is not a blacklister"
         );
         _isBlacklisted[account] = true;
+        emit AccountBlacklisted(account);
+    }
+
