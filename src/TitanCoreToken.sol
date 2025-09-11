@@ -447,3 +447,5 @@ contract TitanCoreToken is
         emit VestingTokensReleased(scheduleId, releasable);
     }
 
+    function revokeVestingSchedule(bytes32 scheduleId) public {
+        require(
