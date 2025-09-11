@@ -263,3 +263,6 @@ contract TitanCoreToken is
                 _burn(from, burnAmount);
                 amountToTransfer = amountToTransfer.sub(burnAmount);
                 totalAutoBurned += burnAmount;
+            }
+        }
+
