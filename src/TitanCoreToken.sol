@@ -122,3 +122,7 @@ contract TitanCoreToken is
         uint256 duration
     );
     event VestingTokensReleased(bytes32 indexed scheduleId, uint256 amount);
+    event VestingScheduleRevoked(bytes32 indexed scheduleId);
+    event TokensLocked(
+        address indexed user,
+        uint256 amount,
