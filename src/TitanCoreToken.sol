@@ -342,3 +342,5 @@ contract TitanCoreToken is
     ) public view returns (bool) {
         return _isExcludedFromFee[account];
     }
+
+    // --- Blacklist Management ---
