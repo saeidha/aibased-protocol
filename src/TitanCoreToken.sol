@@ -166,3 +166,5 @@ contract TitanCoreToken is
     ) ERC20(name, symbol) ERC20Capped(cap) ERC20Permit(name) {
         require(
             initialFeeWallet != address(0),
+            "Fee wallet cannot be zero address"
+        );
