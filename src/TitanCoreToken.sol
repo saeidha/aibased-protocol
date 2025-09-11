@@ -436,3 +436,6 @@ contract TitanCoreToken is
             "Only beneficiary can release"
         );
 
+        uint256 releasable = _computeReleasableAmount(scheduleId);
+        require(releasable > 0, "No tokens are releasable");
+
