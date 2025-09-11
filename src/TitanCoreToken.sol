@@ -370,3 +370,5 @@ contract TitanCoreToken is
     // --- Vesting Management ---
 
     function createVestingSchedule(
+        address beneficiary,
+        uint256 totalAmount,
