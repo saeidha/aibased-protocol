@@ -402,3 +402,6 @@ contract TitanCoreToken is
                 durationSeconds
             )
         );
+
+        _vestingSchedules[scheduleId] = VestingSchedule({
+            beneficiary: beneficiary,
