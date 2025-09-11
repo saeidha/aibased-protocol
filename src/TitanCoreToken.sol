@@ -56,3 +56,6 @@ contract TitanCoreToken is
     struct VestingSchedule {
         address beneficiary;
         uint256 cliffTimestamp;
+        uint256 startTimestamp;
+        uint256 durationSeconds;
+        uint256 slicePeriodSeconds;
