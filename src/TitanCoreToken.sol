@@ -306,3 +306,7 @@ contract TitanCoreToken is
             "New fee wallet is the zero address"
         );
         feeWallet = newWallet;
+        emit FeeWalletChanged(newWallet);
+    }
+
+    function setTransferFeeBps(uint256 newFeeBps) public {
