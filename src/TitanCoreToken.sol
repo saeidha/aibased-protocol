@@ -112,3 +112,7 @@ contract TitanCoreToken is
     // --- Events ---
     event FeeWalletChanged(address indexed newWallet);
     event TransferFeeChanged(uint256 newFeeBps);
+    event FeeExclusionSet(address indexed account, bool isExcluded);
+    event AccountBlacklisted(address indexed account);
+    event AccountUnblacklisted(address indexed account);
+    event VestingScheduleCreated(
