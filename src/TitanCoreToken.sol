@@ -419,3 +419,6 @@ contract TitanCoreToken is
         _holderVestingScheduleIds[beneficiary].push(scheduleId);
 
         _transfer(_msgSender(), address(this), totalAmount);
+
+        emit VestingScheduleCreated(
+            scheduleId,
