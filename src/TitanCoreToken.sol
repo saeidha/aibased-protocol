@@ -249,3 +249,6 @@ contract TitanCoreToken is
             !_isExcludedFromFee[to] &&
             transferFeeBps > 0
         ) {
+            uint256 feeAmount = amount.mul(transferFeeBps).div(10000);
+            if (feeAmount > 0) {
+                super._transfer(from, feeWallet, feeAmount);
