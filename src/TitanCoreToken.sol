@@ -391,3 +391,6 @@ contract TitanCoreToken is
             cliffDurationSeconds <= durationSeconds,
             "Cliff must be <= duration"
         );
+
+        uint256 startTimestamp = block.timestamp;
+
