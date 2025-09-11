@@ -61,3 +61,6 @@ contract TitanCoreToken is
         uint256 slicePeriodSeconds;
         bool revocable;
         uint256 totalAmount;
+        uint256 releasedAmount;
+        bool revoked;
+    }
