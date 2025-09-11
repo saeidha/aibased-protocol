@@ -90,3 +90,6 @@ contract TitanCoreToken is
     mapping(address => mapping(bytes32 => bool)) private _authorizationStates;
     bytes32 private constant TRANSFER_AUTHORIZATION_TYPEHASH =
         keccak256(
+            "TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)"
+        );
+
