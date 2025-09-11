@@ -328,3 +328,5 @@ contract TitanCoreToken is
         emit FeeExclusionSet(account, true);
     }
 
+    function includeInFee(address account) public {
+        require(
