@@ -216,3 +216,6 @@ contract TitanCoreToken is
                 amount <= maxTransferPerTx,
                 "Transfer exceeds max limit per transaction"
             );
+        }
+        super._beforeTokenTransfer(from, to, amount);
+    }
