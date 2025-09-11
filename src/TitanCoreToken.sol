@@ -45,3 +45,6 @@ contract TitanCoreToken is
     bytes32 public constant DIVIDEND_MANAGER_ROLE = keccak256("DIVIDEND_MANAGER_ROLE");
 
     // --- Fee Properties ---
+    address public feeWallet;
+    uint256 public transferFeeBps; // Fee in basis points (1 bps = 0.01%)
+    mapping(address => bool) private _isExcludedFromFee;
