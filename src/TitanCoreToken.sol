@@ -366,3 +366,7 @@ contract TitanCoreToken is
     function isBlacklisted(address account) public view returns (bool) {
         return _isBlacklisted[account];
     }
+
+    // --- Vesting Management ---
+
+    function createVestingSchedule(
