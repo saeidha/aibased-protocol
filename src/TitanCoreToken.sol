@@ -460,3 +460,7 @@ contract TitanCoreToken is
             schedule.releasedAmount
         );
         schedule.revoked = true;
+
+        if (unreleased > 0) {
+            super._transfer(address(this), _msgSender(), unreleased);
+        }
