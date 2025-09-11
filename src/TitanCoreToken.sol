@@ -422,3 +422,6 @@ contract TitanCoreToken is
 
         emit VestingScheduleCreated(
             scheduleId,
+            beneficiary,
+            totalAmount,
+            durationSeconds
