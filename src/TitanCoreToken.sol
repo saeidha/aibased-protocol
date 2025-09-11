@@ -160,3 +160,6 @@ contract TitanCoreToken is
     constructor(
         string memory name,
         string memory symbol,
+        uint256 cap,
+        uint256 initialSupply,
+        address initialFeeWallet
