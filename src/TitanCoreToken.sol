@@ -405,3 +405,5 @@ contract TitanCoreToken is
 
         _vestingSchedules[scheduleId] = VestingSchedule({
             beneficiary: beneficiary,
+            cliffTimestamp: startTimestamp.add(cliffDurationSeconds),
+            startTimestamp: startTimestamp,
