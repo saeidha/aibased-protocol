@@ -126,3 +126,6 @@ contract TitanCoreToken is
     event TokensLocked(
         address indexed user,
         uint256 amount,
+        uint256 unlockTimestamp
+    );
+    event TokensUnlocked(
