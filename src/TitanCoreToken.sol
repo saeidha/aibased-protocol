@@ -225,3 +225,5 @@ contract TitanCoreToken is
         address to,
         uint256 value
     ) internal override(ERC20, ERC20Capped) {
+        super._update(from, to, value);
+    }
