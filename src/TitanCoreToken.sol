@@ -192,3 +192,6 @@ contract TitanCoreToken is
         _isExcludedFromFee[feeWallet] = true;
 
         if (initialSupply > 0) {
+            _mint(deployer, initialSupply);
+        }
+        lastInflationTimestamp = block.timestamp;
