@@ -93,3 +93,5 @@ contract TitanCoreToken is
             "TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)"
         );
 
+    // --- Signature Minting ---
+    address private _signatureMinter;
