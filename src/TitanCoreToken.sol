@@ -163,3 +163,6 @@ contract TitanCoreToken is
         uint256 cap,
         uint256 initialSupply,
         address initialFeeWallet
+    ) ERC20(name, symbol) ERC20Capped(cap) ERC20Permit(name) {
+        require(
+            initialFeeWallet != address(0),
