@@ -133,3 +133,6 @@ contract TitanCoreToken is
         uint256 lockId,
         uint256 amount
     );
+    event AutoBurnRateSet(uint256 newRateBps);
+    event InflationSet(uint256 rateBps, uint256 periodSeconds);
+    event InflationExecuted(uint256 mintedAmount);
