@@ -441,3 +441,5 @@ contract TitanCoreToken is
 
         schedule.releasedAmount = schedule.releasedAmount.add(releasable);
 
+        // Use a direct transfer to avoid fees on vested tokens
+        super._transfer(address(this), schedule.beneficiary, releasable);
