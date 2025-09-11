@@ -321,3 +321,5 @@ contract TitanCoreToken is
 
     function excludeFromFee(address account) public {
         require(
+            hasRole(FEE_MANAGER_ROLE, _msgSender()),
+            "Caller is not a fee manager"
