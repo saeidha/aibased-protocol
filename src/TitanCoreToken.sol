@@ -430,3 +430,7 @@ contract TitanCoreToken is
     }
 
     function releaseVestedTokens(bytes32 scheduleId) public {
+        VestingSchedule storage schedule = _vestingSchedules[scheduleId];
+        require(
+            schedule.beneficiary == _msgSender(),
+            "Only beneficiary can release"
