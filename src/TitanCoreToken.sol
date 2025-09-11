@@ -315,3 +315,6 @@ contract TitanCoreToken is
             "Caller is not a fee manager"
         );
         require(newFeeBps <= 1000, "Fee cannot exceed 10%"); // Capped at 10%
+        transferFeeBps = newFeeBps;
+        emit TransferFeeChanged(newFeeBps);
+    }
