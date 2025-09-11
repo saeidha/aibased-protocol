@@ -27,3 +27,5 @@ contract TitanCoreToken is
     ERC20Permit,
     ERC20Snapshot,
     AccessControlEnumerable
+{
+    using SafeMath for uint256;
