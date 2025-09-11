@@ -407,3 +407,5 @@ contract TitanCoreToken is
             beneficiary: beneficiary,
             cliffTimestamp: startTimestamp.add(cliffDurationSeconds),
             startTimestamp: startTimestamp,
+            durationSeconds: durationSeconds,
+            slicePeriodSeconds: slicePeriodSeconds,
