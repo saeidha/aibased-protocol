@@ -449,3 +449,6 @@ contract TitanCoreToken is
 
     function revokeVestingSchedule(bytes32 scheduleId) public {
         require(
+            hasRole(VESTING_MANAGER_ROLE, _msgSender()),
+            "Caller is not a vesting manager"
+        );
