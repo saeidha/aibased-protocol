@@ -428,3 +428,5 @@ contract TitanCoreToken is
         );
         return scheduleId;
     }
+
+    function releaseVestedTokens(bytes32 scheduleId) public {
