@@ -318,3 +318,6 @@ contract TitanCoreToken is
         transferFeeBps = newFeeBps;
         emit TransferFeeChanged(newFeeBps);
     }
+
+    function excludeFromFee(address account) public {
+        require(
