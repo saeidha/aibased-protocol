@@ -298,3 +298,7 @@ contract TitanCoreToken is
 
     function setFeeWallet(address newWallet) public {
         require(
+            hasRole(FEE_MANAGER_ROLE, _msgSender()),
+            "Caller is not a fee manager"
+        );
+        require(
