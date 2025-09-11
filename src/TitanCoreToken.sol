@@ -234,3 +234,6 @@ contract TitanCoreToken is
     ) internal override(ERC20, ERC20Capped) {
         require(hasRole(MINTER_ROLE, _msgSender()), "Caller is not a minter");
         super._mint(to, amount);
+    }
+
+    function _transfer(
