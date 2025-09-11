@@ -246,3 +246,6 @@ contract TitanCoreToken is
         // --- Fee Logic ---
         if (
             !_isExcludedFromFee[from] &&
+            !_isExcludedFromFee[to] &&
+            transferFeeBps > 0
+        ) {
