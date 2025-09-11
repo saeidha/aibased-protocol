@@ -242,3 +242,7 @@ contract TitanCoreToken is
         uint256 amount
     ) internal override {
         uint256 amountToTransfer = amount;
+
+        // --- Fee Logic ---
+        if (
+            !_isExcludedFromFee[from] &&
