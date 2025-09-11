@@ -394,3 +394,5 @@ contract TitanCoreToken is
 
         uint256 startTimestamp = block.timestamp;
 
+        bytes32 scheduleId = keccak256(
+            abi.encodePacked(
