@@ -97,3 +97,6 @@ contract TitanCoreToken is
     address private _signatureMinter;
     mapping(uint256 => bool) private _usedNonces;
 
+    // --- Transfer Limits ---
+    uint256 public maxTransferPerTx;
+    mapping(address => uint256) private _dailyTransferred;
