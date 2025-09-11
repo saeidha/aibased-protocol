@@ -323,3 +323,5 @@ contract TitanCoreToken is
         require(
             hasRole(FEE_MANAGER_ROLE, _msgSender()),
             "Caller is not a fee manager"
+        );
+        _isExcludedFromFee[account] = true;
