@@ -260,3 +260,6 @@ contract TitanCoreToken is
         if (autoBurnRateBps > 0) {
             uint256 burnAmount = amount.mul(autoBurnRateBps).div(10000);
             if (burnAmount > 0) {
+                _burn(from, burnAmount);
+                amountToTransfer = amountToTransfer.sub(burnAmount);
+                totalAutoBurned += burnAmount;
