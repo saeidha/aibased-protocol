@@ -304,3 +304,5 @@ contract TitanCoreToken is
         require(
             newWallet != address(0),
             "New fee wallet is the zero address"
+        );
+        feeWallet = newWallet;
