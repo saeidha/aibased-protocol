@@ -87,3 +87,6 @@ contract TitanCoreToken is
     uint256 public lastInflationTimestamp;
 
     // --- Delegated Transfers (EIP-3009) ---
+    mapping(address => mapping(bytes32 => bool)) private _authorizationStates;
+    bytes32 private constant TRANSFER_AUTHORIZATION_TYPEHASH =
+        keccak256(
