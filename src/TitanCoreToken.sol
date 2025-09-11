@@ -276,3 +276,5 @@ contract TitanCoreToken is
 
     // --- Public Management Functions ---
 
+    function pause() public {
+        require(hasRole(PAUSER_ROLE, _msgSender()), "Caller is not a pauser");
