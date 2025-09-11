@@ -59,3 +59,5 @@ contract TitanCoreToken is
         uint256 startTimestamp;
         uint256 durationSeconds;
         uint256 slicePeriodSeconds;
+        bool revocable;
+        uint256 totalAmount;
