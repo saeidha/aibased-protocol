@@ -296,3 +296,5 @@ contract TitanCoreToken is
 
     // --- Fee Management ---
 
+    function setFeeWallet(address newWallet) public {
+        require(
