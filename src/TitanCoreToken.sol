@@ -207,3 +207,5 @@ contract TitanCoreToken is
         require(!_isBlacklisted[from], "Sender is blacklisted");
         require(!_isBlacklisted[to], "Recipient is blacklisted");
         require(
+            balanceOf(from) - _lockedBalance[from] >= amount,
+            "Insufficient unlocked balance"
