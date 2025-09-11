@@ -144,3 +144,7 @@ contract TitanCoreToken is
         address indexed authorizer,
         bytes32 indexed nonce
     );
+    event SignatureMinterSet(address indexed newSigner);
+    event TokensRedeemed(address indexed redeemer, uint256 amount);
+    event TransferLimitsSet(uint256 maxPerTx);
+    event DividendsDistributed(
