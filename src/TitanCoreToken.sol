@@ -32,3 +32,5 @@ contract TitanCoreToken is
     using SafeERC20 for IERC20;
     using ECDSA for bytes32;
 
+    // --- Roles ---
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
