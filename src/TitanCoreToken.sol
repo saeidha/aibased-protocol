@@ -467,3 +467,7 @@ contract TitanCoreToken is
 
         emit VestingScheduleRevoked(scheduleId);
     }
+
+    // --- Vesting View Functions ---
+
+    function getVestingSchedule(
