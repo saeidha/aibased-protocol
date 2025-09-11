@@ -337,3 +337,6 @@ contract TitanCoreToken is
         emit FeeExclusionSet(account, false);
     }
 
+    function isExcludedFromFee(
+        address account
+    ) public view returns (bool) {
