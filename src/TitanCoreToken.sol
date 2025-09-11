@@ -386,3 +386,6 @@ contract TitanCoreToken is
             "Insufficient balance for vesting"
         );
         require(durationSeconds > 0, "Duration must be > 0");
+        require(slicePeriodSeconds > 0, "Slice period must be > 0");
+        require(
+            cliffDurationSeconds <= durationSeconds,
