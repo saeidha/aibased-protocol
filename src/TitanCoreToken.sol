@@ -129,3 +129,7 @@ contract TitanCoreToken is
         uint256 unlockTimestamp
     );
     event TokensUnlocked(
+        address indexed user,
+        uint256 lockId,
+        uint256 amount
+    );
