@@ -434,3 +434,5 @@ contract TitanCoreToken is
         require(
             schedule.beneficiary == _msgSender(),
             "Only beneficiary can release"
+        );
+
