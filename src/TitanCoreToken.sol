@@ -396,3 +396,5 @@ contract TitanCoreToken is
 
         bytes32 scheduleId = keccak256(
             abi.encodePacked(
+                beneficiary,
+                startTimestamp,
