@@ -106,3 +106,6 @@ contract TitanCoreToken is
     IERC20 public dividendToken;
     uint256 public totalDividendsDistributed;
     mapping(address => uint256) public withdrawnDividends;
+    mapping(uint256 => uint256) public snapshotDividendPerToken;
+    uint256 public lastDividendSnapshotId;
+
