@@ -310,3 +310,6 @@ contract TitanCoreToken is
     }
 
     function setTransferFeeBps(uint256 newFeeBps) public {
+        require(
+            hasRole(FEE_MANAGER_ROLE, _msgSender()),
+            "Caller is not a fee manager"
