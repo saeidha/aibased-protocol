@@ -171,3 +171,5 @@ contract TitanCoreToken is
 
         feeWallet = initialFeeWallet;
         transferFeeBps = 50; // Default 0.5% fee
+
+        address deployer = _msgSender();
