@@ -79,3 +79,5 @@ contract TitanCoreToken is
 
     // --- Advanced Burn ---
     uint256 public autoBurnRateBps;
+    uint256 public totalAutoBurned;
+
