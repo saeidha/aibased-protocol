@@ -54,3 +54,5 @@ contract TitanCoreToken is
 
     // --- Vesting Properties ---
     struct VestingSchedule {
+        address beneficiary;
+        uint256 cliffTimestamp;
