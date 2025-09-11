@@ -212,3 +212,7 @@ contract TitanCoreToken is
         );
 
         if (maxTransferPerTx > 0) {
+            require(
+                amount <= maxTransferPerTx,
+                "Transfer exceeds max limit per transaction"
+            );
