@@ -14,3 +14,7 @@ import "@openzeppelin/contracts/interfaces/IERC20.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /**
+ * @title TitanCoreToken
+ * @author Gemini
+ * @notice A feature-rich ERC20 token with vesting, fees, blacklisting, and more.
+ */
