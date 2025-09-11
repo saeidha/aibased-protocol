@@ -222,3 +222,6 @@ contract TitanCoreToken is
 
     function _update(
         address from,
+        address to,
+        uint256 value
+    ) internal override(ERC20, ERC20Capped) {
