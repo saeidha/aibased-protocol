@@ -140,3 +140,5 @@ contract TitanCoreToken is
         address indexed authorizer,
         bytes32 indexed nonce
     );
+    event AuthorizationCanceled(
+        address indexed authorizer,
