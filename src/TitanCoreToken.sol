@@ -454,3 +454,6 @@ contract TitanCoreToken is
         );
         VestingSchedule storage schedule = _vestingSchedules[scheduleId];
         require(schedule.revocable, "Schedule is not revocable");
+        require(!schedule.revoked, "Schedule already revoked");
+
+        uint256 unreleased = schedule.totalAmount.sub(
