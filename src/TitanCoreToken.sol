@@ -354,3 +354,5 @@ contract TitanCoreToken is
         emit AccountBlacklisted(account);
     }
 
+    function unblacklistAddress(address account) public {
+        require(
