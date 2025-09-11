@@ -109,3 +109,6 @@ contract TitanCoreToken is
     mapping(uint256 => uint256) public snapshotDividendPerToken;
     uint256 public lastDividendSnapshotId;
 
+    // --- Events ---
+    event FeeWalletChanged(address indexed newWallet);
+    event TransferFeeChanged(uint256 newFeeBps);
