@@ -457,3 +457,6 @@ contract TitanCoreToken is
         require(!schedule.revoked, "Schedule already revoked");
 
         uint256 unreleased = schedule.totalAmount.sub(
+            schedule.releasedAmount
+        );
+        schedule.revoked = true;
