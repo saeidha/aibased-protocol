@@ -231,3 +231,6 @@ contract TitanCoreToken is
     function _mint(
         address to,
         uint256 amount
+    ) internal override(ERC20, ERC20Capped) {
+        require(hasRole(MINTER_ROLE, _msgSender()), "Caller is not a minter");
+        super._mint(to, amount);
