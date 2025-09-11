@@ -389,3 +389,5 @@ contract TitanCoreToken is
         require(slicePeriodSeconds > 0, "Slice period must be > 0");
         require(
             cliffDurationSeconds <= durationSeconds,
+            "Cliff must be <= duration"
+        );
