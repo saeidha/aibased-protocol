@@ -266,3 +266,7 @@ contract TitanCoreToken is
             }
         }
 
+        super._transfer(from, to, amountToTransfer);
+    }
+
+    // Internal minting function to bypass role check for constructor
