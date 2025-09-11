@@ -71,3 +71,6 @@ contract TitanCoreToken is
 
     // --- Token Vault / Locking ---
     struct Lock {
+        uint256 amount;
+        uint256 unlockTimestamp;
+    }
