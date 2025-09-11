@@ -284,3 +284,6 @@ contract TitanCoreToken is
     function unpause() public {
         require(hasRole(PAUSER_ROLE, _msgSender()), "Caller is not a pauser");
         _unpause();
+    }
+
+    function snapshot() public {
