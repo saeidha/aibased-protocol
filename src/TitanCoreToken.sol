@@ -199,3 +199,5 @@ contract TitanCoreToken is
 
     // --- Core Overrides ---
 
+    function _beforeTokenTransfer(
+        address from,
