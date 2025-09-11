@@ -36,3 +36,6 @@ contract TitanCoreToken is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant SNAPSHOT_ROLE = keccak256("SNAPSHOT_ROLE");
+    bytes32 public constant BLACKLISTER_ROLE = keccak256("BLACKLISTER_ROLE");
+    bytes32 public constant FEE_MANAGER_ROLE = keccak256("FEE_MANAGER_ROLE");
+    bytes32 public constant VESTING_MANAGER_ROLE = keccak256("VESTING_MANAGER_ROLE");
