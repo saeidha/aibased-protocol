@@ -136,3 +136,5 @@ contract TitanCoreToken is
     event AutoBurnRateSet(uint256 newRateBps);
     event InflationSet(uint256 rateBps, uint256 periodSeconds);
     event InflationExecuted(uint256 mintedAmount);
+    event AuthorizationUsed(
+        address indexed authorizer,
