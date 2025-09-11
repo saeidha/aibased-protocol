@@ -48,3 +48,6 @@ contract TitanCoreToken is
     address public feeWallet;
     uint256 public transferFeeBps; // Fee in basis points (1 bps = 0.01%)
     mapping(address => bool) private _isExcludedFromFee;
+
+    // --- Blacklist Properties ---
+    mapping(address => bool) private _isBlacklisted;
