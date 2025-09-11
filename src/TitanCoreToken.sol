@@ -439,3 +439,5 @@ contract TitanCoreToken is
         uint256 releasable = _computeReleasableAmount(scheduleId);
         require(releasable > 0, "No tokens are releasable");
 
+        schedule.releasedAmount = schedule.releasedAmount.add(releasable);
+
