@@ -21,3 +21,6 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 contract TitanCoreToken is
     Context,
     ERC20,
+    ERC20Burnable,
+    ERC20Pausable,
+    ERC20Capped,
