@@ -293,3 +293,6 @@ contract TitanCoreToken is
         );
         _snapshot();
     }
+
+    // --- Fee Management ---
+
