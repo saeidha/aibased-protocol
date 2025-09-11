@@ -68,3 +68,6 @@ contract TitanCoreToken is
     bytes32[] private _vestingScheduleIds;
     mapping(bytes32 => VestingSchedule) private _vestingSchedules;
     mapping(address => bytes32[]) private _holderVestingScheduleIds;
+
+    // --- Token Vault / Locking ---
+    struct Lock {
