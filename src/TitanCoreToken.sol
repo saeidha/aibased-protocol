@@ -168,3 +168,6 @@ contract TitanCoreToken is
             initialFeeWallet != address(0),
             "Fee wallet cannot be zero address"
         );
+
+        feeWallet = initialFeeWallet;
+        transferFeeBps = 50; // Default 0.5% fee
