@@ -239,3 +239,6 @@ contract TitanCoreToken is
     function _transfer(
         address from,
         address to,
+        uint256 amount
+    ) internal override {
+        uint256 amountToTransfer = amount;
