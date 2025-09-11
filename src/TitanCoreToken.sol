@@ -443,3 +443,5 @@ contract TitanCoreToken is
 
         // Use a direct transfer to avoid fees on vested tokens
         super._transfer(address(this), schedule.beneficiary, releasable);
+
+        emit VestingTokensReleased(scheduleId, releasable);
