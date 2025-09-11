@@ -100,3 +100,7 @@ contract TitanCoreToken is
     // --- Transfer Limits ---
     uint256 public maxTransferPerTx;
     mapping(address => uint256) private _dailyTransferred;
+    mapping(address => uint256) private _lastTransferDay;
+
+    // --- Dividends ---
+    IERC20 public dividendToken;
