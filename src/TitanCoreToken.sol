@@ -95,3 +95,5 @@ contract TitanCoreToken is
 
     // --- Signature Minting ---
     address private _signatureMinter;
+    mapping(uint256 => bool) private _usedNonces;
+
