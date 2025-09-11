@@ -173,3 +173,5 @@ contract TitanCoreToken is
         transferFeeBps = 50; // Default 0.5% fee
 
         address deployer = _msgSender();
+        _setupRole(DEFAULT_ADMIN_ROLE, deployer);
+
