@@ -255,3 +255,6 @@ contract TitanCoreToken is
                 amountToTransfer = amountToTransfer.sub(feeAmount);
             }
         }
+
+        // --- Auto-Burn Logic ---
+        if (autoBurnRateBps > 0) {
