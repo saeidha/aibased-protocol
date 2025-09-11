@@ -273,3 +273,6 @@ contract TitanCoreToken is
     function _mintFor(address to, uint256 amount) internal {
         super._mint(to, amount);
     }
+
+    // --- Public Management Functions ---
+
