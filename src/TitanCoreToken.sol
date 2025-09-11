@@ -119,3 +119,6 @@ contract TitanCoreToken is
         bytes32 indexed scheduleId,
         address indexed beneficiary,
         uint256 amount,
+        uint256 duration
+    );
+    event VestingTokensReleased(bytes32 indexed scheduleId, uint256 amount);
