@@ -409,3 +409,6 @@ contract TitanCoreToken is
             startTimestamp: startTimestamp,
             durationSeconds: durationSeconds,
             slicePeriodSeconds: slicePeriodSeconds,
+            revocable: revocable,
+            totalAmount: totalAmount,
+            releasedAmount: 0,
