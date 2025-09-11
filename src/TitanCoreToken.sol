@@ -81,3 +81,5 @@ contract TitanCoreToken is
     uint256 public autoBurnRateBps;
     uint256 public totalAutoBurned;
 
+    // --- Supply Management (Inflation) ---
+    uint256 public inflationRateBps;
