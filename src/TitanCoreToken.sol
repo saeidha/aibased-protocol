@@ -359,3 +359,6 @@ contract TitanCoreToken is
             hasRole(BLACKLISTER_ROLE, _msgSender()),
             "Caller is not a blacklister"
         );
+        _isBlacklisted[account] = false;
+        emit AccountUnblacklisted(account);
+    }
