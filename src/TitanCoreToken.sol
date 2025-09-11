@@ -157,3 +157,6 @@ contract TitanCoreToken is
     /**
      * @dev Constructor
      */
+    constructor(
+        string memory name,
+        string memory symbol,
