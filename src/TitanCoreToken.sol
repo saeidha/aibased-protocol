@@ -237,3 +237,5 @@ contract TitanCoreToken is
     }
 
     function _transfer(
+        address from,
+        address to,
