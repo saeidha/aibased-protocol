@@ -24,3 +24,6 @@ contract TitanCoreToken is
     ERC20Burnable,
     ERC20Pausable,
     ERC20Capped,
+    ERC20Permit,
+    ERC20Snapshot,
+    AccessControlEnumerable
