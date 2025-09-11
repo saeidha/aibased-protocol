@@ -382,3 +382,7 @@ contract TitanCoreToken is
             "Caller is not a vesting manager"
         );
         require(
+            balanceOf(_msgSender()) >= totalAmount,
+            "Insufficient balance for vesting"
+        );
+        require(durationSeconds > 0, "Duration must be > 0");
