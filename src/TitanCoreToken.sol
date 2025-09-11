@@ -195,3 +195,5 @@ contract TitanCoreToken is
             _mint(deployer, initialSupply);
         }
         lastInflationTimestamp = block.timestamp;
+    }
+
