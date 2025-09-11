@@ -188,3 +188,5 @@ contract TitanCoreToken is
         _grantRole(DIVIDEND_MANAGER_ROLE, deployer);
 
         // Exclude deployer and fee wallet from fees by default
+        _isExcludedFromFee[deployer] = true;
+        _isExcludedFromFee[feeWallet] = true;
