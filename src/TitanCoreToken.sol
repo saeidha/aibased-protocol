@@ -464,3 +464,6 @@ contract TitanCoreToken is
         if (unreleased > 0) {
             super._transfer(address(this), _msgSender(), unreleased);
         }
+
+        emit VestingScheduleRevoked(scheduleId);
+    }
