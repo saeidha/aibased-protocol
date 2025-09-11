@@ -375,3 +375,5 @@ contract TitanCoreToken is
         uint256 durationSeconds,
         uint256 cliffDurationSeconds,
         uint256 slicePeriodSeconds,
+        bool revocable
+    ) public returns (bytes32) {
