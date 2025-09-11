@@ -412,3 +412,7 @@ contract TitanCoreToken is
             revocable: revocable,
             totalAmount: totalAmount,
             releasedAmount: 0,
+            revoked: false
+        });
+
+        _vestingScheduleIds.push(scheduleId);
