@@ -138,3 +138,5 @@ contract TitanCoreToken is
     event InflationExecuted(uint256 mintedAmount);
     event AuthorizationUsed(
         address indexed authorizer,
+        bytes32 indexed nonce
+    );
