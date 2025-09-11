@@ -18,3 +18,6 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
  * @author Gemini
  * @notice A feature-rich ERC20 token with vesting, fees, blacklisting, and more.
  */
+contract TitanCoreToken is
+    Context,
+    ERC20,
