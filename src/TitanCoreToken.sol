@@ -227,3 +227,7 @@ contract TitanCoreToken is
     ) internal override(ERC20, ERC20Capped) {
         super._update(from, to, value);
     }
+
+    function _mint(
+        address to,
+        uint256 amount
