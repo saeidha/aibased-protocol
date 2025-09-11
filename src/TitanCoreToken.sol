@@ -116,3 +116,6 @@ contract TitanCoreToken is
     event AccountBlacklisted(address indexed account);
     event AccountUnblacklisted(address indexed account);
     event VestingScheduleCreated(
+        bytes32 indexed scheduleId,
+        address indexed beneficiary,
+        uint256 amount,
