@@ -205,3 +205,5 @@ contract TitanCoreToken is
         uint256 amount
     ) internal override(ERC20, ERC20Pausable, ERC20Snapshot) {
         require(!_isBlacklisted[from], "Sender is blacklisted");
+        require(!_isBlacklisted[to], "Recipient is blacklisted");
+        require(
