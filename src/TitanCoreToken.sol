@@ -344,3 +344,6 @@ contract TitanCoreToken is
     }
 
     // --- Blacklist Management ---
+
+    function blacklistAddress(address account) public {
+        require(
