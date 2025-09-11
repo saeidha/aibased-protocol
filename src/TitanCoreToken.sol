@@ -153,3 +153,7 @@ contract TitanCoreToken is
         uint256 totalAmount
     );
     event DividendWithdrawn(address indexed user, uint256 amount);
+
+    /**
+     * @dev Constructor
+     */
