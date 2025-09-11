@@ -347,3 +347,7 @@ contract TitanCoreToken is
 
     function blacklistAddress(address account) public {
         require(
+            hasRole(BLACKLISTER_ROLE, _msgSender()),
+            "Caller is not a blacklister"
+        );
+        _isBlacklisted[account] = true;
