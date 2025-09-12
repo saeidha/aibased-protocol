@@ -661,3 +661,7 @@ contract TitanCoreToken is
         )
             .mul(snapshotDividendPerToken[lastDividendSnapshotId])
             .div(1e18);
+        return totalOwed.sub(withdrawnDividends[holder]);
+    }
+
+    function setDividendToken(address tokenAddr) public {
