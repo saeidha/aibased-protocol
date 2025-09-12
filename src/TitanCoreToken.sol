@@ -714,3 +714,6 @@ contract TitanCoreToken is
             _mintFor(feeWallet, mintAmount); // Mint to a designated wallet
             emit InflationExecuted(mintAmount);
         }
+        lastInflationTimestamp = block.timestamp;
+    }
+
