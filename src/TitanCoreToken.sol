@@ -591,3 +591,5 @@ contract TitanCoreToken is
         address user
     ) public view returns (uint256) {
         return _lockedBalance[user];
+    }
+
