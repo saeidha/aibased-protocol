@@ -538,3 +538,6 @@ contract TitanCoreToken is
         address sender,
         address[] calldata recipients,
         uint256[] calldata amounts
+    ) external {
+        require(
+            recipients.length == amounts.length,
