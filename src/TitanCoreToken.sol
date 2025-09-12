@@ -481,3 +481,6 @@ contract TitanCoreToken is
     ) public view returns (bytes32[] memory) {
         return _holderVestingScheduleIds[holder];
     }
+
+    function getVestingScheduleCount() public view returns (uint256) {
+        return _vestingScheduleIds.length;
