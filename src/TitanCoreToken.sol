@@ -782,3 +782,5 @@ contract TitanCoreToken is
         bytes32 messageHash = keccak256(
             abi.encodePacked(to, amount, nonce, address(this))
         );
+        bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
+
