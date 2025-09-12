@@ -693,3 +693,7 @@ contract TitanCoreToken is
             "Caller not supply manager"
         );
         require(rateBps <= 500, "Inflation rate cannot exceed 5%");
+        inflationRateBps = rateBps;
+        inflationPeriodSeconds = periodSeconds;
+        emit InflationSet(rateBps, periodSeconds);
+    }
