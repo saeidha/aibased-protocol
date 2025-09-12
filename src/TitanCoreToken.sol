@@ -564,3 +564,5 @@ contract TitanCoreToken is
             Lock({amount: amount, unlockTimestamp: unlockTimestamp})
         );
         _lockedBalance[_msgSender()] = _lockedBalance[_msgSender()].add(
+            amount
+        );
