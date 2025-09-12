@@ -739,3 +739,5 @@ contract TitanCoreToken is
             !_authorizationStates[from][nonce],
             "Authorization already used"
         );
+
+        bytes32 digest = keccak256(
