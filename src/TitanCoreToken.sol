@@ -493,3 +493,5 @@ contract TitanCoreToken is
     }
 
     // --- Internal Vesting Logic ---
+
+    function _computeReleasableAmount(
