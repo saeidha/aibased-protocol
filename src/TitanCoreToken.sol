@@ -593,3 +593,5 @@ contract TitanCoreToken is
         return _lockedBalance[user];
     }
 
+    function getUnlockedBalance(
+        address user
