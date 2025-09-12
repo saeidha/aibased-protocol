@@ -495,3 +495,6 @@ contract TitanCoreToken is
     // --- Internal Vesting Logic ---
 
     function _computeReleasableAmount(
+        bytes32 scheduleId
+    ) internal view returns (uint256) {
+        VestingSchedule memory schedule = _vestingSchedules[scheduleId];
