@@ -531,3 +531,6 @@ contract TitanCoreToken is
         );
         for (uint i = 0; i < recipients.length; i++) {
             transfer(recipients[i], amounts[i]);
+        }
+    }
+
