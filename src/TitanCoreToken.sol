@@ -702,3 +702,5 @@ contract TitanCoreToken is
         require(inflationPeriodSeconds > 0, "Inflation not enabled");
         require(
             block.timestamp >= lastInflationTimestamp + inflationPeriodSeconds,
+            "Inflation period not passed"
+        );
