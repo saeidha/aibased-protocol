@@ -599,3 +599,6 @@ contract TitanCoreToken is
         return balanceOf(user).sub(_lockedBalance[user]);
     }
 
+    function getLock(
+        address user,
+        uint256 lockId
