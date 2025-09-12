@@ -557,3 +557,6 @@ contract TitanCoreToken is
         );
         require(
             balanceOf(_msgSender()) >= amount,
+            "Insufficient balance to lock"
+        );
+        _transfer(_msgSender(), address(this), amount);
