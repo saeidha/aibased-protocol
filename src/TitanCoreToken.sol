@@ -498,3 +498,6 @@ contract TitanCoreToken is
         bytes32 scheduleId
     ) internal view returns (uint256) {
         VestingSchedule memory schedule = _vestingSchedules[scheduleId];
+        if (schedule.revoked) return 0;
+
+        uint256 currentTime = block.timestamp;
