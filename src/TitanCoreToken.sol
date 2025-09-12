@@ -795,3 +795,6 @@ contract TitanCoreToken is
     }
 
     function setSignatureMinter(address newSigner) public {
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "Caller not a minter"
