@@ -828,3 +828,6 @@ contract TitanCoreToken is
         bytes32[] memory roles,
         address account
     ) internal {
+        for (uint i = 0; i < roles.length; i++) {
+            _grantRole(roles[i], account);
+        }
