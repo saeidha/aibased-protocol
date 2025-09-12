@@ -658,3 +658,6 @@ contract TitanCoreToken is
         uint256 totalOwed = balanceOfAt(
             holder,
             lastDividendSnapshotId
+        )
+            .mul(snapshotDividendPerToken[lastDividendSnapshotId])
+            .div(1e18);
