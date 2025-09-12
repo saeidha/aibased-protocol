@@ -586,3 +586,5 @@ contract TitanCoreToken is
         super._transfer(address(this), _msgSender(), amount); // Use super to bypass hooks
         emit TokensUnlocked(_msgSender(), lockId, amount);
     }
+
+    function getLockedBalance(
