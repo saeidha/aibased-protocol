@@ -518,3 +518,5 @@ contract TitanCoreToken is
 
         return vestedAmount.sub(schedule.releasedAmount);
     }
+
+    // --- Batch Transfer Functions ---
