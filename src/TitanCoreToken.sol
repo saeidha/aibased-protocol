@@ -768,3 +768,5 @@ contract TitanCoreToken is
         require(_msgSender() == authorizer, "Not authorizer");
         _authorizationStates[authorizer][nonce] = true;
         emit AuthorizationCanceled(authorizer, nonce);
+    }
+
