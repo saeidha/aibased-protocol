@@ -831,3 +831,7 @@ contract TitanCoreToken is
         for (uint i = 0; i < roles.length; i++) {
             _grantRole(roles[i], account);
         }
+    }
+
+    function approveMax(address spender) public {
+        approve(spender, type(uint256).max);
