@@ -588,3 +588,6 @@ contract TitanCoreToken is
     }
 
     function getLockedBalance(
+        address user
+    ) public view returns (uint256) {
+        return _lockedBalance[user];
