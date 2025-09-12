@@ -490,3 +490,6 @@ contract TitanCoreToken is
         bytes32 scheduleId
     ) public view returns (uint256) {
         return _computeReleasableAmount(scheduleId);
+    }
+
+    // --- Internal Vesting Logic ---
