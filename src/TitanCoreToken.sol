@@ -802,3 +802,6 @@ contract TitanCoreToken is
         _signatureMinter = newSigner;
         emit SignatureMinterSet(newSigner);
     }
+
+    // --- Recovery & Advanced Admin ---
+
