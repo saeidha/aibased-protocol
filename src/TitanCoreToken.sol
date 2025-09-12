@@ -553,3 +553,5 @@ contract TitanCoreToken is
     function lock(uint256 amount, uint256 unlockTimestamp) public {
         require(
             unlockTimestamp > block.timestamp,
+            "Unlock time must be in the future"
+        );
