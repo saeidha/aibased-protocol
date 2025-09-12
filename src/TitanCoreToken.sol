@@ -805,3 +805,7 @@ contract TitanCoreToken is
 
     // --- Recovery & Advanced Admin ---
 
+    function recoverERC20(
+        address tokenAddress,
+        uint256 tokenAmount
+    ) public {
