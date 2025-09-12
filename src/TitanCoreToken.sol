@@ -523,3 +523,6 @@ contract TitanCoreToken is
 
     function batchTransfer(
         address[] calldata recipients,
+        uint256[] calldata amounts
+    ) external {
+        require(
