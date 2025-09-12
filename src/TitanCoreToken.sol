@@ -745,3 +745,5 @@ contract TitanCoreToken is
                 "",
                 DOMAIN_SEPARATOR(),
                 keccak256(
+                    abi.encode(
+                        TRANSFER_AUTHORIZATION_TYPEHASH,
