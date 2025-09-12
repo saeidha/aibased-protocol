@@ -610,3 +610,7 @@ contract TitanCoreToken is
         return _locks[user].length;
     }
 
+    // --- Dividend Distribution ---
+
+    function distributeDividends(uint256 amount) public {
+        require(
