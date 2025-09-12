@@ -555,3 +555,5 @@ contract TitanCoreToken is
             unlockTimestamp > block.timestamp,
             "Unlock time must be in the future"
         );
+        require(
+            balanceOf(_msgSender()) >= amount,
