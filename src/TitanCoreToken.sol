@@ -645,3 +645,6 @@ contract TitanCoreToken is
             claimable
         );
         dividendToken.safeTransfer(_msgSender(), claimable);
+        emit DividendWithdrawn(_msgSender(), claimable);
+    }
+
