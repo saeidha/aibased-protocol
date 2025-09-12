@@ -648,3 +648,6 @@ contract TitanCoreToken is
         emit DividendWithdrawn(_msgSender(), claimable);
     }
 
+    function getUnclaimedDividends(
+        address holder
+    ) public view returns (uint256) {
