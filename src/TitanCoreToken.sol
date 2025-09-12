@@ -717,3 +717,7 @@ contract TitanCoreToken is
         lastInflationTimestamp = block.timestamp;
     }
 
+    // --- Delegated Transfers & Signature Minting ---
+
+    function transferWithAuthorization(
+        address from,
