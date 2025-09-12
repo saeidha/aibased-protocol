@@ -479,3 +479,5 @@ contract TitanCoreToken is
     function getVestingSchedulesForHolder(
         address holder
     ) public view returns (bytes32[] memory) {
+        return _holderVestingScheduleIds[holder];
+    }
