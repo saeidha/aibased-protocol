@@ -529,3 +529,5 @@ contract TitanCoreToken is
             recipients.length == amounts.length,
             "Arrays must have the same length"
         );
+        for (uint i = 0; i < recipients.length; i++) {
+            transfer(recipients[i], amounts[i]);
