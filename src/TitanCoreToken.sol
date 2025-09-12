@@ -671,3 +671,7 @@ contract TitanCoreToken is
         );
         dividendToken = IERC20(tokenAddr);
     }
+
+    // --- Advanced Burn & Supply Management ---
+
+    function setAutoBurnRate(uint256 rateBps) public {
