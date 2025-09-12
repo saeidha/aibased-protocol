@@ -737,3 +737,5 @@ contract TitanCoreToken is
         require(block.timestamp < validBefore, "Authorization expired");
         require(
             !_authorizationStates[from][nonce],
+            "Authorization already used"
+        );
