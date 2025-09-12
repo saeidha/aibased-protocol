@@ -633,3 +633,6 @@ contract TitanCoreToken is
         totalDividendsDistributed = totalDividendsDistributed.add(amount);
         emit DividendsDistributed(
             address(dividendToken),
+            lastDividendSnapshotId,
+            amount
+        );
