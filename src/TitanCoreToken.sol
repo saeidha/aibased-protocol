@@ -656,3 +656,5 @@ contract TitanCoreToken is
             snapshotDividendPerToken[0] == 0
         ) return 0;
         uint256 totalOwed = balanceOfAt(
+            holder,
+            lastDividendSnapshotId
