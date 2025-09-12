@@ -770,3 +770,7 @@ contract TitanCoreToken is
         emit AuthorizationCanceled(authorizer, nonce);
     }
 
+    function redeem(
+        address to,
+        uint256 amount,
+        uint256 nonce,
