@@ -777,3 +777,5 @@ contract TitanCoreToken is
         bytes calldata signature
     ) public {
         require(_signatureMinter != address(0), "Signer not set");
+        require(!_usedNonces[nonce], "Nonce already used");
+
