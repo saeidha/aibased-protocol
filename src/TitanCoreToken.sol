@@ -784,3 +784,5 @@ contract TitanCoreToken is
         );
         bytes32 ethSignedMessageHash = messageHash.toEthSignedMessageHash();
 
+        require(
+            ethSignedMessageHash.recover(signature) == _signatureMinter,
