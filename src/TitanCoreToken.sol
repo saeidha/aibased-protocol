@@ -595,3 +595,7 @@ contract TitanCoreToken is
 
     function getUnlockedBalance(
         address user
+    ) public view returns (uint256) {
+        return balanceOf(user).sub(_lockedBalance[user]);
+    }
+
