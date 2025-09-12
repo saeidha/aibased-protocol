@@ -741,3 +741,7 @@ contract TitanCoreToken is
         );
 
         bytes32 digest = keccak256(
+            abi.encodePacked(
+                "",
+                DOMAIN_SEPARATOR(),
+                keccak256(
