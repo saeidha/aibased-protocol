@@ -755,3 +755,5 @@ contract TitanCoreToken is
                         nonce
                     )
                 )
+            )
+        );
