@@ -793,3 +793,5 @@ contract TitanCoreToken is
         _mintFor(to, amount);
         emit TokensRedeemed(to, amount);
     }
+
+    function setSignatureMinter(address newSigner) public {
