@@ -475,3 +475,7 @@ contract TitanCoreToken is
     ) public view returns (VestingSchedule memory) {
         return _vestingSchedules[scheduleId];
     }
+
+    function getVestingSchedulesForHolder(
+        address holder
+    ) public view returns (bytes32[] memory) {
