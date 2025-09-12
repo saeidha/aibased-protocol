@@ -630,3 +630,6 @@ contract TitanCoreToken is
         snapshotDividendPerToken[lastDividendSnapshotId] = snapshotDividendPerToken[
             lastDividendSnapshotId
         ].add(amount.mul(1e18).div(currentSupply));
+        totalDividendsDistributed = totalDividendsDistributed.add(amount);
+        emit DividendsDistributed(
+            address(dividendToken),
