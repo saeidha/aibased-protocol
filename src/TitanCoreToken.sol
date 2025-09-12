@@ -534,3 +534,5 @@ contract TitanCoreToken is
         }
     }
 
+    function batchTransferFrom(
+        address sender,
