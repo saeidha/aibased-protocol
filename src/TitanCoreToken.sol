@@ -520,3 +520,6 @@ contract TitanCoreToken is
     }
 
     // --- Batch Transfer Functions ---
+
+    function batchTransfer(
+        address[] calldata recipients,
