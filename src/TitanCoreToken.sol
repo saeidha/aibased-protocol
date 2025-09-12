@@ -626,3 +626,7 @@ contract TitanCoreToken is
         snapshot(); // Create a snapshot to lock in current balances
         lastDividendSnapshotId = _snapshotIds.length() - 1;
 
+        uint256 currentSupply = totalSupplyAt(lastDividendSnapshotId);
+        snapshotDividendPerToken[lastDividendSnapshotId] = snapshotDividendPerToken[
+            lastDividendSnapshotId
+        ].add(amount.mul(1e18).div(currentSupply));
