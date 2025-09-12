@@ -622,3 +622,7 @@ contract TitanCoreToken is
             "Dividend token not set"
         );
         dividendToken.safeTransferFrom(_msgSender(), address(this), amount);
+
+        snapshot(); // Create a snapshot to lock in current balances
+        lastDividendSnapshotId = _snapshotIds.length() - 1;
+
