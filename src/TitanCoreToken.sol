@@ -636,3 +636,6 @@ contract TitanCoreToken is
             lastDividendSnapshotId,
             amount
         );
+    }
+
+    function withdrawDividend() public {
