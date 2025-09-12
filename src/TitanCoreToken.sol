@@ -548,3 +548,5 @@ contract TitanCoreToken is
         }
     }
 
+    // --- Token Vault / Locking ---
+
