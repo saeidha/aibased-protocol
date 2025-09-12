@@ -606,3 +606,7 @@ contract TitanCoreToken is
         return _locks[user][lockId];
     }
 
+    function getLockCount(address user) public view returns (uint256) {
+        return _locks[user].length;
+    }
+
