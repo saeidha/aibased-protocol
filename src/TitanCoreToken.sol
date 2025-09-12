@@ -582,3 +582,7 @@ contract TitanCoreToken is
 
         _lockedBalance[_msgSender()] = _lockedBalance[_msgSender()].sub(
             amount
+        );
+        super._transfer(address(this), _msgSender(), amount); // Use super to bypass hooks
+        emit TokensUnlocked(_msgSender(), lockId, amount);
+    }
