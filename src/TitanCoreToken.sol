@@ -735,3 +735,5 @@ contract TitanCoreToken is
             "Authorization not yet valid"
         );
         require(block.timestamp < validBefore, "Authorization expired");
+        require(
+            !_authorizationStates[from][nonce],
