@@ -821,3 +821,6 @@ contract TitanCoreToken is
             hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
             "Caller not an admin"
         );
+        payable(_msgSender()).transfer(address(this).balance);
+    }
+
