@@ -501,3 +501,6 @@ contract TitanCoreToken is
         if (schedule.revoked) return 0;
 
         uint256 currentTime = block.timestamp;
+        if (currentTime < schedule.cliffTimestamp) {
+            return 0;
+        }
