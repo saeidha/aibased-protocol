@@ -798,3 +798,5 @@ contract TitanCoreToken is
         require(
             hasRole(MINTER_ROLE, _msgSender()),
             "Caller not a minter"
+        );
+        _signatureMinter = newSigner;
