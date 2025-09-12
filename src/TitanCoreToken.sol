@@ -684,3 +684,6 @@ contract TitanCoreToken is
         emit AutoBurnRateSet(rateBps);
     }
 
+    function setInflation(
+        uint256 rateBps,
+        uint256 periodSeconds
