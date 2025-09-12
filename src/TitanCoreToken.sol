@@ -577,3 +577,6 @@ contract TitanCoreToken is
         );
         require(userLock.amount > 0, "Lock is empty or already unlocked");
 
+        uint256 amount = userLock.amount;
+        userLock.amount = 0; // Prevent re-entrancy
+
