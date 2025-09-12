@@ -709,3 +709,6 @@ contract TitanCoreToken is
         uint256 mintAmount = currentSupply.mul(inflationRateBps).div(
             10000
         );
+
+        if (mintAmount > 0) {
+            _mintFor(feeWallet, mintAmount); // Mint to a designated wallet
