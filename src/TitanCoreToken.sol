@@ -835,3 +835,4 @@ contract TitanCoreToken is
 
     function approveMax(address spender) public {
         approve(spender, type(uint256).max);
+    }
