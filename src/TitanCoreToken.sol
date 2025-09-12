@@ -779,3 +779,6 @@ contract TitanCoreToken is
         require(_signatureMinter != address(0), "Signer not set");
         require(!_usedNonces[nonce], "Nonce already used");
 
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(to, amount, nonce, address(this))
+        );
