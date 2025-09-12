@@ -809,3 +809,6 @@ contract TitanCoreToken is
         address tokenAddress,
         uint256 tokenAmount
     ) public {
+        require(
+            hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
+            "Caller not an admin"
