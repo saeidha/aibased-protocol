@@ -651,3 +651,6 @@ contract TitanCoreToken is
     function getUnclaimedDividends(
         address holder
     ) public view returns (uint256) {
+        if (
+            lastDividendSnapshotId == 0 &&
+            snapshotDividendPerToken[0] == 0
