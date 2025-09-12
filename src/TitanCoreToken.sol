@@ -550,3 +550,6 @@ contract TitanCoreToken is
 
     // --- Token Vault / Locking ---
 
+    function lock(uint256 amount, uint256 unlockTimestamp) public {
+        require(
+            unlockTimestamp > block.timestamp,
