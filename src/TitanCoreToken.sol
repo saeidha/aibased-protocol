@@ -602,3 +602,5 @@ contract TitanCoreToken is
     function getLock(
         address user,
         uint256 lockId
+    ) public view returns (Lock memory) {
+        return _locks[user][lockId];
