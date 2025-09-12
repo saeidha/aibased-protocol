@@ -706,3 +706,6 @@ contract TitanCoreToken is
         );
 
         uint256 currentSupply = totalSupply();
+        uint256 mintAmount = currentSupply.mul(inflationRateBps).div(
+            10000
+        );
