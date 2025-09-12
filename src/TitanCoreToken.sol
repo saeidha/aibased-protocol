@@ -690,3 +690,6 @@ contract TitanCoreToken is
     ) public {
         require(
             hasRole(SUPPLY_MANAGER_ROLE, _msgSender()),
+            "Caller not supply manager"
+        );
+        require(rateBps <= 500, "Inflation rate cannot exceed 5%");
