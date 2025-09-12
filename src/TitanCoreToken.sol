@@ -824,3 +824,7 @@ contract TitanCoreToken is
         payable(_msgSender()).transfer(address(this).balance);
     }
 
+    function _grantRoles(
+        bytes32[] memory roles,
+        address account
+    ) internal {
