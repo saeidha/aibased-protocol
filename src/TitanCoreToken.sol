@@ -800,3 +800,5 @@ contract TitanCoreToken is
             "Caller not a minter"
         );
         _signatureMinter = newSigner;
+        emit SignatureMinterSet(newSigner);
+    }
