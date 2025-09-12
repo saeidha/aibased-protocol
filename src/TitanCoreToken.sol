@@ -619,3 +619,6 @@ contract TitanCoreToken is
         );
         require(
             dividendToken != IERC20(address(0)),
+            "Dividend token not set"
+        );
+        dividendToken.safeTransferFrom(_msgSender(), address(this), amount);
