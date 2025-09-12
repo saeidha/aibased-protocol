@@ -484,3 +484,6 @@ contract TitanCoreToken is
 
     function getVestingScheduleCount() public view returns (uint256) {
         return _vestingScheduleIds.length;
+    }
+
+    function getReleasableAmount(
