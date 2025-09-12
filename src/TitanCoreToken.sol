@@ -697,3 +697,6 @@ contract TitanCoreToken is
         inflationPeriodSeconds = periodSeconds;
         emit InflationSet(rateBps, periodSeconds);
     }
+
+    function executeInflation() public {
+        require(inflationPeriodSeconds > 0, "Inflation not enabled");
