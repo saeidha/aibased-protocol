@@ -675,3 +675,6 @@ contract TitanCoreToken is
     // --- Advanced Burn & Supply Management ---
 
     function setAutoBurnRate(uint256 rateBps) public {
+        require(
+            hasRole(SUPPLY_MANAGER_ROLE, _msgSender()),
+            "Caller not supply manager"
