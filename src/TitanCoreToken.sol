@@ -790,3 +790,6 @@ contract TitanCoreToken is
         );
         _usedNonces[nonce] = true;
 
+        _mintFor(to, amount);
+        emit TokensRedeemed(to, amount);
+    }
