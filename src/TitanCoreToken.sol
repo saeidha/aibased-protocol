@@ -575,3 +575,5 @@ contract TitanCoreToken is
             userLock.unlockTimestamp <= block.timestamp,
             "Tokens are still locked"
         );
+        require(userLock.amount > 0, "Lock is empty or already unlocked");
+
