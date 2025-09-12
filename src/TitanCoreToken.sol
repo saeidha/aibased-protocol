@@ -506,3 +506,7 @@ contract TitanCoreToken is
         }
 
         uint256 timeElapsed = currentTime.sub(schedule.startTimestamp);
+        if (timeElapsed >= schedule.durationSeconds) {
+            return schedule.totalAmount.sub(schedule.releasedAmount);
+        }
+
