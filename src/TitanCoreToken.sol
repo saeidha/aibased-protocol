@@ -687,3 +687,6 @@ contract TitanCoreToken is
     function setInflation(
         uint256 rateBps,
         uint256 periodSeconds
+    ) public {
+        require(
+            hasRole(SUPPLY_MANAGER_ROLE, _msgSender()),
