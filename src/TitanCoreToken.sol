@@ -724,3 +724,5 @@ contract TitanCoreToken is
         address to,
         uint256 value,
         uint256 validAfter,
+        uint256 validBefore,
+        bytes32 nonce,
