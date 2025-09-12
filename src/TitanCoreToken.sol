@@ -504,3 +504,5 @@ contract TitanCoreToken is
         if (currentTime < schedule.cliffTimestamp) {
             return 0;
         }
+
+        uint256 timeElapsed = currentTime.sub(schedule.startTimestamp);
