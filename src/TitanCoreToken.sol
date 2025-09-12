@@ -788,3 +788,5 @@ contract TitanCoreToken is
             ethSignedMessageHash.recover(signature) == _signatureMinter,
             "Invalid signature"
         );
+        _usedNonces[nonce] = true;
+
