@@ -510,3 +510,7 @@ contract TitanCoreToken is
             return schedule.totalAmount.sub(schedule.releasedAmount);
         }
 
+        uint256 periods = timeElapsed.div(schedule.slicePeriodSeconds);
+        uint256 vestedAmount = schedule
+            .totalAmount
+            .mul(periods.mul(schedule.slicePeriodSeconds))
