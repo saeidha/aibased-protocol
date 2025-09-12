@@ -487,3 +487,6 @@ contract TitanCoreToken is
     }
 
     function getReleasableAmount(
+        bytes32 scheduleId
+    ) public view returns (uint256) {
+        return _computeReleasableAmount(scheduleId);
