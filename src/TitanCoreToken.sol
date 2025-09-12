@@ -526,3 +526,6 @@ contract TitanCoreToken is
         uint256[] calldata amounts
     ) external {
         require(
+            recipients.length == amounts.length,
+            "Arrays must have the same length"
+        );
