@@ -614,3 +614,6 @@ contract TitanCoreToken is
 
     function distributeDividends(uint256 amount) public {
         require(
+            hasRole(DIVIDEND_MANAGER_ROLE, _msgSender()),
+            "Caller is not dividend manager"
+        );
