@@ -731,3 +731,7 @@ contract TitanCoreToken is
         bytes32 s
     ) public {
         require(
+            block.timestamp > validAfter,
+            "Authorization not yet valid"
+        );
+        require(block.timestamp < validBefore, "Authorization expired");
