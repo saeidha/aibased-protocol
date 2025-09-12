@@ -712,3 +712,5 @@ contract TitanCoreToken is
 
         if (mintAmount > 0) {
             _mintFor(feeWallet, mintAmount); // Mint to a designated wallet
+            emit InflationExecuted(mintAmount);
+        }
