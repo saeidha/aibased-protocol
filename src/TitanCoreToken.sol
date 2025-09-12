@@ -572,3 +572,6 @@ contract TitanCoreToken is
     function unlock(uint256 lockId) public {
         Lock storage userLock = _locks[_msgSender()][lockId];
         require(
+            userLock.unlockTimestamp <= block.timestamp,
+            "Tokens are still locked"
+        );
