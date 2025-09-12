@@ -721,3 +721,6 @@ contract TitanCoreToken is
 
     function transferWithAuthorization(
         address from,
+        address to,
+        uint256 value,
+        uint256 validAfter,
