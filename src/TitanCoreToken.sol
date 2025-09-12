@@ -757,3 +757,7 @@ contract TitanCoreToken is
                 )
             )
         );
+        require(from == ecrecover(digest, v, r, s), "Invalid signature");
+
+        _authorizationStates[from][nonce] = true;
+        emit AuthorizationUsed(from, nonce);
