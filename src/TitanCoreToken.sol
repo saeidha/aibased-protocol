@@ -682,3 +682,5 @@ contract TitanCoreToken is
         require(rateBps <= 100, "Burn rate cannot exceed 1%");
         autoBurnRateBps = rateBps;
         emit AutoBurnRateSet(rateBps);
+    }
+
