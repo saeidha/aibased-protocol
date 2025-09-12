@@ -704,3 +704,5 @@ contract TitanCoreToken is
             block.timestamp >= lastInflationTimestamp + inflationPeriodSeconds,
             "Inflation period not passed"
         );
+
+        uint256 currentSupply = totalSupply();
