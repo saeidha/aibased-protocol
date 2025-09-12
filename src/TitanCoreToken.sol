@@ -560,3 +560,7 @@ contract TitanCoreToken is
             "Insufficient balance to lock"
         );
         _transfer(_msgSender(), address(this), amount);
+        _locks[_msgSender()].push(
+            Lock({amount: amount, unlockTimestamp: unlockTimestamp})
+        );
+        _lockedBalance[_msgSender()] = _lockedBalance[_msgSender()].add(
