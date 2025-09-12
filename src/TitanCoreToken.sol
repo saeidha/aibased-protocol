@@ -764,3 +764,7 @@ contract TitanCoreToken is
         _transfer(from, to, value);
     }
 
+    function cancelAuthorization(address authorizer, bytes32 nonce) public {
+        require(_msgSender() == authorizer, "Not authorizer");
+        _authorizationStates[authorizer][nonce] = true;
+        emit AuthorizationCanceled(authorizer, nonce);
