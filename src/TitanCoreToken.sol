@@ -536,3 +536,5 @@ contract TitanCoreToken is
 
     function batchTransferFrom(
         address sender,
+        address[] calldata recipients,
+        uint256[] calldata amounts
