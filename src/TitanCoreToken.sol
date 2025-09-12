@@ -700,3 +700,5 @@ contract TitanCoreToken is
 
     function executeInflation() public {
         require(inflationPeriodSeconds > 0, "Inflation not enabled");
+        require(
+            block.timestamp >= lastInflationTimestamp + inflationPeriodSeconds,
