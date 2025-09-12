@@ -617,3 +617,5 @@ contract TitanCoreToken is
             hasRole(DIVIDEND_MANAGER_ROLE, _msgSender()),
             "Caller is not dividend manager"
         );
+        require(
+            dividendToken != IERC20(address(0)),
