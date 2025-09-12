@@ -812,3 +812,6 @@ contract TitanCoreToken is
         require(
             hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
             "Caller not an admin"
+        );
+        IERC20(tokenAddress).safeTransfer(_msgSender(), tokenAmount);
+    }
