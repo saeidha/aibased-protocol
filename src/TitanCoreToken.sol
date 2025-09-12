@@ -786,3 +786,5 @@ contract TitanCoreToken is
 
         require(
             ethSignedMessageHash.recover(signature) == _signatureMinter,
+            "Invalid signature"
+        );
