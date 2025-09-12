@@ -569,3 +569,6 @@ contract TitanCoreToken is
         emit TokensLocked(_msgSender(), amount, unlockTimestamp);
     }
 
+    function unlock(uint256 lockId) public {
+        Lock storage userLock = _locks[_msgSender()][lockId];
+        require(
