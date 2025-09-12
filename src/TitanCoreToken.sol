@@ -580,3 +580,5 @@ contract TitanCoreToken is
         uint256 amount = userLock.amount;
         userLock.amount = 0; // Prevent re-entrancy
 
+        _lockedBalance[_msgSender()] = _lockedBalance[_msgSender()].sub(
+            amount
