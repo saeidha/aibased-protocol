@@ -747,3 +747,6 @@ contract TitanCoreToken is
                 keccak256(
                     abi.encode(
                         TRANSFER_AUTHORIZATION_TYPEHASH,
+                        from,
+                        to,
+                        value,
