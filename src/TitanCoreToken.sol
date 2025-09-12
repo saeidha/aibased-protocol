@@ -774,3 +774,6 @@ contract TitanCoreToken is
         address to,
         uint256 amount,
         uint256 nonce,
+        bytes calldata signature
+    ) public {
+        require(_signatureMinter != address(0), "Signer not set");
