@@ -642,3 +642,6 @@ contract TitanCoreToken is
         uint256 claimable = getUnclaimedDividends(_msgSender());
         require(claimable > 0, "No dividends to claim");
         withdrawnDividends[_msgSender()] = withdrawnDividends[_msgSender()].add(
+            claimable
+        );
+        dividendToken.safeTransfer(_msgSender(), claimable);
