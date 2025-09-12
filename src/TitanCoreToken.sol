@@ -752,3 +752,6 @@ contract TitanCoreToken is
                         value,
                         validAfter,
                         validBefore,
+                        nonce
+                    )
+                )
