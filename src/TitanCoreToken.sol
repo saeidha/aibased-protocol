@@ -678,3 +678,7 @@ contract TitanCoreToken is
         require(
             hasRole(SUPPLY_MANAGER_ROLE, _msgSender()),
             "Caller not supply manager"
+        );
+        require(rateBps <= 100, "Burn rate cannot exceed 1%");
+        autoBurnRateBps = rateBps;
+        emit AutoBurnRateSet(rateBps);
