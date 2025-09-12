@@ -471,3 +471,5 @@ contract TitanCoreToken is
     // --- Vesting View Functions ---
 
     function getVestingSchedule(
+        bytes32 scheduleId
+    ) public view returns (VestingSchedule memory) {
