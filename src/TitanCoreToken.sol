@@ -818,3 +818,6 @@ contract TitanCoreToken is
 
     function recoverETH() public {
         require(
+            hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
+            "Caller not an admin"
+        );
