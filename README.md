@@ -152,4 +152,10 @@ We welcome contributions of all kinds\! If you'd like to help improve the projec
 
 If you find a bug or have a feature request, please open a new **Issue**. We appreciate your help\!
 
+-----
 
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for more details.
+
+**Copyright (c) 2024 aibased.app**
