@@ -166,3 +166,28 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         emit Transfer(node, to);
     }
     
+    function setRecord(bytes32 node, address _owner, address _resolver, uint64 _ttl) external whenNotPaused authorised(node) {
+
+
+
+        _setOwner(node, _owner);
+        records[node].resolver = _resolver;
+        records[node].ttl = _ttl;
+        emit Transfer(node, _owner);
+        emit NewResolver(node, _resolver);
+        emit NewTTL(node, _ttl);
+    }
+    
+    /**
+     * @dev A convenience function to set all records for a subnode at once.
+     */
+    function setSubnodeRecord(bytes32 node, bytes32 label, address _owner, address _resolver, uint64 _ttl) external whenNotPaused authorised(node) {
+
+        bytes32 subnode = keccak256(abi.encodePacked(node, label));
+        _setOwner(subnode, _owner);
+        records[subnode].resolver = _resolver;
+        records[subnode].ttl = _ttl;
+        emit NewOwner(node, label, _owner);
+        emit NewResolver(subnode, _resolver);
+        emit NewTTL(subnode, _ttl);
+    }
