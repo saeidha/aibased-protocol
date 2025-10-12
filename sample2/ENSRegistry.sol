@@ -229,3 +229,25 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         _pause();
     }
     
+
+    /**
+     * @dev Unpauses the contract.
+     */
+    function unpause() external onlyOwner {
+        _unpause();
+    }
+    
+    /**
+     * @dev Internal function to set the owner of a node.
+     */
+    function _setOwner(bytes32 node, address _owner) internal {
+        records[node].owner = _owner;
+    }
+
+    /**
+     * @inheritdoc IERC165
+     */
+    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
+        return interfaceId == type(IERC165).interfaceId;
+    }
+}
