@@ -144,3 +144,25 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         approved[node] = to;
         emit Approval(node, records[node].owner, to, true);
     }
+    function getApproved(bytes32 node) external view returns (address) {
+        return approved[node];
+    }
+
+    /**
+     * @dev Transfers ownership of a node to another address.
+     */
+    function transferFrom(address from, address to, bytes32 node) external whenNotPaused {
+        require(from == records[node].owner, "ENSRegistry: Not owner");
+        require(
+            msg.sender == from || 
+            operators[from][msg.sender] || 
+            approved[node] == msg.sender,
+            "ENSRegistry: Not approved for transfer"
+        );
+        
+        // Clear approval after transfer
+        approved[node] = address(0);
+        _setOwner(node, to);
+        emit Transfer(node, to);
+    }
+    
