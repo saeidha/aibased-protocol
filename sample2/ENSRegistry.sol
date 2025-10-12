@@ -75,3 +75,20 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         _setOwner(node, _owner);
         emit Transfer(node, _owner);
     }
+ /**
+     * @dev Sets the owner of a subnode.
+     * @param node The parent node.
+     */
+    function setSubnodeOwner(bytes32 node, bytes32 label, address _owner) external whenNotPaused authorised(node) {
+        bytes32 subnode = keccak256(abi.encodePacked(node, label));
+        _setOwner(subnode, _owner);
+        emit NewOwner(node, label, _owner);
+    }
+    /**
+     * @dev Sets the resolver for a node.
+     * @param node The node to update.
+     */
+    function setResolver(bytes32 node, address _resolver) external whenNotPaused authorised(node) {
+        records[node].resolver = _resolver;
+        emit NewResolver(node, _resolver);
+    }
