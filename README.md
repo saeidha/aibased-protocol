@@ -21,6 +21,7 @@ This project forms the core blockchain infrastructure of our platform, including
   * **W3Pass (Web3 Pass):** A special NFT that grants holders access to premium tools and exclusive features on the platform.
   * **Gas Optimized:** Contracts are carefully written to minimize transaction costs (gas fees).
   * **Secure & Reliable:** Developed with the best security practices and patterns in mind.
+  * **AIAgent:**
 
 -----
 
