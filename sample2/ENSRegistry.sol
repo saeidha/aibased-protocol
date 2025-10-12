@@ -26,3 +26,7 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         address resolver;
         uint64 ttl;
     }
+    mapping(bytes32 => Record) private records;
+    mapping(address => mapping(address => bool)) private operators;
+    mapping(bytes32 => address) private approved;
+    mapping(address => bool) private controllers;
