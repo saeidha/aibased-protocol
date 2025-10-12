@@ -47,3 +47,14 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     constructor() {
         records[0x0].owner = msg.sender;
     }
+
+
+    /**
+     * @dev Registers a new node with an owner. Only callable by contract owner for top-level domains.
+     * @param node The hash of the name to register.
+     */
+    function register(bytes32 node, address _owner) external onlyOwner {
+
+        _setOwner(node, _owner);
+        emit Transfer(node, _owner);
+    }
