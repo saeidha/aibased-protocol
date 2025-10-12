@@ -191,3 +191,41 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         emit NewResolver(subnode, _resolver);
         emit NewTTL(subnode, _ttl);
     }
+    /**
+     * @dev Allows an owner to relinquish ownership of a node.
+     */
+    function renounceOwnership(bytes32 node) external whenNotPaused authorised(node) {
+        _setOwner(node, address(0));
+        emit Transfer(node, address(0));
+    }
+    
+    /**
+     * @dev Sets or removes a controller address. Only callable by contract owner.
+     */
+    function setController(address controller, bool enabled) external onlyOwner {
+        controllers[controller] = enabled;
+        emit ControllerChanged(controller, enabled);
+    }
+
+    /**
+     * @dev Checks if an address is a controller.
+     */
+    function isController(address controller) external view returns (bool) {
+        return controllers[controller];
+    }
+
+    /**
+     * @dev Deletes a node from the registry.
+     */
+    function burn(bytes32 node) external whenNotPaused authorised(node) {
+        delete records[node];
+        emit NodeBurnt(node);
+    }
+
+    /**
+     * @dev Pauses all state-changing functions in the contract.
+     */
+    function pause() external onlyOwner {
+        _pause();
+    }
+    
