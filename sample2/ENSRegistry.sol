@@ -107,3 +107,12 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     function ttl(bytes32 node) external view returns (uint64) {
         return records[node].ttl;
     }
+    /**
+     * @dev Checks if a node exists (i.e., has an owner).
+     * @param node The node to check.
+     * @return True if the node exists, false otherwise.
+     */
+    function exists(bytes32 node) external view returns (bool) {
+
+        return records[node].owner != address(0);
+    }
