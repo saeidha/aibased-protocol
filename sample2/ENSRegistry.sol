@@ -95,3 +95,15 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
  function resolver(bytes32 node) external view returns (address) {
         return records[node].resolver;
     }
+    /**
+     * @dev Sets the TTL for a node.
+     * @param node The node to update.
+     * @param _ttl The new TTL value.
+     */
+    function setTTL(bytes32 node, uint64 _ttl) external whenNotPaused authorised(node) {
+        records[node].ttl = _ttl;
+        emit NewTTL(node, _ttl);
+    }
+    function ttl(bytes32 node) external view returns (uint64) {
+        return records[node].ttl;
+    }
