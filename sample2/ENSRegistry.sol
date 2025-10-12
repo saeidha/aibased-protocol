@@ -12,3 +12,9 @@ abstract contract ENS {
     function owner(bytes32 node) virtual external view returns (address);
     function resolver(bytes32 node) virtual external view returns (address);
 }
+
+/**
+ * @title ENSRegistry
+ * @dev A contract for a name registration and resolution system, similar to ENS.
+ * It allows for the registration of nodes, setting resolvers, and managing ownership.
+ */
