@@ -116,3 +116,31 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
 
         return records[node].owner != address(0);
     }
+
+    /**
+     * @dev Sets or unsets the approval of a given operator.
+     * @param operator The operator to set the approval for.
+     * @param _approved True if the operator is approved, false to revoke approval.
+     */
+    function setApprovalForAll(address operator, bool _approved) external {
+        operators[msg.sender][operator] = _approved;
+        emit ApprovalForAll(msg.sender, operator, _approved);
+    }
+
+    /**
+     * @dev Tells whether an operator is approved by a given owner.
+     * @param _owner The owner to check.
+     * @param operator The operator to check.
+     * @return True if the operator is approved, false otherwise.
+     */
+    function isApprovedForAll(address _owner, address operator) external view returns (bool) {
+        return operators[_owner][operator];
+    }
+    
+    /**
+     * @dev Approves another address to transfer the ownership of a specific node.
+     */
+    function approve(address to, bytes32 node) external whenNotPaused authorised(node) {
+        approved[node] = to;
+        emit Approval(node, records[node].owner, to, true);
+    }
