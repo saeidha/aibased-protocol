@@ -30,3 +30,11 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     mapping(address => mapping(address => bool)) private operators;
     mapping(bytes32 => address) private approved;
     mapping(address => bool) private controllers;
+    event NewOwner(bytes32 indexed node, bytes32 indexed label, address owner);
+    event Transfer(bytes32 indexed node, address owner);
+    event NewResolver(bytes32 indexed node, address resolver);
+    event NewTTL(bytes32 indexed node, uint64 ttl);
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+    event Approval(bytes32 indexed node, address owner, address approved, bool isApproved);
+    event ControllerChanged(address indexed controller, bool enabled);
+    event NodeBurnt(bytes32 indexed node);
