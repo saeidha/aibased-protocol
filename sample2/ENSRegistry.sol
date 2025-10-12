@@ -18,3 +18,11 @@ abstract contract ENS {
  * @dev A contract for a name registration and resolution system, similar to ENS.
  * It allows for the registration of nodes, setting resolvers, and managing ownership.
  */
+
+contract ENSRegistry is Ownable, Pausable, IERC165 {
+    
+    struct Record {
+        address owner;
+        address resolver;
+        uint64 ttl;
+    }
