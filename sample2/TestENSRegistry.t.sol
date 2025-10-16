@@ -35,3 +35,158 @@ contract TestENSRegistry is Test {
         registry.setOwner(testNode, user2);
         assertEq(registry.owner(testNode), user2);
     }
+
+
+    
+    function test_setOwner() public {
+        vm.prank(user1);
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_fail_setOwnerNotAuthorized() public {
+        vm.prank(user2);
+        registry.setOwner(testNode, user2);
+    }
+
+    function test_setSubnodeOwner() public {
+        vm.prank(user1);
+        registry.setSubnodeOwner(testNode, testLabel, user2);
+        assertEq(registry.owner(testSubNode), user2);
+    }
+    
+    function test_setResolver() public {
+        address newResolver = address(0x4);
+        vm.prank(user1);
+        registry.setResolver(testNode, newResolver);
+        assertEq(registry.resolver(testNode), newResolver);
+    }
+    
+    function test_setTTL() public {
+        uint64 newTtl = 3600;
+        vm.prank(user1);
+        registry.setTTL(testNode, newTtl);
+        assertEq(registry.ttl(testNode), newTtl);
+    }
+    
+    function test_exists() public {
+        assertTrue(registry.exists(testNode));
+        assertFalse(registry.exists(keccak256("nonexistent")));
+    }
+    
+    function test_setApprovalForAll() public {
+        vm.prank(user1);
+        registry.setApprovalForAll(user2, true);
+        assertTrue(registry.isApprovedForAll(user1, user2));
+    }
+
+    function test_transferFrom() public {
+        vm.prank(user1);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_transferFromByOperator() public {
+        vm.prank(user1);
+        registry.setApprovalForAll(user2, true);
+        
+        vm.prank(user2);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_approveAndTransfer() public {
+        vm.prank(user1);
+        registry.approve(user2, testNode);
+        assertEq(registry.getApproved(testNode), user2);
+
+        vm.prank(user2);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.getApproved(testNode), address(0));
+    }
+
+    function test_setRecord() public {
+        vm.prank(user1);
+        registry.setRecord(testNode, user2, address(resolver), 7200);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.resolver(testNode), address(resolver));
+        assertEq(registry.ttl(testNode), 7200);
+    }
+
+    function test_setSubnodeRecord() public {
+        vm.prank(user1);
+        registry.setSubnodeRecord(testNode, testLabel, user2, address(resolver), 1800);
+        assertEq(registry.owner(testSubNode), user2);
+        assertEq(registry.resolver(testSubNode), address(resolver));
+        assertEq(registry.ttl(testSubNode), 1800);
+    }
+    
+    function test_renounceOwnership() public {
+        vm.prank(user1);
+        registry.renounceOwnership(testNode);
+        assertEq(registry.owner(testNode), address(0));
+    }
+
+    function test_controller() public {
+        vm.prank(owner);
+        registry.setController(user2, true);
+        assertTrue(registry.isController(user2));
+
+        vm.prank(user2); // As a controller
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_burn() public {
+        vm.prank(user1);
+        registry.burn(testNode);
+        assertFalse(registry.exists(testNode));
+    }
+    
+    function test_pause() public {
+        vm.prank(owner);
+        registry.pause();
+        
+        vm.prank(user1);
+        vm.expectRevert("Pausable: paused");
+        registry.setOwner(testNode, user2);
+        
+        vm.prank(owner);
+        registry.unpause();
+        
+        vm.prank(user1);
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    // --- Resolver Tests ---
+    
+    function test_resolver_setAddr() public {
+        vm.prank(user1);
+        resolver.setAddr(testNode, user1);
+        assertEq(resolver.addr(testNode), user1);
+    }
+    
+    function test_resolver_setText() public {
+        string memory key = "url";
+        string memory value = "https://my.domain";
+        vm.prank(user1);
+        resolver.setText(testNode, key, value);
+        assertEq(resolver.text(testNode, key), value);
+    }
+
+    function test_resolver_setName() public {
+        string memory name = "test.eth";
+        vm.prank(user1);
+        resolver.setName(testNode, name);
+        assertEq(resolver.name(testNode), name);
+    }
+
+    function test_resolver_supportsInterface() public {
+        assertTrue(resolver.supportsInterface(0x3b3b57de)); // ADDR
+        assertTrue(resolver.supportsInterface(0x59d1d43c)); // TEXT
+        assertTrue(resolver.supportsInterface(0x691f3431)); // NAME
+        assertTrue(resolver.supportsInterface(0x01ffc9a7)); // ERC165
+    }
+}
