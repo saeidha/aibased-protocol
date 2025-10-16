@@ -26,3 +26,7 @@ contract TestENSRegistry is Test {
         registry.setResolver(testNode, address(resolver));
         vm.stopPrank();
 }
+
+   function test_initialOwner() public {
+        assertEq(registry.owner(testNode), user1);
+    }
