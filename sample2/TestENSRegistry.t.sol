@@ -19,5 +19,10 @@ contract TestENSRegistry is Test {
     function setUp() public {
         vm.prank(owner);
         registry = new ENSRegistry();
-vm.prank(owner);
+        vm.prank(owner);
         resolver = new PublicResolver();
+        vm.startPrank(owner);
+        registry.register(testNode, user1);
+        registry.setResolver(testNode, address(resolver));
+        vm.stopPrank();
+}
