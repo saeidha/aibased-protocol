@@ -38,3 +38,15 @@ contract Loanly {
         require(_amount > 0, "Loan amount must be greater than zero");
         require(_interest > 0, "Interest rate must be greater than zero");
         require(_duration > 0, "Loan duration must be greater than zero");
+        loanCounter++;
+        loans[loanCounter] = Loan({
+            id: loanCounter,
+            borrower: payable(msg.sender),
+            lender: payable(address(0)),
+            amount: _amount,
+            interest: _interest,
+            duration: _duration,
+            startTime: 0,
+            funded: false,
+            repaid: false
+        });
