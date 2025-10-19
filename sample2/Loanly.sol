@@ -53,3 +53,9 @@ contract Loanly {
 
         emit LoanRequested(loanCounter, msg.sender, _amount, _interest);
     }
+    /**
+     * @dev Funds an existing loan request.
+     * @param _id The ID of the loan to fund.
+     */
+
+    function fundLoan(uint256 _id) public payable {
