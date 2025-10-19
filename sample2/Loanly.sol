@@ -109,3 +109,13 @@ contract Loanly {
         uint256 timeElapsed = block.timestamp - loan.startTime;
         return (loan.amount * loan.interest * timeElapsed) / (10000 * loan.duration);
     }
+
+   /**
+     * @dev Retrieves the details of a specific loan.
+     * @param _id The ID of the loan.
+     * @return All the loan's details.
+     */
+    function getLoanDetails(uint256 _id) public view returns (uint256, address, address, uint256, uint256, uint256, uint256, bool, bool) {
+        Loan storage loan = loans[_id];
+        return (loan.id, loan.borrower, loan.lender, loan.amount, loan.interest, loan.duration, loan.startTime, loan.funded, loan.repaid);
+    }
