@@ -135,3 +135,7 @@ require(msg.sender == loan.lender, "Only lender can withdraw");
         (bool success, ) = loan.lender.call{value: amountToWithdraw}("");
         require(success, "Withdrawal failed");
     }
+
+function getCurrentTime() public view returns (uint256) {
+        return block.timestamp;
+    }
