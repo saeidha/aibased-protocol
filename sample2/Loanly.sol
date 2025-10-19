@@ -86,9 +86,6 @@ contract Loanly {
      */
     function repayLoan(uint256 _id) public payable {
 
-
-
-
         Loan storage loan = loans[_id];
         require(loan.funded, "Loan is not funded");
         require(!loan.repaid, "Loan has already been repaid");
@@ -101,4 +98,14 @@ contract Loanly {
         loan.lender.transfer(totalAmount);
 
         emit LoanRepaid(_id, totalAmount);
+    }
+
+
+ function calculateInterest(uint256 _id) public view returns (uint256) {
+        Loan storage loan = loans[_id];
+        if (!loan.funded) {
+            return 0;
+        }
+        uint256 timeElapsed = block.timestamp - loan.startTime;
+        return (loan.amount * loan.interest * timeElapsed) / (10000 * loan.duration);
     }
