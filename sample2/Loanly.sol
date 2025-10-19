@@ -85,3 +85,20 @@ contract Loanly {
      * @param _id The ID of the loan to repay.
      */
     function repayLoan(uint256 _id) public payable {
+
+
+
+
+        Loan storage loan = loans[_id];
+        require(loan.funded, "Loan is not funded");
+        require(!loan.repaid, "Loan has already been repaid");
+        require(msg.sender == loan.borrower, "Only the borrower can repay the loan");
+
+        uint256 interestAmount = calculateInterest(_id);
+        uint256 totalAmount = loan.amount + interestAmount;
+        require(msg.value == totalAmount, "Incorrect repayment amount");
+        loan.repaid = true;
+        loan.lender.transfer(totalAmount);
+
+        emit LoanRepaid(_id, totalAmount);
+    }
