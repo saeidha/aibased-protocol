@@ -140,17 +140,15 @@ function getCurrentTime() public view returns (uint256) {
         return block.timestamp;
     }
 
-/**
-     * @dev A simple function to get the current timestamp of the blockchain.
-     * @return The current block timestamp.
-     */
-    
-
     /**
      * @dev A simple check to see if a loan is funded.
-     * @param _id The ID of the loan.
      * @return A boolean indicating if the loan is funded.
      */
     function isLoanFunded(uint256 _id) public view returns (bool) {
+
         return loans[_id].funded;
     }
+
+
+
+
