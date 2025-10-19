@@ -149,6 +149,12 @@ function getCurrentTime() public view returns (uint256) {
         return loans[_id].funded;
     }
 
+  /**
+     * @dev Gets the total number of loans created.
+     * @return The total loan count.
+     */
 
-
-
+    function getLoanCount() public view returns (uint256) {
+        return loanCounter;
+    }
+}
