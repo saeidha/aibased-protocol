@@ -12,3 +12,8 @@ abstract contract Resolver {
     function addr(bytes32 node) virtual external view returns (address);
     function setAddr(bytes32 node, address addr) virtual external;
 }
+/**
+ * @title PublicResolver
+ * @dev A flexible resolver contract for the ENS-like registry.
+ * It stores various types of records for a given node.
+ */
