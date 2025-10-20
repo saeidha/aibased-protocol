@@ -45,3 +45,103 @@ contract PublicResolver is ERC165 {
      * @param a The address to set.
      */
  
+
+
+
+ 
+    function setAddr(bytes32 node, address a) external authorised(node) {
+        addresses[node] = a;
+        emit AddrChanged(node, a);
+    }
+
+    /**
+     * @dev Returns the address for a node.
+     * @param node The node to query.
+     * @return The address for the node.
+     */
+    function addr(bytes32 node) external view returns (address) {
+        return addresses[node];
+    }
+    
+    /**
+     * @dev Sets a text record for a node.
+     * @param node The node to update.
+     * @param key The key of the text record.
+     * @param value The value of the text record.
+     */
+    function setText(bytes32 node, string calldata key, string calldata value) external authorised(node) {
+        texts[node][key] = value;
+        emit TextChanged(node, key, key, value);
+    }
+    
+    /**
+     * @dev Returns a text record for a node.
+     * @param node The node to query.
+     * @param key The key of the text record.
+     * @return The value of the text record.
+     */
+    function text(bytes32 node, string calldata key) external view returns (string memory) {
+        return texts[node][key];
+    }
+    
+    /**
+     * @dev Sets the canonical name for a node.
+     * @param node The node to update.
+     * @param _name The name to set.
+     */
+    function setName(bytes32 node, string calldata _name) external authorised(node) {
+        names[node] = _name;
+        emit NameChanged(node, _name);
+    }
+    
+    /**
+     * @dev Returns the canonical name for a node.
+     * @param node The node to query.
+     * @return The name for the node.
+     */
+    function name(bytes32 node) external view returns (string memory) {
+        return names[node];
+    }
+
+    /**
+     * @dev Sets or clears an authorisation for a given address to act on behalf of the owner.
+     * @param node The node to set authorisation for.
+     * @param target The address to authorise.
+     * @param isAuthorised True if the address is authorised, false otherwise.
+     */
+    function setAuthorisation(bytes32 node, address target, bool isAuthorised) external authorised(node) {
+        authorisations[node][msg.sender][target] = isAuthorised;
+        emit AuthorisationChanged(node, msg.sender, target, isAuthorised);
+    }
+    
+    /**
+     * @dev Clears all records for a node.
+     */
+    function clearRecords(bytes32 node) external authorised(node) {
+        delete addresses[node];
+        // Note: Deleting mappings of mappings is not directly possible.
+        // You would need to clear keys individually if you need to fully clear text records.
+        emit AddrChanged(node, address(0));
+    }
+    
+    /**
+     * @dev Multicall function to execute multiple calls in a single transaction.
+     * @param data Array of call data to execute.
+     */
+    function multicall(bytes[] calldata data) external {
+        for (uint i = 0; i < data.length; i++) {
+            (bool success, ) = address(this).delegatecall(data[i]);
+            require(success, "PublicResolver: multicall call failed");
+        }
+    }
+
+    /**
+     * @inheritdoc IERC165
+     */
+    function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
+        return interfaceId == ADDR_INTERFACE_ID || 
+               interfaceId == TEXT_INTERFACE_ID ||
+               interfaceId == NAME_INTERFACE_ID ||
+               super.supportsInterface(interfaceId);
+    }
+}
