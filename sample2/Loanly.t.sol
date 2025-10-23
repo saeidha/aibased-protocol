@@ -13,3 +13,12 @@ contract LoanlyTest is Test {
     uint256 public constant INTEREST_RATE = 500; // 5%
     uint256 public constant DURATION = 30 days;
 
+
+    /**
+     * @dev Sets up the testing environment before each test.
+     */
+    function setUp() public {
+        loanly = new Loanly();
+        vm.deal(borrower, 10 ether);
+        vm.deal(lender, 10 ether);
+    }
