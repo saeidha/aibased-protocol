@@ -28,3 +28,11 @@ contract LoanlyTest is Test {
     function testRequestLoan() public {
         vm.prank(borrower);
         loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        (uint256 id, address b, , uint256 amount, uint256 interest, , , bool funded, bool repaid) = loanly.getLoanDetails(1);
+        assertEq(id, 1);
+        assertEq(b, borrower);
+        assertEq(amount, LOAN_AMOUNT);
+        assertEq(interest, INTEREST_RATE);
+        assertFalse(funded);
+        assertFalse(repaid);
+    }
