@@ -1,27 +1,3 @@
-   * @dev Sets the TTL for a node.
-     * @param node The node to update.
-     * @param _ttl The new TTL value.
-     */
-    function setTTL(bytes32 node, uint64 _ttl) external whenNotPaused authorised(node) {
-        records[node].ttl = _ttl;
-        emit NewTTL(node, _ttl);
-    }
-        bytes32 subnode = keccak256(abi.encodePacked(node, label));
-        _setOwner(subnode, _owner);
-        emit NewOwner(node, label, _owner);
-    }
-    /**
-     * @dev Sets the resolver for a node.
-     * @param node The node to update.
-     */
-      /**
-     * @dev Registers a new node with an owner. Only callable by contract owner for top-level domains.
-     * @param node The hash of the name to register.
-     */
-    function register(bytes32 node, address _owner) external onlyOwner {
-
-        _setOwner(node, _owner);
-        emit Transfer(node, _owner);
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
@@ -35,6 +11,31 @@ abstract contract ENS {
     function owner(bytes32 node) virtual external view returns (address);
     function resolver(bytes32 node) virtual external view returns (address);
 }
+   * @dev Sets the TTL for a node.
+     * @param node The node to update.
+     * @param _ttl The new TTL value.
+     */
+    function setTTL(bytes32 node, uint64 _ttl) external whenNotPaused authorised(node) {
+        records[node].ttl = _ttl;
+        emit NewTTL(node, _ttl);
+    }
+
+    /**
+     * @dev Sets the resolver for a node.
+     * @param node The node to update.
+     */
+      /**
+     * @dev Registers a new node with an owner. Only callable by contract owner for top-level domains.
+     * @param node The hash of the name to register.
+     */
+    function register(bytes32 node, address _owner) external onlyOwner {
+
+        _setOwner(node, _owner);
+        emit Transfer(node, _owner);
+        bytes32 subnode = keccak256(abi.encodePacked(node, label));
+        _setOwner(subnode, _owner);
+        emit NewOwner(node, label, _owner);
+    }
 
 /**
  * @title ENSRegistry
@@ -109,3 +110,15 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     }
     /**
   
+    function ttl(bytes32 node) external view returns (uint64) {
+        return records[node].ttl;
+    }
+    /**
+     * @dev Checks if a node exists (i.e., has an owner).
+     * @param node The node to check.
+     * @return True if the node exists, false otherwise.
+     */
+    function exists(bytes32 node) external view returns (bool) {
+
+        return records[node].owner != address(0);
+    }
