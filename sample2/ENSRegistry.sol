@@ -1,4 +1,12 @@
-      bytes32 subnode = keccak256(abi.encodePacked(node, label));
+   * @dev Sets the TTL for a node.
+     * @param node The node to update.
+     * @param _ttl The new TTL value.
+     */
+    function setTTL(bytes32 node, uint64 _ttl) external whenNotPaused authorised(node) {
+        records[node].ttl = _ttl;
+        emit NewTTL(node, _ttl);
+    }
+        bytes32 subnode = keccak256(abi.encodePacked(node, label));
         _setOwner(subnode, _owner);
         emit NewOwner(node, label, _owner);
     }
