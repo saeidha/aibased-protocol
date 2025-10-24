@@ -1,3 +1,11 @@
+    /**
+     * @dev Registers a new node with an owner. Only callable by contract owner for top-level domains.
+     * @param node The hash of the name to register.
+     */
+    function register(bytes32 node, address _owner) external onlyOwner {
+
+        _setOwner(node, _owner);
+        emit Transfer(node, _owner);
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
