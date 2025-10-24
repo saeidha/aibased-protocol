@@ -151,3 +151,114 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
         approved[node] = to;
         emit Approval(node, records[node].owner, to, true);
     }
+
+
+
+
+    function getApproved(bytes32 node) external view returns (address) {
+        return approved[node];
+    }
+
+    /**
+     * @dev Transfers ownership of a node to another address.
+     */
+    function transferFrom(address from, address to, bytes32 node) external whenNotPaused {
+        require(from == records[node].owner, "ENSRegistry: Not owner");
+        require(
+            msg.sender == from || 
+            operators[from][msg.sender] || 
+            approved[node] == msg.sender,
+            "ENSRegistry: Not approved for transfer"
+        );
+        
+        // Clear approval after transfer
+        approved[node] = address(0);
+        _setOwner(node, to);
+        emit Transfer(node, to);
+    }
+    
+    function setRecord(bytes32 node, address _owner, address _resolver, uint64 _ttl) external whenNotPaused authorised(node) {
+
+
+
+        _setOwner(node, _owner);
+        records[node].resolver = _resolver;
+        records[node].ttl = _ttl;
+        emit Transfer(node, _owner);
+        emit NewResolver(node, _resolver);
+        emit NewTTL(node, _ttl);
+    }
+    
+    /**
+     * @dev A convenience function to set all records for a subnode at once.
+     */
+    function setSubnodeRecord(bytes32 node, bytes32 label, address _owner, address _resolver, uint64 _ttl) external whenNotPaused authorised(node) {
+
+        bytes32 subnode = keccak256(abi.encodePacked(node, label));
+        _setOwner(subnode, _owner);
+        records[subnode].resolver = _resolver;
+        records[subnode].ttl = _ttl;
+        emit NewOwner(node, label, _owner);
+        emit NewResolver(subnode, _resolver);
+        emit NewTTL(subnode, _ttl);
+    }
+    /**
+     * @dev Allows an owner to relinquish ownership of a node.
+     */
+    function renounceOwnership(bytes32 node) external whenNotPaused authorised(node) {
+        _setOwner(node, address(0));
+        emit Transfer(node, address(0));
+    }
+    
+    /**
+     * @dev Sets or removes a controller address. Only callable by contract owner.
+     */
+    function setController(address controller, bool enabled) external onlyOwner {
+        controllers[controller] = enabled;
+        emit ControllerChanged(controller, enabled);
+    }
+
+    /**
+     * @dev Checks if an address is a controller.
+     */
+    function isController(address controller) external view returns (bool) {
+        return controllers[controller];
+    }
+
+    /**
+     * @dev Deletes a node from the registry.
+     */
+    function burn(bytes32 node) external whenNotPaused authorised(node) {
+        delete records[node];
+        emit NodeBurnt(node);
+    }
+
+    /**
+     * @dev Pauses all state-changing functions in the contract.
+     */
+    function pause() external onlyOwner {
+        _pause();
+    }
+    
+
+    /**
+     * @dev Unpauses the contract.
+     */
+    function unpause() external onlyOwner {
+        _unpause();
+    }
+    
+    /**
+     * @dev Internal function to set the owner of a node.
+     */
+    function _setOwner(bytes32 node, address _owner) internal {
+        records[node].owner = _owner;
+    }
+
+    /**
+     * @inheritdoc IERC165
+     */
+    function supportsInterface(bytes4 interfaceId) external pure returns (bool) {
+        return interfaceId == type(IERC165).interfaceId;
+    }
+}
