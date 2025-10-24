@@ -92,3 +92,12 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
      */
     function setSubnodeOwner(bytes32 node, bytes32 label, address _owner) external whenNotPaused authorised(node) {
   
+  function setResolver(bytes32 node, address _resolver) external whenNotPaused authorised(node) {
+        records[node].resolver = _resolver;
+        emit NewResolver(node, _resolver);
+    }
+ function resolver(bytes32 node) external view returns (address) {
+        return records[node].resolver;
+    }
+    /**
+  
