@@ -1,4 +1,12 @@
+      bytes32 subnode = keccak256(abi.encodePacked(node, label));
+        _setOwner(subnode, _owner);
+        emit NewOwner(node, label, _owner);
+    }
     /**
+     * @dev Sets the resolver for a node.
+     * @param node The node to update.
+     */
+      /**
      * @dev Registers a new node with an owner. Only callable by contract owner for top-level domains.
      * @param node The hash of the name to register.
      */
