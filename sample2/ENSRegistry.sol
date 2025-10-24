@@ -38,3 +38,11 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
     event Approval(bytes32 indexed node, address owner, address approved, bool isApproved);
     event ControllerChanged(address indexed controller, bool enabled);
     event NodeBurnt(bytes32 indexed node);
+
+    modifier authorised(bytes32 node) {
+        address owner = records[node].owner;
+        require(owner == msg.sender || operators[owner][msg.sender] || controllers[msg.sender], "ENSRegistry: Not authorised");
+        _;
+    }
+    constructor() {
+ 
