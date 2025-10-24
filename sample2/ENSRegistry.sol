@@ -122,3 +122,12 @@ contract ENSRegistry is Ownable, Pausable, IERC165 {
 
         return records[node].owner != address(0);
     }
+    /**
+     * @dev Sets or unsets the approval of a given operator.
+     * @param operator The operator to set the approval for.
+     * @param _approved True if the operator is approved, false to revoke approval.
+     */
+    function setApprovalForAll(address operator, bool _approved) external {
+        operators[msg.sender][operator] = _approved;
+        emit ApprovalForAll(msg.sender, operator, _approved);
+    }
