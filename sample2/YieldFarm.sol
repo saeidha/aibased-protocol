@@ -133,3 +133,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     }
     // --- View Functions ---
 
+    /**
+     * @dev Calculates pending rewards for a user.
+     * @param _user The address of the user.
+     * @return The amount of rewardToken owed.
+     */
