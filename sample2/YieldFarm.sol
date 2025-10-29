@@ -73,3 +73,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
                 emit RewardsClaimed(msg.sender, pending);
             }
             // A user must stick to their initial lockup tier
+            require(_tier == userStake.lockupTier, "Cannot change lockup tier");
+        } else {
+            userStake.lockupTier = _tier;
+            if (_tier == LockupTier.ThirtyDays) {
+                userStake.lockupEndTime = block.timestamp + 30 days;
