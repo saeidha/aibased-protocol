@@ -63,3 +63,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     function stake(uint256 _amount, LockupTier _tier) public nonReentrant {
         require(_amount > 0, "Cannot stake 0");
         
+        StakeInfo storage userStake = stakes[msg.sender];
+
+// If user has an existing stake, claim pending rewards first
+        if (userStake.amount > 0) {
+            uint256 pending = calculateRewards(msg.sender);
