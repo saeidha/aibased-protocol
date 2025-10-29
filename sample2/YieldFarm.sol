@@ -123,3 +123,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     /**
      * @dev Claims pending rewards without unstaking.
      */
+    function claimRewards() public nonReentrant {
+        uint256 pending = calculateRewards(msg.sender);
+        require(pending > 0, "No rewards to claim");
+
+        stakes[msg.sender].since = block.timestamp;
