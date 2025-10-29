@@ -22,3 +22,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         None,       // Tier 0
         ThirtyDays, // Tier 1
         NinetyDays  // Tier 2
+    }
+
+
+    // Struct to store user's staking information
+    struct StakeInfo {
