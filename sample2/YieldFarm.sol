@@ -32,3 +32,4 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         LockupTier lockupTier;
         uint256 lockupEndTime;
     }
+0xdeF8De1110A2038Fa9fF863C3EC471847315faE8
