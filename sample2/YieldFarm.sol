@@ -78,3 +78,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
             userStake.lockupTier = _tier;
             if (_tier == LockupTier.ThirtyDays) {
                 userStake.lockupEndTime = block.timestamp + 30 days;
+            } else if (_tier == LockupTier.NinetyDays) {
+                userStake.lockupEndTime = block.timestamp + 90 days;
+            }
+        }
+
