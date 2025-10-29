@@ -53,3 +53,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         rewardToken = IERC20(_rewardTokenAddress);
     }
 
+    // --- Core Staking Functions ---
+
+/**
+     * @dev Stakes tokens. If user already has a stake, it adds to it.
+     * @param _amount The amount of stakingToken to stake.
