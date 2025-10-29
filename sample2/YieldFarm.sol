@@ -151,3 +151,13 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         // Formula: (amount * APY * time) / (basis_points * seconds_in_year)
         return (userStake.amount * rate * timeElapsed) / (10000 * 365 days);
     }
+
+
+    /**
+     * @dev Checks if a user's lockup period is currently active.
+     * @param _user The address of the user.
+     * @return True if the lockup is active, false otherwise.
+     */
+    function isLockupActive(address _user) public view returns (bool) {
+        return block.timestamp < stakes[_user].lockupEndTime;
+    }
