@@ -118,3 +118,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     /**
      * @dev Claims pending rewards without unstaking.
      */
+    }
+
+    /**
+     * @dev Claims pending rewards without unstaking.
+     */
