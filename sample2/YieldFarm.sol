@@ -12,3 +12,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 contract YieldFarm is Ownable, ReentrancyGuard {
         // --- State Variables ---
 
+    IERC20 public immutable stakingToken;
+    IERC20 public immutable rewardToken;
+
+    uint256 public totalStaked;
+
