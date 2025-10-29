@@ -68,3 +68,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
 // If user has an existing stake, claim pending rewards first
         if (userStake.amount > 0) {
             uint256 pending = calculateRewards(msg.sender);
+            if (pending > 0) {
+                rewardToken.transfer(msg.sender, pending);
+                emit RewardsClaimed(msg.sender, pending);
+            }
+            // A user must stick to their initial lockup tier
