@@ -48,3 +48,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
 
 // --- Constructor ---
 
+    constructor(address _stakingTokenAddress, address _rewardTokenAddress) Ownable(msg.sender) {
+        stakingToken = IERC20(_stakingTokenAddress);
+        rewardToken = IERC20(_rewardTokenAddress);
+    }
+
