@@ -128,3 +128,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         require(pending > 0, "No rewards to claim");
 
         stakes[msg.sender].since = block.timestamp;
+        rewardToken.transfer(msg.sender, pending);
+        emit RewardsClaimed(msg.sender, pending);
+    }
+    // --- View Functions ---
+
