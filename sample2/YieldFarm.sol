@@ -33,3 +33,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         uint256 lockupEndTime;
     }
 0xdeF8De1110A2038Fa9fF863C3EC471847315faE8
+
+    mapping(address => StakeInfo) public stakes;
+
+    // Mapping from LockupTier to its reward rate (APY in basis points, e.g., 500 = 5%)
+    mapping(LockupTier => uint256) public rewardRates;
