@@ -108,3 +108,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
 
         // Transfer rewards and staked tokens
         if (pending > 0) {
+            rewardToken.transfer(msg.sender, pending);
+            emit RewardsClaimed(msg.sender, pending);
+        }
+        stakingToken.transfer(msg.sender, _amount);
+        emit Unstaked(msg.sender, _amount);
