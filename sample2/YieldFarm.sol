@@ -103,3 +103,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
          uint256 pending = calculateRewards(msg.sender);
         
         userStake.amount -= _amount;
+        userStake.since = block.timestamp;
+        totalStaked -= _amount;
+
+        // Transfer rewards and staked tokens
+        if (pending > 0) {
