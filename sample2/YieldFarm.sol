@@ -17,3 +17,8 @@ contract YieldFarm is Ownable, ReentrancyGuard {
 
     uint256 public totalStaked;
 
+    // Enum for different lockup tiers
+    enum LockupTier {
+        None,       // Tier 0
+        ThirtyDays, // Tier 1
+        NinetyDays  // Tier 2
