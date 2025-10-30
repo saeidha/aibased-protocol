@@ -196,3 +196,13 @@ contract MultiSigWallet {
         require(
             confirmationCount >= requiredConfirmations,
             "MultiSigWallet: Not enough confirmations"
+        );
+
+        Transaction storage transaction = transactions[_txIndex];
+        transaction.executed = true;
+
+        (bool success, ) = transaction.destination.call{value: transaction.value}(transaction.data);
+        require(success, "MultiSigWallet: Transaction execution failed");
+
+        emit TransactionExecuted(_txIndex, msg.sender);
+    }
