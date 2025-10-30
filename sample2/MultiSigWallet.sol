@@ -282,3 +282,13 @@ transaction.
      */
     function getTransaction(uint256 _txIndex)
         public
+        view
+        returns (address destination, uint256 value, bytes memory data, bool executed)
+    {
+        Transaction storage transaction = transactions[_txIndex];
+        return (transaction.destination, transaction.value, transaction.data, transaction.executed);
+    }
+    
+    /**
+     * @dev Returns the number of confirmations for a given transaction.
+     * @param _txIndex The index of the transaction.
