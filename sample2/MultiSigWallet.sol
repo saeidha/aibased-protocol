@@ -41,3 +41,12 @@ contract MultiSigWallet {
     struct Transaction {
         address destination;
         uint256 value;
+        bytes data;
+        bool executed;
+    }
+
+    // Mapping from transaction index to the transaction details.
+    Transaction[] public transactions;
+
+    // Mapping from transaction index to a mapping of owner addresses to their confirmation status.
+    mapping(uint256 => mapping(address => bool)) public isConfirmed;
