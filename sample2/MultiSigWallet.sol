@@ -23,3 +23,15 @@ contract MultiSigWallet {
     );
     event TransactionConfirmed(uint256 indexed txIndex, address indexed owner);
     event ConfirmationRevoked(uint256 indexed txIndex, address indexed owner);
+    event TransactionExecuted(uint256 indexed txIndex, address indexed owner);
+    event OwnerAdded(address indexed newOwner);
+    event OwnerRemoved(address indexed oldOwner);
+    event RequiredConfirmationsChanged(uint256 newRequiredConfirmations);
+
+    //================================================================================
+    event TransactionExecuted(uint256 indexed txIndex, address indexed owner);
+    event OwnerAdded(address indexed newOwner);
+    event OwnerRemoved(address indexed oldOwner);
+    event RequiredConfirmationsChanged(uint256 newRequiredConfirmations);
+
+    //================================================================================
