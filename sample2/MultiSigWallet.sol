@@ -121,3 +121,9 @@ contract MultiSigWallet {
         emit Deposit(msg.sender, msg.value, address(this).balance);
     }
 
+    //================================================================================
+    // Public and External Functions
+    //================================================================================
+
+    /**
+     * @dev Allows an owner to submit a new transaction proposal.
