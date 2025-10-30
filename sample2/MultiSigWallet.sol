@@ -177,3 +177,12 @@ contract MultiSigWallet {
         txExists(_txIndex)
         notExecuted(_txIndex)
     {
+        require(isConfirmed[_txIndex][msg.sender], "MultiSigWallet: You have not confirmed this transaction");
+        isConfirmed[_txIndex][msg.sender] = false;
+        emit ConfirmationRevoked(_txIndex, msg.sender);
+    }
+
+    /**
+     * @dev Allows anyone to execute a transaction once it has enough confirmations.
+     * @param _txIndex The index of the transaction to execute.
+     */
