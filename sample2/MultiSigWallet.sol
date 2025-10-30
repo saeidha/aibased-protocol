@@ -272,3 +272,13 @@ transaction.
     /**
      * @dev Returns the total number of transactions submitted to the wallet.
      */
+    function getTransactionCount() public view returns (uint256) {
+        return transactions.length;
+    }
+
+    /**
+     * @dev Returns the details of a specific transaction.
+     * @param _txIndex The index of the transaction.
+     */
+    function getTransaction(uint256 _txIndex)
+        public
