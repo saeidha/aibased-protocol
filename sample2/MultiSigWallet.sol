@@ -35,3 +35,9 @@ contract MultiSigWallet {
     event RequiredConfirmationsChanged(uint256 newRequiredConfirmations);
 
     //================================================================================
+    // State Variables
+    //================================================================================
+
+    struct Transaction {
+        address destination;
+        uint256 value;
