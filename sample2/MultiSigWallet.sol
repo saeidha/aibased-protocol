@@ -69,3 +69,13 @@ contract MultiSigWallet {
         require(isOwner[msg.sender], "MultiSigWallet: Not an owner");
         _;
     }
+
+    modifier txExists(uint256 _txIndex) {
+        require(_txIndex < transactions.length, "MultiSigWallet: Transaction does not exist");
+        _;
+    }
+
+    modifier notExecuted(uint256 _txIndex) {
+        require(!transactions[_txIndex].executed, "MultiSigWallet: Transaction already executed");
+        _;
+    }
