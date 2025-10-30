@@ -256,3 +256,9 @@ transaction.
         );
         requiredConfirmations = _newRequiredConfirmations;
         emit RequiredConfirmationsChanged(_newRequiredConfirmations);
+    }
+
+    //================================================================================
+    // View and Helper Functions
+    //================================================================================
+    
