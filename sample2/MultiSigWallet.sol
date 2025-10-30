@@ -15,3 +15,11 @@ contract MultiSigWallet {
 
     event Deposit(address indexed sender, uint256 amount, uint256 balance);
     event TransactionSubmitted(
+        uint256 indexed txIndex,
+        address indexed owner,
+        address indexed destination,
+        uint256 value,
+        bytes data
+    );
+    event TransactionConfirmed(uint256 indexed txIndex, address indexed owner);
+    event ConfirmationRevoked(uint256 indexed txIndex, address indexed owner);
