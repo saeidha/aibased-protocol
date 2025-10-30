@@ -147,3 +147,13 @@ contract MultiSigWallet {
 
         emit TransactionSubmitted(txIndex, msg.sender, _destination, _value, _data);
 
+        // The submitter automatically confirms the transaction.
+        _confirmTransaction(txIndex);
+
+        return txIndex;
+    }
+
+    /**
+     * @dev Allows an owner to confirm a pending transaction.
+     * @param _txIndex The index of the transaction to confirm.
+     */
