@@ -50,3 +50,12 @@ contract MultiSigWallet {
 
     // Mapping from transaction index to a mapping of owner addresses to their confirmation status.
     mapping(uint256 => mapping(address => bool)) public isConfirmed;
+
+    // Array of owner addresses.
+    address[] public owners;
+
+    // Mapping to check if an address is an owner for efficient lookups.
+    mapping(address => bool) public isOwner;
+
+    // The required number of confirmations for a transaction to be executed.
+    uint256 public requiredConfirmations;
