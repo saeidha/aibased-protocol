@@ -216,3 +216,13 @@ contract MultiSigWallet {
         require(!isOwner[_newOwner], "MultiSigWallet: Owner already exists");
         isOwner[_newOwner] = true;
         owners.push(_newOwner);
+        emit OwnerAdded(_newOwner);
+    }
+    
+    /**
+     * @dev Removes an existing owner. This action must be approved via a multi-sig transaction.
+     * @param _oldOwner The address of the owner to remove.
+     */
+    function removeOwner(address _oldOwner) public onlyOwner {
+        require(isOwner[_oldOwner], "MultiSigWallet: Address is not an owner");
+        require(owners.length > 1, "MultiSigWallet: Cannot remove the last owner");
