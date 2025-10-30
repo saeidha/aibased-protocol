@@ -186,3 +186,13 @@ contract MultiSigWallet {
      * @dev Allows anyone to execute a transaction once it has enough confirmations.
      * @param _txIndex The index of the transaction to execute.
      */
+    function executeTransaction(uint256 _txIndex)
+        public
+        onlyOwner
+        txExists(_txIndex)
+        notExecuted(_txIndex)
+    {
+        uint256 confirmationCount = getConfirmationCount(_txIndex);
+        require(
+            confirmationCount >= requiredConfirmations,
+            "MultiSigWallet: Not enough confirmations"
