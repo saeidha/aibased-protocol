@@ -137,3 +137,13 @@ contract MultiSigWallet {
         onlyOwner
         returns (uint256 txIndex)
     {
+        txIndex = transactions.length;
+        transactions.push(Transaction({
+            destination: _destination,
+            value: _value,
+            data: _data,
+            executed: false
+        }));
+
+        emit TransactionSubmitted(txIndex, msg.sender, _destination, _value, _data);
+
