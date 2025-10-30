@@ -262,3 +262,13 @@ transaction.
     // View and Helper Functions
     //================================================================================
     
+    /**
+     * @dev Returns the list of all owners.
+     */
+    function getOwners() public view returns (address[] memory) {
+        return owners;
+    }
+
+    /**
+     * @dev Returns the total number of transactions submitted to the wallet.
+     */
