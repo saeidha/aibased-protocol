@@ -61,3 +61,11 @@ contract MultiSigWallet {
     uint256 public requiredConfirmations;
 
     //===============================================================================
+=
+    // Modifiers
+    //================================================================================
+
+    modifier onlyOwner() {
+        require(isOwner[msg.sender], "MultiSigWallet: Not an owner");
+        _;
+    }
