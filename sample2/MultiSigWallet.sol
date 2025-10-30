@@ -236,3 +236,13 @@ contract MultiSigWallet {
             }
         }
         owners.pop();
+
+        if (requiredConfirmations > owners.length) {
+            changeRequiredConfirmations(owners.length);
+        }
+
+        emit OwnerRemoved(_oldOwner);
+    }
+
+    /**
+     * @dev Changes the number of required confirmations. This action must be approved via a multi-sig 
