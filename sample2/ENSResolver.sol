@@ -90,3 +90,13 @@ contract PublicResolver is ERC165 {
      * @param node The node to update.
      * @param _name The name to set.
      */
+    function setName(bytes32 node, string calldata _name) external authorised(node) {
+        names[node] = _name;
+        emit NameChanged(node, _name);
+    }
+    
+    /**
+     * @dev Returns the canonical name for a node.
+     * @param node The node to query.
+     * @return The name for the node.
+     */
