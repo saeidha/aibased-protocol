@@ -100,3 +100,13 @@ contract PublicResolver is ERC165 {
      * @param node The node to query.
      * @return The name for the node.
      */
+    function name(bytes32 node) external view returns (string memory) {
+        return names[node];
+    }
+
+    /**
+     * @dev Sets or clears an authorisation for a given address to act on behalf of the owner.
+     * @param node The node to set authorisation for.
+     * @param target The address to authorise.
+     * @param isAuthorised True if the address is authorised, false otherwise.
+     */
