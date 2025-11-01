@@ -31,3 +31,10 @@ contract PublicResolver is ERC165 {
     event NameChanged(bytes32 indexed node, string name);
     event AuthorisationChanged(bytes32 indexed node, address indexed owner, address indexed target, bool isAuthorised);
    // Authorization mapping
+    mapping(bytes32 => mapping(address => mapping(address => bool))) public authorisations;
+  modifier authorised(bytes32 node) {
+        // This is a simplified authorization check. A real implementation would check against the ENSRegistry.
+        // For this example, we will allow anyone to set records.
+        // In a real system:
+        // ENS ens = ENS(ensAddress);
+        // require(ens.owner(node) == msg.sender);
