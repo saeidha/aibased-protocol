@@ -81,3 +81,12 @@ contract PublicResolver is ERC165 {
      * @param key The key of the text record.
      * @return The value of the text record.
      */
+    function text(bytes32 node, string calldata key) external view returns (string memory) {
+        return texts[node][key];
+    }
+    
+    /**
+     * @dev Sets the canonical name for a node.
+     * @param node The node to update.
+     * @param _name The name to set.
+     */
