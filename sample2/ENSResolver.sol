@@ -45,3 +45,11 @@ contract PublicResolver is ERC165 {
      * @param node The node to update.
      * @param a The address to set.
      */
+ 
+
+
+
+ 
+    function setAddr(bytes32 node, address a) external authorised(node) {
+        addresses[node] = a;
+        emit AddrChanged(node, a);
