@@ -61,3 +61,12 @@ contract PublicResolver is ERC165 {
      * @return The address for the node.
      */
     function addr(bytes32 node) external view returns (address) {
+        return addresses[node];
+    }
+    
+    /**
+     * @dev Sets a text record for a node.
+     * @param node The node to update.
+     * @param key The key of the text record.
+     * @param value The value of the text record.
+     */
