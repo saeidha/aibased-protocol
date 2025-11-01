@@ -24,3 +24,10 @@ contract PublicResolver is ERC165 {
     bytes4 private constant TEXT_INTERFACE_ID = 0x59d1d43c;
     bytes4 private constant NAME_INTERFACE_ID = 0x691f3431;
     mapping(bytes32 => address) private addresses;
+    mapping(bytes32 => mapping(string => string)) private texts;
+    mapping(bytes32 => string) private names;
+     event AddrChanged(bytes32 indexed node, address a);
+    event TextChanged(bytes32 indexed node, string indexed indexedKey, string key, string value);
+    event NameChanged(bytes32 indexed node, string name);
+    event AuthorisationChanged(bytes32 indexed node, address indexed owner, address indexed target, bool isAuthorised);
+   // Authorization mapping
