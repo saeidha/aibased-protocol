@@ -53,3 +53,11 @@ contract PublicResolver is ERC165 {
     function setAddr(bytes32 node, address a) external authorised(node) {
         addresses[node] = a;
         emit AddrChanged(node, a);
+    }
+
+    /**
+     * @dev Returns the address for a node.
+     * @param node The node to query.
+     * @return The address for the node.
+     */
+    function addr(bytes32 node) external view returns (address) {
