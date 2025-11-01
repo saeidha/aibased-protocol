@@ -135,3 +135,14 @@ contract PublicResolver is ERC165 {
             require(success, "PublicResolver: multicall call failed");
         }
     }
+
+    /**
+     * @inheritdoc IERC165
+     */
+    function supportsInterface(bytes4 interfaceId) public pure override returns (bool) {
+        return interfaceId == ADDR_INTERFACE_ID || 
+               interfaceId == TEXT_INTERFACE_ID ||
+               interfaceId == NAME_INTERFACE_ID ||
+               super.supportsInterface(interfaceId);
+    }
+}
