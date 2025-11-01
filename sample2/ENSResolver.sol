@@ -124,3 +124,14 @@ contract PublicResolver is ERC165 {
         // You would need to clear keys individually if you need to fully clear text records.
         emit AddrChanged(node, address(0));
     }
+    
+    /**
+     * @dev Multicall function to execute multiple calls in a single transaction.
+     * @param data Array of call data to execute.
+     */
+    function multicall(bytes[] calldata data) external {
+        for (uint i = 0; i < data.length; i++) {
+            (bool success, ) = address(this).delegatecall(data[i]);
+            require(success, "PublicResolver: multicall call failed");
+        }
+    }
