@@ -38,3 +38,10 @@ contract PublicResolver is ERC165 {
         // In a real system:
         // ENS ens = ENS(ensAddress);
         // require(ens.owner(node) == msg.sender);
+        _;
+    }
+      /**
+     * @dev Sets the address for a node.
+     * @param node The node to update.
+     * @param a The address to set.
+     */
