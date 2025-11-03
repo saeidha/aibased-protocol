@@ -87,3 +87,16 @@ contract StakeAndLoan is Ownable {
         );
         emit Unstaked(msg.sender, _amount);
     }
+
+    /**
+     * @dev Borrows loan tokens against staked collateral.
+     * @param _amount The amount of loan tokens to borrow.
+     */
+
+    function borrow(uint256 _amount) public {
+        require(_amount > 0, "Borrow amount must be positive");
+        require(stakedBalance[msg.sender] > 0, "No collateral staked");
+        require(
+            userLoan[msg.sender].principal == 0,
+            "Loan already exists, repay first"
+        );
