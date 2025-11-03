@@ -179,3 +179,63 @@ contract StakeAndLoan is Ownable {
         return (_amount * collateralPrice) / 1e18;
     }
     
+
+
+  
+
+    
+
+  
+
+
+
+
+
+    /**
+     * @dev Gets the maximum amount a user can borrow based on their staked collateral.
+     * @param _user The address of the user.
+     * @return The maximum borrowable amount.
+     */
+
+    function getAccountMaxBorrowableValue(address _user) public view returns (uint256) {
+        uint256 collateralValue = getCollateralValue(stakedBalance[_user]);
+        return (collateralValue * collateralizationRatio) / 10000;
+    }
+
+    /**
+     * @dev Retrieves a user's staked balance.
+     * @param _user The address to query.
+     * @return The amount of staked collateral.
+     */
+    function getUserStakedBalance(address _user) public view returns (uint256) {
+        return stakedBalance[_user];
+    }
+
+    /**
+     * @dev Retrieves the details of a user's loan.
+     * @param _user The address to query.
+     * @return The loan principal, interest rate, and start time.
+     */
+    function getLoanDetails(address _user) public view returns (uint256, uint256, uint256) {
+        Loan memory loan = userLoan[_user];
+        return (loan.principal, loan.interestRate, loan.startTime);
+    }
+
+    // --- Admin Functions ---
+    /**
+     * @dev Updates the collateralization ratio.
+     * @param _newRatio The new ratio in basis points.
+     */
+    function setCollateralizationRatio(uint256 _newRatio) public onlyOwner {
+        collateralizationRatio = _newRatio;
+    }
+
+    /**
+     * @dev Updates the price of the collateral asset.
+     * @param _newPrice The new price.
+     */
+    function setCollateralPrice(uint256 _newPrice) public onlyOwner {
+        collateralPrice = _newPrice;
+    }
+}
+
