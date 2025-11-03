@@ -19,3 +19,7 @@ contract StakeAndLoan is Ownable {
         uint256 interestRate; // Annual interest rate in basis points (e.g., 500 = 5%)
         uint256 startTime;
     }
+    // Mapping from user address to their loan details.
+    mapping(address => Loan) public userLoan;
+    // The percentage of collateral value that can be borrowed (e.g., 7500 = 75%).
+    uint256 public collateralizationRatio = 7500; // In basis points
