@@ -78,3 +78,28 @@ contract TestENSRegistry is Test {
         registry.setApprovalForAll(user2, true);
         assertTrue(registry.isApprovedForAll(user1, user2));
     }
+    function test_transferFrom() public {
+        vm.prank(user1);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_transferFromByOperator() public {
+        vm.prank(user1);
+        registry.setApprovalForAll(user2, true);
+        
+        vm.prank(user2);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_approveAndTransfer() public {
+        vm.prank(user1);
+        registry.approve(user2, testNode);
+        assertEq(registry.getApproved(testNode), user2);
+
+        vm.prank(user2);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.getApproved(testNode), address(0));
+    }
