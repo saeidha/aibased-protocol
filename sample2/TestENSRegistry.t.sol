@@ -103,3 +103,57 @@ contract TestENSRegistry is Test {
         assertEq(registry.owner(testNode), user2);
         assertEq(registry.getApproved(testNode), address(0));
     }
+    function test_setRecord() public {
+        vm.prank(user1);
+        registry.setRecord(testNode, user2, address(resolver), 7200);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.resolver(testNode), address(resolver));
+        assertEq(registry.ttl(testNode), 7200);
+    }
+
+    function test_setSubnodeRecord() public {
+        vm.prank(user1);
+        registry.setSubnodeRecord(testNode, testLabel, user2, address(resolver), 1800);
+        assertEq(registry.owner(testSubNode), user2);
+        assertEq(registry.resolver(testSubNode), address(resolver));
+        assertEq(registry.ttl(testSubNode), 1800);
+    }
+    
+    function test_renounceOwnership() public {
+        vm.prank(user1);
+        registry.renounceOwnership(testNode);
+        assertEq(registry.owner(testNode), address(0));
+    }
+
+    function test_controller() public {
+        vm.prank(owner);
+        registry.setController(user2, true);
+        assertTrue(registry.isController(user2));
+
+        vm.prank(user2); // As a controller
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
+    function test_burn() public {
+        vm.prank(user1);
+        registry.burn(testNode);
+        assertFalse(registry.exists(testNode));
+    }
+    
+    function test_pause() public {
+        vm.prank(owner);
+        registry.pause();
+        
+        vm.prank(user1);
+        vm.expectRevert("Pausable: paused");
+        registry.setOwner(testNode, user2);
+        
+        vm.prank(owner);
+        registry.unpause();
+        
+        vm.prank(user1);
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
