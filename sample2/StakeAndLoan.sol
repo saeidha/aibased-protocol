@@ -155,3 +155,29 @@ contract StakeAndLoan is Ownable {
         );
         emit Liquidated(_borrower, collateralToLiquidate);
     }
+
+        // --- View and Helper Functions ---
+
+        /**
+     * @dev Calculates the current value of a loan including accrued interest.
+     * @param _user The address of the user.
+     * @return The total value of the loan (principal + interest).
+     */
+        function getLoanValue(address _user) public view returns (uint256) {
+            Loan memory loan = userLoan[_user];
+        if (loan.principal == 0) {
+            return 0;
+        }
+        uint256 timeElapsed = block.timestamp - loan.startTime;
+        uint256 interest = (loan.principal * loan.interestRate * timeElapsed) / (10000 * 365 days);
+        return loan.principal + interest;
+    }
+    /**
+     * @dev Calculates the value of a user's collateral in terms of the loan token.
+     * @param _amount The amount of collateral.
+     * @return The value in loan tokens.
+     */
+    function getCollateralValue(uint256 _amount) public view returns (uint256) {
+        return (_amount * collateralPrice) / 1e18;
+    }
+    
