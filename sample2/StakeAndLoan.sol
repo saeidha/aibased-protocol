@@ -63,3 +63,28 @@ contract StakeAndLoan is Ownable {
         );
         emit Staked(msg.sender, _amount);
     }
+  /**
+     * @dev Unstakes collateral tokens from the contract.
+     * @param _amount The amount of collateral tokens to unstake.
+     */
+
+    function unstake(uint256 _amount) public {
+        require(_amount > 0, "Unstake amount must be positive");
+        require(
+            stakedBalance[msg.sender] >= _amount,
+            "Insufficient staked balance"
+        );
+        uint256 maxBorrowable = getAccountMaxBorrowableValue(msg.sender) -
+            getLoanValue(msg.sender);
+        require(
+            getCollateralValue(stakedBalance[msg.sender] - _amount) >=
+                maxBorrowable,
+            "Unstaking would make you undercollateralized"
+        );
+        stakedBalance[msg.sender] -= _amount;
+        require(
+            collateralToken.transfer(msg.sender, _amount),
+            "Token transfer failed"
+        );
+        emit Unstaked(msg.sender, _amount);
+    }
