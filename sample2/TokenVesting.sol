@@ -219,3 +219,21 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         return _calculateVestedAmount(vestingSchedules[_beneficiary], _timestamp);
     }
     
+    /**
+     * @notice Checks if a beneficiary has an existing vesting schedule.
+     * @param _beneficiary The address of the beneficiary.
+     * @return True if a schedule exists, false otherwise.
+     */
+    function hasVestingSchedule(address _beneficiary) public view returns (bool) {
+        return vestingSchedules[_beneficiary].totalAmount > 0;
+    }
+
+    /**
+     * @notice Returns the end time of the vesting schedule for a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The Unix timestamp of when the vesting schedule ends.
+     */
+    function getVestingEndTime(address _beneficiary) public view returns (uint64) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        return schedule.startTime + schedule.duration;
+    }
