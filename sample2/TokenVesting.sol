@@ -256,3 +256,11 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     function getRemainingAmount(address _beneficiary) public view returns (uint256) {
         return vestingSchedules[_beneficiary].totalAmount - vestingSchedules[_beneficiary].releasedAmount;
     }
+
+    /**
+     * @notice Gets the total amount of all tokens locked in this contract across all schedules.
+     * @return The total locked amount.
+     */
+    function getTotalLockedAmount() public view returns (uint256) {
+        return token.balanceOf(address(this));
+    }
