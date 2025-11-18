@@ -209,3 +209,13 @@ contract TokenVesting is Ownable, ReentrancyGuard {
         return vestedAmount - schedule.releasedAmount;
     }
     
+    /**
+     * @notice Calculates the vested amount at a specific timestamp.
+     * @param _beneficiary The address of the beneficiary.
+     * @param _timestamp The timestamp to calculate the vested amount at.
+     * @return The vested amount at the given timestamp.
+     */
+    function getVestedAmountAt(address _beneficiary, uint64 _timestamp) public view returns (uint256) {
+        return _calculateVestedAmount(vestingSchedules[_beneficiary], _timestamp);
+    }
+    
