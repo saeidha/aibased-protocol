@@ -264,3 +264,25 @@ contract TokenVesting is Ownable, ReentrancyGuard {
     function getTotalLockedAmount() public view returns (uint256) {
         return token.balanceOf(address(this));
     }
+
+    // --- Internal Functions ---
+
+    /**
+     * @dev Internal function to calculate the vested amount at a specific time.
+     * @param _schedule The vesting schedule.
+     * @param _timestamp The timestamp to calculate the vested amount at.
+     * @return The vested amount.
+     */
+    function _calculateVestedAmount(VestingSchedule memory _schedule, uint64 _timestamp) internal pure returns (uint256) {
+        if (_timestamp < _schedule.startTime + _schedule.cliffDuration) {
+            return 0;
+        }
+
+        if (_timestamp >= _schedule.startTime + _schedule.duration) {
+            return _schedule.totalAmount;
+        }
+
+        uint256 timeElapsed = _timestamp - _schedule.startTime;
+        return (_schedule.totalAmount * timeElapsed) / _schedule.duration;
+    }
+}
