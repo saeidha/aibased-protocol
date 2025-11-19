@@ -189,3 +189,26 @@ contract YieldFarm is Ownable, ReentrancyGuard {
     function getRewardRateForTier(LockupTier _tier) public view returns (uint256) {
         return rewardRates[_tier];
     }
+
+    // --- Admin Functions ---
+
+    /**
+     * @dev Sets the reward rate for a specific lockup tier.
+     * @param _tier The lockup tier to modify.
+     * @param _rate The new APY in basis points.
+     */
+    function setRewardRate(LockupTier _tier, uint256 _rate) public onlyOwner {
+        rewardRates[_tier] = _rate;
+        emit RewardRateSet(_tier, _rate);
+    }
+
+
+/**
+     * @dev Adds more reward tokens to the contract to be distributed.
+     * @param _amount The amount of rewardToken to add.
+     */
+    function addRewards(uint256 _amount) public onlyOwner {
+        require(_amount > 0, "Amount must be positive");
+        require(rewardToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
+    }
+}                      
