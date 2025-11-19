@@ -151,3 +151,41 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         // Formula: (amount * APY * time) / (basis_points * seconds_in_year)
         return (userStake.amount * rate * timeElapsed) / (10000 * 365 days);
     }
+
+
+    /**
+     * @dev Checks if a user's lockup period is currently active.
+     * @param _user The address of the user.
+     * @return True if the lockup is active, false otherwise.
+     */
+    function isLockupActive(address _user) public view returns (bool) {
+        return block.timestamp < stakes[_user].lockupEndTime;
+    }
+
+
+    /**
+     * @dev Returns the full staking information for a user.
+     * @param _user The address of the user.
+     * @return A StakeInfo struct.
+     */
+    function getStakeInfo(address _user) public view returns (StakeInfo memory) {
+        return stakes[_user];
+    }
+
+    /**
+     * @dev Returns the total amount of tokens staked in the contract.
+     * @return The total staked amount.
+     */
+    function getTotalStaked() public view returns (uint256) {
+        return totalStaked;
+    }
+
+
+    /**
+     * @dev Returns the reward rate for a given tier.
+     * @param _tier The lockup tier.
+     * @return The reward rate in basis points.
+     */
+    function getRewardRateForTier(LockupTier _tier) public view returns (uint256) {
+        return rewardRates[_tier];
+    }
