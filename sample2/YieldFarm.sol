@@ -115,3 +115,39 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         emit Unstaked(msg.sender, _amount);
     }
 
+    /**
+     * @dev Claims pending rewards without unstaking.
+     */
+    }
+
+    /**
+     * @dev Claims pending rewards without unstaking.
+     */
+    function claimRewards() public nonReentrant {
+        uint256 pending = calculateRewards(msg.sender);
+        require(pending > 0, "No rewards to claim");
+
+        stakes[msg.sender].since = block.timestamp;
+        rewardToken.transfer(msg.sender, pending);
+        emit RewardsClaimed(msg.sender, pending);
+    }
+    // --- View Functions ---
+
+    /**
+     * @dev Calculates pending rewards for a user.
+     * @param _user The address of the user.
+     * @return The amount of rewardToken owed.
+     */
+
+
+    function calculateRewards(address _user) public view returns (uint256) {
+        StakeInfo memory userStake = stakes[_user];
+        if (userStake.amount == 0) {
+            return 0;
+        }
+        uint256 rate = rewardRates[userStake.lockupTier];
+        uint256 timeElapsed = block.timestamp - userStake.since;
+        
+        // Formula: (amount * APY * time) / (basis_points * seconds_in_year)
+        return (userStake.amount * rate * timeElapsed) / (10000 * 365 days);
+    }
