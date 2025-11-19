@@ -84,3 +84,14 @@ contract YieldFarm is Ownable, ReentrancyGuard {
         }
 
         userStake.amount += _amount;
+        userStake.since = block.timestamp;
+        totalStaked += _amount;
+
+        require(stakingToken.transferFrom(msg.sender, address(this), _amount), "Transfer failed");
+        emit Staked(msg.sender, _amount, _tier);
+    }
+
+    /**
+     * @dev Unstakes tokens and claims any pending rewards.
+     * @param _amount The amount to unstake.
+     */
