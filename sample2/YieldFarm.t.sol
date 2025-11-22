@@ -131,3 +131,15 @@ contract YieldFarmTest is Test {
         assertEq(yieldFarm.calculateRewards(user1), 0);
         vm.stopPrank();
     }
+
+      /**
+     * @dev Tests getTotalStaked function.
+     */
+    function testGetTotalStaked() public {
+        vm.startPrank(user1);
+        stakingToken.approve(address(yieldFarm), 50 ether);
+        yieldFarm.stake(50 ether, YieldFarm.LockupTier.None);
+        vm.stopPrank();
+        
+        assertEq(yieldFarm.getTotalStaked(), 50 ether);
+    }
