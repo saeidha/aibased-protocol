@@ -52,4 +52,16 @@ contract YieldFarmTest is Test {
         assertEq(uint(info.lockupTier), uint(YieldFarm.LockupTier.None));
         vm.stopPrank();
     }
+        /**
+     * @dev Tests staking with a 30-day lockup.
+     */
+    function testStakeWithLockup() public {
+        vm.startPrank(user1);
+        stakingToken.approve(address(yieldFarm), 100 ether);
+        yieldFarm.stake(100 ether, YieldFarm.LockupTier.ThirtyDays);
+        
+        assertTrue(yieldFarm.isLockupActive(user1));
+        vm.stopPrank();
+    }
+
     
