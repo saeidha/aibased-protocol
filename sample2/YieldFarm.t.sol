@@ -19,4 +19,5 @@ contract YieldFarmTest is Test {
     MockERC20 public rewardToken;
      address public owner;
     address public user1 = address(1);
-    
+        uint256 constant APY_NONE = 500; // 5%
+    uint256 constant APY_30_DAYS = 750; // 7.5%
