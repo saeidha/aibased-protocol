@@ -21,3 +21,14 @@ contract YieldFarmTest is Test {
     address public user1 = address(1);
         uint256 constant APY_NONE = 500; // 5%
     uint256 constant APY_30_DAYS = 750; // 7.5%
+
+ /**
+     * @dev Sets up the test environment before each test.
+     */
+    function setUp() public {
+        owner = address(this);
+        stakingToken = new MockERC20("Staking Token", "STK");
+        rewardToken = new MockERC20("Reward Token", "RWD");
+        yieldFarm = new YieldFarm(address(stakingToken), address(rewardToken));
+
+        // Set up rewar
