@@ -82,9 +82,13 @@ DEPLOY LEVEL:
 
 forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL --broadcast --verify -vvvv
 
+forge script script/Main/DeployAndLinkLevelNFT.s.sol:DeployAndLinkLevelNFT --rpc-url $RPC_URL_LINEA --broadcast --verify -vvvv
+
 DEPLOY W3PASS:
 
 forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL --broadcast --verify -vvvv
+
+forge script script/Main/DeployW3Pass.s.sol:DeployW3Pass --rpc-url $RPC_URL_LINEA --broadcast --verify -vvvv
 
 TEST MINT W3PASS:
 
