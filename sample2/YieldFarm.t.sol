@@ -64,4 +64,14 @@ contract YieldFarmTest is Test {
         vm.stopPrank();
     }
 
-    
+        /**
+     * @dev Tests that unstaking is blocked during the lockup period.
+     */
+    function testFailUnstakeDuringLockup() public {
+        stakingToken.approve(address(yieldFarm), 100 ether);
+        yieldFarm.stake(100 ether, YieldFarm.LockupTier.ThirtyDays);
+        
+        vm.expectRevert("Lockup period is still active");
+        yieldFarm.unstake(50 ether);
+        vm.stopPrank();
+    }
