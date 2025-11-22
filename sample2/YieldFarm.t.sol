@@ -39,3 +39,12 @@ contract YieldFarmTest is Test {
         stakingToken.mint(user1, 1000 ether);
         rewardToken.mint(address(yieldFarm), 10000 ether);
     }
+
+ /**
+     * @dev Tests staking with no lockup.
+     */
+    function testStakeNoLockup() public {
+        vm.startPrank(user1);
+        stakingToken.approve(address(yieldFarm), 100 ether);
+        yieldFarm.stake(100 ether, YieldFarm.LockupTier.None);
+        
