@@ -160,3 +160,20 @@ contract YieldFarmTest is Test {
         vm.expectRevert(); // Default revert message for Ownable
         yieldFarm.setRewardRate(YieldFarm.LockupTier.None, 9999);
     }
+
+
+    /**
+     * @dev Tests the addRewards functionality.
+     */
+    function testAddRewards() public {
+        uint256 amountToAdd = 5000 ether;
+        rewardToken.mint(owner, amountToAdd);
+        rewardToken.approve(address(yieldFarm), amountToAdd);
+
+        uint256 initialBalance = rewardToken.balanceOf(address(yieldFarm));
+        yieldFarm.addRewards(amountToAdd);
+        uint256 finalBalance = rewardToken.balanceOf(address(yieldFarm));
+
+        assertEq(finalBalance, initialBalance + amountToAdd);
+    }
+}
