@@ -71,6 +71,7 @@ Deply FACTROY:
 
 forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL --broadcast --verify -vvvv
 
+forge script script/Main/DeployFactory.s.sol:DeployFactory --rpc-url $RPC_URL_LINEA --broadcast --verify -vvvv
 
 ReDeply FACTROY:
 
