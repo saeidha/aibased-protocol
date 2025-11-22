@@ -11,3 +11,12 @@ contract MockERC20 is ERC20 {
     constructor(string memory name, string memory symbol) ERC20(name, symbol) {}
     function mint(address to, uint256 amount) public { _mint(to, amount); }
 }
+
+
+contract YieldFarmTest is Test {
+    YieldFarm public yieldFarm;
+    MockERC20 public stakingToken;
+    MockERC20 public rewardToken;
+     address public owner;
+    address public user1 = address(1);
+    
