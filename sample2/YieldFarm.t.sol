@@ -31,4 +31,11 @@ contract YieldFarmTest is Test {
         rewardToken = new MockERC20("Reward Token", "RWD");
         yieldFarm = new YieldFarm(address(stakingToken), address(rewardToken));
 
-        // Set up rewar
+        // Set up reward rates
+        yieldFarm.setRewardRate(YieldFarm.LockupTier.None, APY_NONE);
+        yieldFarm.setRewardRate(YieldFarm.LockupTier.ThirtyDays, APY_30_DAYS);
+
+        // Fund user and the farm contract
+        stakingToken.mint(user1, 1000 ether);
+        rewardToken.mint(address(yieldFarm), 10000 ether);
+    }
