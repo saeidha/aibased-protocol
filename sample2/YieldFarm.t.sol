@@ -143,3 +143,20 @@ contract YieldFarmTest is Test {
         
         assertEq(yieldFarm.getTotalStaked(), 50 ether);
     }
+
+    /**
+     * @dev Tests owner's ability to set reward rates.
+     */
+    function testOwnerCanSetRewardRate() public {
+        yieldFarm.setRewardRate(YieldFarm.LockupTier.NinetyDays, 1000); // 10%
+        assertEq(yieldFarm.getRewardRateForTier(YieldFarm.LockupTier.NinetyDays), 1000);
+    }
+
+    /**
+     * @dev Tests that non-owners cannot set reward rates.
+     */
+    function testNonOwnerCannotSetRewardRate() public {
+        vm.prank(user1);
+        vm.expectRevert(); // Default revert message for Ownable
+        yieldFarm.setRewardRate(YieldFarm.LockupTier.None, 9999);
+    }
