@@ -77,3 +77,28 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
         emit VestingScheduleCreated(_beneficiary, _totalAmount, _startTime, _duration, _cliffDuration);
     }
+    
+    /**
+     * @notice Creates vesting schedules for multiple beneficiaries at once.
+     * @param _beneficiaries An array of beneficiary addresses.
+     * @param _amounts An array of total token amounts for each beneficiary.
+     * @param _startTimes An array of start times for each beneficiary.
+     * @param _durations An array of durations for each beneficiary.
+     * @param _cliffDurations An array of cliff durations for each beneficiary.
+     */
+    function createMultipleVestingSchedules(
+        address[] calldata _beneficiaries,
+        uint256[] calldata _amounts,
+        uint64[] calldata _startTimes,
+        uint64[] calldata _durations,
+        uint64[] calldata _cliffDurations
+    ) external onlyOwner {
+        require(_beneficiaries.length == _amounts.length, "Arrays length mismatch");
+        require(_beneficiaries.length == _startTimes.length, "Arrays length mismatch");
+        require(_beneficiaries.length == _durations.length, "Arrays length mismatch");
+        require(_beneficiaries.length == _cliffDurations.length, "Arrays length mismatch");
+
+        for (uint256 i = 0; i < _beneficiaries.length; i++) {
+            createVestingSchedule(_beneficiaries[i], _amounts[i], _startTimes[i], _durations[i], _cliffDurations[i]);
+        }
+    }
