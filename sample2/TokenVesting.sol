@@ -168,3 +168,124 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
     function getCliffDuration(address _beneficiary) public view returns (uint64) {
         return vestingSchedules[_beneficiary].cliffDuration;
     }
+
+
+    /**
+     * @notice Gets the total amount of tokens for a beneficiary's vesting schedule.
+     */
+    function getTotalAmount(address _beneficiary) public view returns (uint256) {
+        return vestingSchedules[_beneficiary].totalAmount;
+    }
+
+    /**
+     * @notice Gets the amount of tokens already released to a beneficiary.
+     */
+    function getReleasedAmount(address _beneficiary) public view returns (uint256) {
+        return vestingSchedules[_beneficiary].releasedAmount;
+    }
+
+    /**
+     * @notice Calculates the total amount of vested tokens for a beneficiary at the current time.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The total vested amount of tokens.
+     */
+    function getVestedAmount(address _beneficiary) public view returns (uint256) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        if (schedule.totalAmount == 0) {
+            return 0;
+        }
+        return _calculateVestedAmount(schedule, uint64(block.timestamp));
+    }
+
+    /**
+     * @notice Calculates the amount of tokens that can be released by a beneficiary at the current time.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The amount of releasable tokens.
+     */
+    function getReleasableAmount(address _beneficiary) public view returns (uint256) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        if (schedule.totalAmount == 0) {
+            return 0;
+        }
+
+        uint256 vestedAmount = _calculateVestedAmount(schedule, uint64(block.timestamp));
+        return vestedAmount - schedule.releasedAmount;
+    }
+    
+    /**
+     * @notice Calculates the vested amount at a specific timestamp.
+     * @param _beneficiary The address of the beneficiary.
+     * @param _timestamp The timestamp to calculate the vested amount at.
+     * @return The vested amount at the given timestamp.
+     */
+    function getVestedAmountAt(address _beneficiary, uint64 _timestamp) public view returns (uint256) {
+        return _calculateVestedAmount(vestingSchedules[_beneficiary], _timestamp);
+    }
+    
+    /**
+     * @notice Checks if a beneficiary has an existing vesting schedule.
+     * @param _beneficiary The address of the beneficiary.
+     * @return True if a schedule exists, false otherwise.
+     */
+    function hasVestingSchedule(address _beneficiary) public view returns (bool) {
+        return vestingSchedules[_beneficiary].totalAmount > 0;
+    }
+
+    /**
+     * @notice Returns the end time of the vesting schedule for a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The Unix timestamp of when the vesting schedule ends.
+     */
+    function getVestingEndTime(address _beneficiary) public view returns (uint64) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        return schedule.startTime + schedule.duration;
+    }
+
+    /**
+     * @notice Returns the end time of the cliff period for a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The Unix timestamp of when the cliff period ends.
+     */
+    function getCliffEndTime(address _beneficiary) public view returns (uint64) {
+        VestingSchedule memory schedule = vestingSchedules[_beneficiary];
+        return schedule.startTime + schedule.cliffDuration;
+    }
+    
+    /**
+     * @notice Gets the remaining amount of tokens to be vested for a beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The amount of tokens yet to be released.
+     */
+    function getRemainingAmount(address _beneficiary) public view returns (uint256) {
+        return vestingSchedules[_beneficiary].totalAmount - vestingSchedules[_beneficiary].releasedAmount;
+    }
+
+    /**
+     * @notice Gets the total amount of all tokens locked in this contract across all schedules.
+     * @return The total locked amount.
+     */
+    function getTotalLockedAmount() public view returns (uint256) {
+        return token.balanceOf(address(this));
+    }
+
+    // --- Internal Functions ---
+
+    /**
+     * @dev Internal function to calculate the vested amount at a specific time.
+     * @param _schedule The vesting schedule.
+     * @param _timestamp The timestamp to calculate the vested amount at.
+     * @return The vested amount.
+     */
+    function _calculateVestedAmount(VestingSchedule memory _schedule, uint64 _timestamp) internal pure returns (uint256) {
+        if (_timestamp < _schedule.startTime + _schedule.cliffDuration) {
+            return 0;
+        }
+
+        if (_timestamp >= _schedule.startTime + _schedule.duration) {
+            return _schedule.totalAmount;
+        }
+
+        uint256 timeElapsed = _timestamp - _schedule.startTime;
+        return (_schedule.totalAmount * timeElapsed) / _schedule.duration;
+    }
+}
