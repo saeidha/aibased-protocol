@@ -11,3 +11,15 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
  * It allows for linear vesting with an optional cliff period.
  * The owner can create vesting schedules, and beneficiaries can release their vested tokens.
  */
+ contract TokenVesting is Ownable, ReentrancyGuard {
+
+    struct VestingSchedule {
+        address beneficiary;
+        uint64 startTime;
+        uint64 duration;
+        uint64 cliffDuration;
+        uint256 totalAmount;
+        uint256 releasedAmount;
+    }
+
+    IERC20 public immutable token;
