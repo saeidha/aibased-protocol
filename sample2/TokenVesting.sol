@@ -23,3 +23,10 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
     }
 
     IERC20 public immutable token;
+    // Mapping from beneficiary address to their vesting schedule
+    mapping(address => VestingSchedule) private vestingSchedules;
+    // Array of all beneficiary addresses to enable iteration
+    address[] public beneficiaries;
+
+    event VestingScheduleCreated(address indexed beneficiary, uint256 totalAmount, uint64 startTime, uint64 duration, uint64 cliffDuration);
+    event TokensReleased(address indexed beneficiary, uint256 amount);
