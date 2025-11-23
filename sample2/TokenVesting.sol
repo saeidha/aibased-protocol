@@ -118,3 +118,53 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
         require(token.transfer(beneficiary, releasableAmount), "TokenVesting: Token transfer failed");
     }
     
+
+
+    // --- View Functions ---
+
+    /**
+     * @notice Gets the number of beneficiaries with vesting schedules.
+     * @return The total number of beneficiaries.
+     */
+    function getBeneficiaryCount() public view returns (uint256) {
+        return beneficiaries.length;
+    }
+    
+    /**
+     * @notice Gets the address of a beneficiary at a specific index.
+     * @param _index The index of the beneficiary in the beneficiaries array.
+     * @return The address of the beneficiary.
+     */
+    function getBeneficiaryAtIndex(uint256 _index) public view returns (address) {
+        return beneficiaries[_index];
+    }
+
+    /**
+     * @notice Gets the details of a vesting schedule for a specific beneficiary.
+     * @param _beneficiary The address of the beneficiary.
+     * @return The VestingSchedule struct for the given beneficiary.
+     */
+    function getVestingSchedule(address _beneficiary) public view returns (VestingSchedule memory) {
+        return vestingSchedules[_beneficiary];
+    }
+    
+    /**
+     * @notice Gets the start time of the vesting schedule for a beneficiary.
+     */
+    function getStartTime(address _beneficiary) public view returns (uint64) {
+        return vestingSchedules[_beneficiary].startTime;
+    }
+
+    /**
+     * @notice Gets the duration of the vesting schedule for a beneficiary.
+     */
+    function getDuration(address _beneficiary) public view returns (uint64) {
+        return vestingSchedules[_beneficiary].duration;
+    }
+
+    /**
+     * @notice Gets the cliff duration of the vesting schedule for a beneficiary.
+     */
+    function getCliffDuration(address _beneficiary) public view returns (uint64) {
+        return vestingSchedules[_beneficiary].cliffDuration;
+    }
