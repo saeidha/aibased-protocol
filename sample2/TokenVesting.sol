@@ -102,3 +102,19 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
             createVestingSchedule(_beneficiaries[i], _amounts[i], _startTimes[i], _durations[i], _cliffDurations[i]);
         }
     }
+    /**
+     * @notice Allows a beneficiary to release their vested tokens.
+     */
+    function release() external nonReentrant {
+        address beneficiary = msg.sender;
+        uint256 releasableAmount = getReleasableAmount(beneficiary);
+
+        require(releasableAmount > 0, "TokenVesting: No tokens available for release");
+
+        vestingSchedules[beneficiary].releasedAmount += releasableAmount;
+
+        emit TokensReleased(beneficiary, releasableAmount);
+
+        require(token.transfer(beneficiary, releasableAmount), "TokenVesting: Token transfer failed");
+    }
+    
