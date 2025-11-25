@@ -50,6 +50,24 @@ contract TestTokenVesting is Test {
         startTime = uint64(block.timestamp + 1 days); // Vesting starts tomorrow
     }
     function test_01_ContractDeployment() public {
+        
         assertEq(address(tokenVesting.token()), address(mockToken));
         assertEq(tokenVesting.owner(), owner);
     }
+
+    function test_02_CreateVestingSchedule_Success() public {
+
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+
+        TokenVesting.VestingSchedule memory schedule = tokenVesting.getVestingSchedule(beneficiary1);
+        assertEq(schedule.beneficiary, beneficiary1);
+        assertEq(schedule.totalAmount, VESTING_AMOUNT_1);
+        assertEq(schedule.startTime, startTime);
+        assertEq(schedule.duration, DURATION);
+        assertEq(schedule.cliffDuration, CLIFF);
+        assertEq(schedule.releasedAmount, 0);
+        assertEq(tokenVesting.getBeneficiaryCount(), 1);
+        assertEq(tokenVesting.getBeneficiaryAtIndex(0), beneficiary1);
+    }
+    
