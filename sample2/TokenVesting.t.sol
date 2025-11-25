@@ -14,3 +14,11 @@ contract MockToken is ERC20 {
 }
 
 contract TestTokenVesting is Test {
+
+    TokenVesting public tokenVesting;
+    MockToken public mockToken;
+
+    address public owner;
+    address public beneficiary1;
+    address public beneficiary2;
+    address public randomUser;
