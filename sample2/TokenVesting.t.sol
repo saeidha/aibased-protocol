@@ -124,3 +124,97 @@ contract TestTokenVesting is Test {
         assertEq(mockToken.balanceOf(beneficiary1), expectedVested);
         assertEq(tokenVesting.getReleasedAmount(beneficiary1), expectedVested);
     }
+
+    
+    function test_08_ReleaseTokens_AfterVestingPeriod() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        vm.warp(startTime + DURATION + 1 days);
+        
+        assertEq(tokenVesting.getReleasableAmount(beneficiary1), VESTING_AMOUNT_1);
+        
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        
+        assertEq(mockToken.balanceOf(beneficiary1), VESTING_AMOUNT_1);
+        assertEq(tokenVesting.getReleasedAmount(beneficiary1), VESTING_AMOUNT_1);
+    }
+    
+    function test_09_MultipleReleases() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+
+        // First release
+        uint64 firstReleaseTime = startTime + CLIFF + 30 days;
+        vm.warp(firstReleaseTime);
+        uint256 firstExpectedVested = (VESTING_AMOUNT_1 * (firstReleaseTime - startTime)) / DURATION;
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        assertEq(mockToken.balanceOf(beneficiary1), firstExpectedVested);
+
+        // Second release
+        uint64 secondReleaseTime = startTime + CLIFF + 90 days;
+        vm.warp(secondReleaseTime);
+        uint256 totalVested = (VESTING_AMOUNT_1 * (secondReleaseTime - startTime)) / DURATION;
+        uint256 secondExpectedVested = totalVested - firstExpectedVested;
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        assertEq(mockToken.balanceOf(beneficiary1), totalVested);
+    }
+    
+    function test_10_CreateMultipleVestingSchedules() public {
+        address[] memory beneficiaries = new address[](2);
+        beneficiaries[0] = beneficiary1;
+        beneficiaries[1] = beneficiary2;
+
+        uint256[] memory amounts = new uint256[](2);
+        amounts[0] = VESTING_AMOUNT_1;
+        amounts[1] = VESTING_AMOUNT_2;
+        
+        uint64[] memory startTimes = new uint64[](2);
+        startTimes[0] = startTime;
+        startTimes[1] = startTime;
+        
+        uint64[] memory durations = new uint64[](2);
+        durations[0] = DURATION;
+        durations[1] = DURATION;
+
+        uint64[] memory cliffDurations = new uint64[](2);
+        cliffDurations[0] = CLIFF;
+        cliffDurations[1] = CLIFF;
+        
+        vm.prank(owner);
+        tokenVesting.createMultipleVestingSchedules(beneficiaries, amounts, startTimes, durations, cliffDurations);
+        
+        assertEq(tokenVesting.getBeneficiaryCount(), 2);
+        assertEq(tokenVesting.getTotalAmount(beneficiary1), VESTING_AMOUNT_1);
+        assertEq(tokenVesting.getTotalAmount(beneficiary2), VESTING_AMOUNT_2);
+    }
+    
+    function test_11_ViewFunctions() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        assertEq(tokenVesting.getStartTime(beneficiary1), startTime);
+        assertEq(tokenVesting.getDuration(beneficiary1), DURATION);
+        assertEq(tokenVesting.getCliffDuration(beneficiary1), CLIFF);
+        assertEq(tokenVesting.getTotalAmount(beneficiary1), VESTING_AMOUNT_1);
+        assertEq(tokenVesting.getReleasedAmount(beneficiary1), 0);
+        assertTrue(tokenVesting.hasVestingSchedule(beneficiary1));
+        assertFalse(tokenVesting.hasVestingSchedule(beneficiary2));
+        assertEq(tokenVesting.getVestingEndTime(beneficiary1), startTime + DURATION);
+        assertEq(tokenVesting.getCliffEndTime(beneficiary1), startTime + CLIFF);
+        assertEq(tokenVesting.getRemainingAmount(beneficiary1), VESTING_AMOUNT_1);
+    }
+    
+    function test_12_GetVestedAmountAtTimestamp() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+
+        uint64 futureTime = startTime + CLIFF + 100 days;
+        uint256 expectedVested = (VESTING_AMOUNT_1 * (futureTime - startTime)) / DURATION;
+        
+        assertEq(tokenVesting.getVestedAmountAt(beneficiary1, futureTime), expectedVested);
+    }
+    
