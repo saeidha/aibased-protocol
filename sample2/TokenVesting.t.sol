@@ -30,3 +30,22 @@ contract TestTokenVesting is Test {
     uint64 public startTime;
     uint64 constant DURATION = 365 days;
     uint64 constant CLIFF = 180 days;
+
+    function setUp() public {
+        owner = makeAddr("owner");
+        beneficiary1 = makeAddr("beneficiary1");
+        beneficiary2 = makeAddr("beneficiary2");
+        randomUser = makeAddr("randomUser");
+
+        vm.prank(owner);
+        mockToken = new MockToken("Mock Token", "MTK", TOTAL_SUPPLY);
+
+        vm.prank(owner);
+        tokenVesting = new TokenVesting(address(mockToken));
+
+        // Transfer tokens to the vesting contract
+        vm.prank(owner);
+        mockToken.transfer(address(tokenVesting), VESTING_AMOUNT_1 + VESTING_AMOUNT_2);
+
+        startTime = uint64(block.timestamp + 1 days); // Vesting starts tomorrow
+    }
