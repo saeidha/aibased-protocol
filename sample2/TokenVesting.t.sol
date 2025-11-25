@@ -218,3 +218,51 @@ contract TestTokenVesting is Test {
         assertEq(tokenVesting.getVestedAmountAt(beneficiary1, futureTime), expectedVested);
     }
     
+    function test_13_TotalLockedAmount() public {
+        assertEq(tokenVesting.getTotalLockedAmount(), VESTING_AMOUNT_1 + VESTING_AMOUNT_2);
+    }
+    
+    function test_14_Release_NoTokensVested() public {
+         vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        vm.warp(startTime - 1 days); // Before vesting starts
+        
+        vm.prank(beneficiary1);
+        vm.expectRevert("TokenVesting: No tokens available for release");
+        tokenVesting.release();
+    }
+
+    function test_15_Release_AllTokensAlreadyReleased() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        vm.warp(startTime + DURATION + 1 days);
+        
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        
+        // Try to release again
+        vm.prank(beneficiary1);
+        vm.expectRevert("TokenVesting: No tokens available for release");
+        tokenVesting.release();
+    }
+    
+    function test_16_Fail_CreateSchedule_PastStartTime() public {
+        vm.prank(owner);
+        uint64 pastTime = uint64(block.timestamp - 1 days);
+        vm.expectRevert("TokenVesting: Start time must be in the future");
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, pastTime, DURATION, CLIFF);
+    }
+
+    function test_17_Fail_CreateSchedule_ZeroDuration() public {
+        vm.prank(owner);
+        vm.expectRevert("TokenVesting: Duration must be greater than zero");
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, 0, CLIFF);
+    }
+    
+    function test_18_Fail_CreateSchedule_CliffLongerThanDuration() public {
+        vm.prank(owner);
+        vm.expectRevert("TokenVesting: Cliff duration cannot be longer than total duration");
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, DURATION + 1);
+    }
