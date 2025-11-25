@@ -50,7 +50,7 @@ contract TestTokenVesting is Test {
         startTime = uint64(block.timestamp + 1 days); // Vesting starts tomorrow
     }
     function test_01_ContractDeployment() public {
-        
+
         assertEq(address(tokenVesting.token()), address(mockToken));
         assertEq(tokenVesting.owner(), owner);
     }
@@ -71,3 +71,25 @@ contract TestTokenVesting is Test {
         assertEq(tokenVesting.getBeneficiaryAtIndex(0), beneficiary1);
     }
     
+
+
+    function test_03_Fail_CreateVestingSchedule_NotOwner() public {
+        vm.prank(randomUser);
+        vm.expectRevert();
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+    }
+    
+    function test_04_Fail_CreateVestingSchedule_ZeroAddress() public {
+        vm.prank(owner);
+        vm.expectRevert("TokenVesting: Beneficiary address cannot be zero");
+        tokenVesting.createVestingSchedule(address(0), VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+    }
+    
+    function test_05_Fail_CreateVestingSchedule_AlreadyExists() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        vm.prank(owner);
+        vm.expectRevert("TokenVesting: Beneficiary already has a vesting schedule");
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+    }
