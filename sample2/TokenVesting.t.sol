@@ -22,3 +22,11 @@ contract TestTokenVesting is Test {
     address public beneficiary1;
     address public beneficiary2;
     address public randomUser;
+
+    uint256 constant TOTAL_SUPPLY = 1_000_000e18;
+    uint256 constant VESTING_AMOUNT_1 = 100_000e18;
+    uint256 constant VESTING_AMOUNT_2 = 50_000e18;
+
+    uint64 public startTime;
+    uint64 constant DURATION = 365 days;
+    uint64 constant CLIFF = 180 days;
