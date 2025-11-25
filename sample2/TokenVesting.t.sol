@@ -93,3 +93,34 @@ contract TestTokenVesting is Test {
         vm.expectRevert("TokenVesting: Beneficiary already has a vesting schedule");
         tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
     }
+
+    
+    function test_06_ReleaseTokens_BeforeCliff() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        vm.warp(startTime + CLIFF - 1 days);
+        
+        assertEq(tokenVesting.getReleasableAmount(beneficiary1), 0);
+
+        vm.prank(beneficiary1);
+        vm.expectRevert("TokenVesting: No tokens available for release");
+        tokenVesting.release();
+    }
+    
+    function test_07_ReleaseTokens_AfterCliff_MidVesting() public {
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+        
+        uint64 timeAfterCliff = startTime + CLIFF + 90 days;
+        vm.warp(timeAfterCliff);
+        
+        uint256 expectedVested = (VESTING_AMOUNT_1 * (timeAfterCliff - startTime)) / DURATION;
+        assertEq(tokenVesting.getReleasableAmount(beneficiary1), expectedVested);
+        
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        
+        assertEq(mockToken.balanceOf(beneficiary1), expectedVested);
+        assertEq(tokenVesting.getReleasedAmount(beneficiary1), expectedVested);
+    }
