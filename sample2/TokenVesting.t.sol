@@ -49,3 +49,7 @@ contract TestTokenVesting is Test {
 
         startTime = uint64(block.timestamp + 1 days); // Vesting starts tomorrow
     }
+    function test_01_ContractDeployment() public {
+        assertEq(address(tokenVesting.token()), address(mockToken));
+        assertEq(tokenVesting.owner(), owner);
+    }
