@@ -266,3 +266,38 @@ contract TestTokenVesting is Test {
         vm.expectRevert("TokenVesting: Cliff duration cannot be longer than total duration");
         tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, DURATION + 1);
     }
+
+
+    function test_19_GetVestedAmount_NoSchedule() public {
+        assertEq(tokenVesting.getVestedAmount(randomUser), 0);
+    }
+
+    function test_20_GetReleasableAmount_NoSchedule() public {
+        assertEq(tokenVesting.getReleasableAmount(randomUser), 0);
+    }
+
+    function test_21_MultipleBeneficiaries_IndependentReleases() public {
+        // Schedule for beneficiary 1
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary1, VESTING_AMOUNT_1, startTime, DURATION, CLIFF);
+
+        // Schedule for beneficiary 2
+        vm.prank(owner);
+        tokenVesting.createVestingSchedule(beneficiary2, VESTING_AMOUNT_2, startTime, DURATION, CLIFF);
+
+        // Time passes
+        uint64 time = startTime + CLIFF + 50 days;
+        vm.warp(time);
+
+        // Beneficiary 1 releases
+        uint256 b1_expected = (VESTING_AMOUNT_1 * (time - startTime)) / DURATION;
+        vm.prank(beneficiary1);
+        tokenVesting.release();
+        assertEq(mockToken.balanceOf(beneficiary1), b1_expected);
+
+        // Beneficiary 2 has not released yet
+        assertEq(mockToken.balanceOf(beneficiary2), 0);
+        uint256 b2_releasable = (VESTING_AMOUNT_2 * (time - startTime)) / DURATION;
+        assertEq(tokenVesting.getReleasableAmount(beneficiary2), b2_releasable);
+    }
+}
