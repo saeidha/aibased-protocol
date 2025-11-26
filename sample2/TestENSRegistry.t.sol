@@ -71,4 +71,14 @@ contract TestENSRegistry is Test {
         assertTrue(registry.exists(testNode));
         assertFalse(registry.exists(keccak256("nonexistent")));
     }
+        function test_setApprovalForAll() public {
+        vm.prank(user1);
+        registry.setApprovalForAll(user2, true);
+        assertTrue(registry.isApprovedForAll(user1, user2));
+    }
+    function test_transferFrom() public {
+        vm.prank(user1);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+    }
     
