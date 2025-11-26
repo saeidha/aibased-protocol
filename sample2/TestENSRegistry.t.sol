@@ -106,3 +106,26 @@ contract TestENSRegistry is Test {
         assertEq(registry.resolver(testNode), address(resolver));
         assertEq(registry.ttl(testNode), 7200);
     }
+      function test_setSubnodeRecord() public {
+        vm.prank(user1);
+        registry.setSubnodeRecord(testNode, testLabel, user2, address(resolver), 1800);
+        assertEq(registry.owner(testSubNode), user2);
+        assertEq(registry.resolver(testSubNode), address(resolver));
+        assertEq(registry.ttl(testSubNode), 1800);
+    }
+    
+    function test_renounceOwnership() public {
+        vm.prank(user1);
+        registry.renounceOwnership(testNode);
+        assertEq(registry.owner(testNode), address(0));
+    }
+
+    function test_controller() public {
+        vm.prank(owner);
+        registry.setController(user2, true);
+        assertTrue(registry.isController(user2));
+
+        vm.prank(user2); // As a controller
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
