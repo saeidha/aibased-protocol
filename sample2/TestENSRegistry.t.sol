@@ -89,4 +89,20 @@ contract TestENSRegistry is Test {
         registry.transferFrom(user1, user2, testNode);
         assertEq(registry.owner(testNode), user2);
     }
-    
+        function test_approveAndTransfer() public {
+        vm.prank(user1);
+        registry.approve(user2, testNode);
+        assertEq(registry.getApproved(testNode), user2);
+
+        vm.prank(user2);
+        registry.transferFrom(user1, user2, testNode);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.getApproved(testNode), address(0));
+    }
+    function test_setRecord() public {
+        vm.prank(user1);
+        registry.setRecord(testNode, user2, address(resolver), 7200);
+        assertEq(registry.owner(testNode), user2);
+        assertEq(registry.resolver(testNode), address(resolver));
+        assertEq(registry.ttl(testNode), 7200);
+    }
