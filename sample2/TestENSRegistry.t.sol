@@ -60,3 +60,15 @@ contract TestENSRegistry is Test {
         registry.setResolver(testNode, newResolver);
         assertEq(registry.resolver(testNode), newResolver);
     }
+        function test_setTTL() public {
+        uint64 newTtl = 3600;
+        vm.prank(user1);
+        registry.setTTL(testNode, newTtl);
+        assertEq(registry.ttl(testNode), newTtl);
+    }
+    
+    function test_exists() public {
+        assertTrue(registry.exists(testNode));
+        assertFalse(registry.exists(keccak256("nonexistent")));
+    }
+    
