@@ -129,3 +129,25 @@ contract TestENSRegistry is Test {
         registry.setOwner(testNode, user2);
         assertEq(registry.owner(testNode), user2);
     }
+    function test_burn() public {
+        vm.prank(user1);
+        registry.burn(testNode);
+        assertFalse(registry.exists(testNode));
+    }
+    
+    function test_pause() public {
+        vm.prank(owner);
+        registry.pause();
+        
+        vm.prank(user1);
+        vm.expectRevert("Pausable: paused");
+        registry.setOwner(testNode, user2);
+        
+        vm.prank(owner);
+        registry.unpause();
+        
+        vm.prank(user1);
+        registry.setOwner(testNode, user2);
+        assertEq(registry.owner(testNode), user2);
+    }
+    
