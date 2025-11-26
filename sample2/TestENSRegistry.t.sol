@@ -150,4 +150,18 @@ contract TestENSRegistry is Test {
         registry.setOwner(testNode, user2);
         assertEq(registry.owner(testNode), user2);
     }
+        // --- Resolver Tests ---
     
+    function test_resolver_setAddr() public {
+        vm.prank(user1);
+        resolver.setAddr(testNode, user1);
+        assertEq(resolver.addr(testNode), user1);
+    }
+    
+    function test_resolver_setText() public {
+        string memory key = "url";
+        string memory value = "https://my.domain";
+        vm.prank(user1);
+        resolver.setText(testNode, key, value);
+        assertEq(resolver.text(testNode, key), value);
+    }
