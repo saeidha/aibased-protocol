@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import "../contracts/ENSRegistry.sol";
 import "../contracts/PublicResolver.sol";
 contract TestENSRegistry is Test {
-        ENSRegistry registry;
+    ENSRegistry registry;
     PublicResolver resolver;
     address owner = address(0x1);
     address user1 = address(0x2);
@@ -13,3 +13,15 @@ contract TestENSRegistry is Test {
     bytes32 testNode = keccak256("test");
     bytes32 testLabel = keccak256("label");
     bytes32 testSubNode = keccak256(abi.encodePacked(testNode, testLabel));
+
+    function setUp() public {
+
+        vm.prank(owner);
+        registry = new ENSRegistry();
+        vm.prank(owner);
+        resolver = new PublicResolver();
+        vm.startPrank(owner);
+        registry.register(testNode, user1);
+        registry.setResolver(testNode, address(resolver));
+        vm.stopPrank();
+    }
