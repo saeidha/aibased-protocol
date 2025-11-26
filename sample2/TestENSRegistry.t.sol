@@ -165,3 +165,24 @@ contract TestENSRegistry is Test {
         resolver.setText(testNode, key, value);
         assertEq(resolver.text(testNode, key), value);
     }
+
+  
+    
+    
+
+
+
+    function test_resolver_setName() public {
+        string memory name = "test.eth";
+        vm.prank(user1);
+        resolver.setName(testNode, name);
+        assertEq(resolver.name(testNode), name);
+    }
+
+    function test_resolver_supportsInterface() public {
+        assertTrue(resolver.supportsInterface(0x3b3b57de)); // ADDR
+        assertTrue(resolver.supportsInterface(0x59d1d43c)); // TEXT
+        assertTrue(resolver.supportsInterface(0x691f3431)); // NAME
+        assertTrue(resolver.supportsInterface(0x01ffc9a7)); // ERC165
+    }
+}
