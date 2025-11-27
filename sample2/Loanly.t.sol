@@ -102,3 +102,35 @@ contract LoanlyTest is Test {
         vm.expectRevert("Cannot fund your own loan");
         loanly.fundLoan{value: LOAN_AMOUNT}(1);
     }
+
+    /**
+     * @dev Tests failure case for incorrect repayment amount.
+     */
+    function testFailIncorrectRepayment() public {
+        vm.prank(borrower);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+
+        vm.prank(lender);
+        loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        vm.prank(borrower);
+        vm.expectRevert("Incorrect repayment amount");
+        loanly.repayLoan{value: 1 wei}(1);
+    }
+
+    /**
+     * @dev Tests the interest calculation.
+     */
+    function testCalculateInterest() public {
+        vm.prank(borrower);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        vm.prank(lender);
+        loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        vm.warp(block.timestamp + DURATION);
+
+        uint256 expectedInterest = (LOAN_AMOUNT * INTEREST_RATE) / 10000;
+        uint256 calculatedInterest = loanly.calculateInterest(1);
+        assertEq(calculatedInterest, expectedInterest);
+    }
+    
+}
+
