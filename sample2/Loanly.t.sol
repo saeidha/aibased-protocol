@@ -149,6 +149,14 @@ contract LoanlyTest is Test {
         loanly.fundLoan{value: LOAN_AMOUNT}(1);
         assertTrue(loanly.isLoanFunded(1));
     }
-   
+   /**
+     * @dev Tests getting the total loan count.
+     */
+    function testGetLoanCount() public {
+        vm.prank(borrower);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        assertEq(loanly.getLoanCount(), 2);
+    } 
 }
 
