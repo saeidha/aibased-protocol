@@ -138,6 +138,17 @@ contract LoanlyTest is Test {
         uint256 currentTime = loanly.getCurrentTime();
         assertTrue(currentTime > 0);
     }
-    
+    /**
+     * @dev Tests checking if a loan is funded.
+     */
+    function testIsLoanFunded() public {
+        vm.prank(borrower);
+        loanly.requestLoan(LOAN_AMOUNT, INTEREST_RATE, DURATION);
+        assertFalse(loanly.isLoanFunded(1));
+        vm.prank(lender);
+        loanly.fundLoan{value: LOAN_AMOUNT}(1);
+        assertTrue(loanly.isLoanFunded(1));
+    }
+   
 }
 
