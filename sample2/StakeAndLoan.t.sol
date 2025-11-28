@@ -138,3 +138,17 @@ contract StakeAndLoanTest is Test {
         assertEq(stakeAndLoan.getUserStakedBalance(user), 0);
         vm.stopPrank();
     }
+
+    /**
+     * @dev Tests that a user cannot borrow more than the collateralization ratio allows.
+     */
+    function testFailBorrowExceedsRatio() public {
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+        uint256 maxBorrowable = stakeAndLoan.getAccountMaxBorrowableValue(user);
+
+        vm.expectRevert("Borrow amount exceeds collateralization ratio");
+        stakeAndLoan.borrow(maxBorrowable + 1);
+        vm.stopPrank();
+    }
