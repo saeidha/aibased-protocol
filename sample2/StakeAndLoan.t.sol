@@ -13,3 +13,25 @@ contract MockERC20 is ERC20 {
         _mint(to, amount);
     }
 }
+contract StakeAndLoanTest is Test {
+    StakeAndLoan public stakeAndLoan;
+    MockERC20 public collateralToken;
+    MockERC20 public loanToken;
+
+    address public user = address(1);
+    address public liquidator = address(2);
+
+    /**
+     * @dev Sets up the test environment.
+     */
+    function setUp() public {
+        collateralToken = new MockERC20("Collateral", "COL");
+        loanToken = new MockERC20("Loan Token", "LOAN");
+        stakeAndLoan = new StakeAndLoan(
+            address(collateralToken),
+            address(loanToken)
+        );
+        // Mint tokens for the user and the contract (to be loaned out)
+        collateralToken.mint(user, 100 ether);
+        loanToken.mint(address(stakeAndLoan), 50000 ether);
+    }
