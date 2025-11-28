@@ -35,3 +35,35 @@ contract StakeAndLoanTest is Test {
         collateralToken.mint(user, 100 ether);
         loanToken.mint(address(stakeAndLoan), 50000 ether);
     }
+
+
+
+    /**
+     * @dev Tests staking functionality.
+     */
+    function testStake() public {
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+        assertEq(stakeAndLoan.getUserStakedBalance(user), 10 ether);
+        vm.stopPrank();
+    }
+
+    /**
+     * @dev Tests borrowing functionality.
+     */
+    function testBorrow() public {
+        // First, stake some collateral
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+
+        // Now, borrow against it
+        uint256 maxBorrowable = stakeAndLoan.getAccountMaxBorrowableValue(user);
+        stakeAndLoan.borrow(maxBorrowable);
+
+        assertEq(loanToken.balanceOf(user), maxBorrowable);
+        (uint256 principal, , ) = stakeAndLoan.getLoanDetails(user);
+        assertEq(principal, maxBorrowable);
+        vm.stopPrank();
+    }
