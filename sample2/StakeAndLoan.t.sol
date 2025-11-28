@@ -92,3 +92,26 @@ contract StakeAndLoanTest is Test {
         assertEq(loanToken.balanceOf(user), 0);
         vm.stopPrank();
     }
+
+
+    /**
+     * @dev Tests unstaking functionality.
+     */
+    function testUnstake() public {
+        // Stake, borrow, and repay
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+        stakeAndLoan.borrow(1000 ether);
+
+        uint256 totalOwed = stakeAndLoan.getLoanValue(user);
+        loanToken.mint(user, totalOwed);
+        loanToken.approve(address(stakeAndLoan), totalOwed);
+        stakeAndLoan.repay();
+
+        // Unstake
+        stakeAndLoan.unstake(10 ether);
+        assertEq(stakeAndLoan.getUserStakedBalance(user), 0);
+        assertEq(collateralToken.balanceOf(user), 100 ether); // Back to original balance
+        vm.stopPrank();
+    }
