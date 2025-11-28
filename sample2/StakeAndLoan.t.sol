@@ -67,3 +67,28 @@ contract StakeAndLoanTest is Test {
         assertEq(principal, maxBorrowable);
         vm.stopPrank();
     }
+
+
+    /**
+     * @dev Tests loan repayment functionality.
+     */
+    function testRepay() public {
+        // Stake and borrow
+        vm.startPrank(user);
+        collateralToken.approve(address(stakeAndLoan), 10 ether);
+        stakeAndLoan.stake(10 ether);
+        stakeAndLoan.borrow(1000 ether);
+
+        // Advance time to accrue interest
+        vm.warp(block.timestamp + 365 days);
+
+        uint256 totalOwed = stakeAndLoan.getLoanValue(user);
+        loanToken.mint(user, totalOwed); // Mint enough to repay
+        loanToken.approve(address(stakeAndLoan), totalOwed);
+
+        stakeAndLoan.repay();
+        (uint256 principal, , ) = stakeAndLoan.getLoanDetails(user);
+        assertEq(principal, 0);
+        assertEq(loanToken.balanceOf(user), 0);
+        vm.stopPrank();
+    }
