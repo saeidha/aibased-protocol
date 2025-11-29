@@ -20,3 +20,19 @@ contract StakeAndLoan is Ownable {
         uint256 interestRate; // Annual interest rate in basis points (e.g., 500 = 5%)
         uint256 startTime;
     }
+
+    // Mapping from user address to their loan details.
+    mapping(address => Loan) public userLoan;
+    // The percentage of collateral value that can be borrowed (e.g., 7500 = 75%).
+    uint256 public collateralizationRatio = 7500; // In basis points
+    // Price of collateral token in terms of loan token (e.g., 1 ETH = 2000 DAI).
+    // In a real-world scenario, this would be fed by an oracle.
+    uint256 public collateralPrice = 2000;
+    // --- Events ---
+    event Staked(address indexed user, uint256 amount);
+    event Unstaked(address indexed user, uint256 amount);
+    event Borrowed(address indexed user, uint256 amount);
+    event Repaid(address indexed user, uint256 amount);
+    event Liquidated(address indexed user, uint256 collateralLiquidated);
+  // --- Constructor ---
+
