@@ -7,3 +7,16 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * @title StakeAndLoan
  * @dev A contract that allows users to stake collateral tokens and borrow loan tokens.
  */
+
+contract StakeAndLoan is Ownable {
+    // --- State Variables ---
+    IERC20 public immutable collateralToken;
+    IERC20 public immutable loanToken;
+    // Mapping from user address to their staked collateral balance.
+    mapping(address => uint256) public stakedBalance;
+    // Struct to hold details of a user's loan.
+    struct Loan {
+        uint256 principal;
+        uint256 interestRate; // Annual interest rate in basis points (e.g., 500 = 5%)
+        uint256 startTime;
+    }
