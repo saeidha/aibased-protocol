@@ -65,3 +65,123 @@ contract StakeAndLoan is Ownable {
         );
         emit Staked(msg.sender, _amount);
     }
+
+  /**
+     * @dev Unstakes collateral tokens from the contract.
+     * @param _amount The amount of collateral tokens to unstake.
+     */
+
+    function unstake(uint256 _amount) public {
+        require(_amount > 0, "Unstake amount must be positive");
+        require(
+            stakedBalance[msg.sender] >= _amount,
+            "Insufficient staked balance"
+        );
+        uint256 maxBorrowable = getAccountMaxBorrowableValue(msg.sender) -
+            getLoanValue(msg.sender);
+        require(
+            getCollateralValue(stakedBalance[msg.sender] - _amount) >=
+                maxBorrowable,
+            "Unstaking would make you undercollateralized"
+        );
+        stakedBalance[msg.sender] -= _amount;
+        require(
+            collateralToken.transfer(msg.sender, _amount),
+            "Token transfer failed"
+        );
+        emit Unstaked(msg.sender, _amount);
+    }
+    /**
+     * @dev Borrows loan tokens against staked collateral.
+     * @param _amount The amount of loan tokens to borrow.
+     */
+
+    function borrow(uint256 _amount) public {
+        require(_amount > 0, "Borrow amount must be positive");
+        require(stakedBalance[msg.sender] > 0, "No collateral staked");
+        require(
+            userLoan[msg.sender].principal == 0,
+            "Loan already exists, repay first"
+        );
+        uint256 maxBorrowable = getAccountMaxBorrowableValue(msg.sender);
+        require(
+            _amount <= maxBorrowable,
+            "Borrow amount exceeds collateralization ratio"
+        );
+        userLoan[msg.sender] = Loan({
+            principal: _amount,
+            interestRate: 500, // 5% annual interest
+            startTime: block.timestamp
+        });
+        require(
+            loanToken.transfer(msg.sender, _amount),
+            "Loan token transfer failed"
+        );
+        emit Borrowed(msg.sender, _amount);
+    }
+
+    /**
+     * @dev Repays an active loan.
+     */
+    function repay() public {
+        Loan storage loan = userLoan[msg.sender];
+        require(loan.principal > 0, "No active loan to repay");
+        uint256 totalOwed = getLoanValue(msg.sender);
+        require(
+            loanToken.transferFrom(msg.sender, address(this), totalOwed),
+            "Repayment transfer failed"
+        );
+        delete userLoan[msg.sender];
+        emit Repaid(msg.sender, totalOwed);
+    }
+
+    /**
+     * @dev Liquidates an undercollateralized position.
+     * @param _borrower The address of the borrower to liquidate.
+     */
+    function liquidate(address _borrower) public {
+        uint256 collateralValue = getCollateralValue(stakedBalance[_borrower]);
+        uint256 loanValue = getLoanValue(_borrower);
+        require(loanValue > 0, "No loan to liquidate");
+        require(
+            collateralValue < loanValue,
+            "Position is not undercollateralized"
+        );
+
+        uint256 collateralToLiquidate = stakedBalance[_borrower];
+        stakedBalance[_borrower] = 0;
+        delete userLoan[_borrower];
+        // In a real scenario, this collateral might be auctioned. Here, it's sent to the liquidator.
+        require(
+            collateralToken.transfer(msg.sender, collateralToLiquidate),
+            "Liquidation transfer failed"
+        );
+        emit Liquidated(_borrower, collateralToLiquidate);
+    }
+
+        // --- View and Helper Functions ---
+
+        /**
+     * @dev Calculates the current value of a loan including accrued interest.
+     * @param _user The address of the user.
+     * @return The total value of the loan (principal + interest).
+     */
+        function getLoanValue(address _user) public view returns (uint256) {
+            Loan memory loan = userLoan[_user];
+        if (loan.principal == 0) {
+            return 0;
+        }
+        uint256 timeElapsed = block.timestamp - loan.startTime;
+        uint256 interest = (loan.principal * loan.interestRate * timeElapsed) / (10000 * 365 days);
+        return loan.principal + interest;
+    }
+    /**
+     * @dev Calculates the value of a user's collateral in terms of the loan token.
+     * @param _amount The amount of collateral.
+     * @return The value in loan tokens.
+     */
+    function getCollateralValue(uint256 _amount) public view returns (uint256) {
+        return (_amount * collateralPrice) / 1e18;
+    }
+}
+    
