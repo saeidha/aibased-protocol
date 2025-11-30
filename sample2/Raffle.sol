@@ -155,27 +155,31 @@ contract Raffle is VRFConsumerBaseV2 {
 
 
     function getNumPlayers() public view returns (uint256) {
+        
         return s_players.length;
     }
 
     function getPlayer(uint256 index) public view returns (address) {
+
         return s_players[index];
     }
 
     function getRecentWinner() public view returns (address) {
+
         return s_recentWinner;
     }
 
     function getRaffleEntranceFee() public view returns (uint256) {
+
         return i_raffleEntranceFee;
     }
 
     function getInterval() public view returns (uint256) {
+
         return i_interval;
     }
-    
-
 
     function getLastTimeStamp() public view returns (uint256) {
+
         return s_lastTimeStamp;
     }
