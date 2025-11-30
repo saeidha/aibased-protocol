@@ -99,3 +99,24 @@ contract Raffle is VRFConsumerBaseV2 {
         upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
         return (upkeepNeeded, "0x0");
     }
+
+    /**
+     * @notice This function is called by Chainlink Automation to initiate the winner selection process.
+     * @dev It requests a random number from the Chainlink VRF.
+     */
+    function performUpkeep(bytes calldata /* performData */) external {
+        (bool upkeepNeeded,) = checkUpkeep("");
+        if (!upkeepNeeded) {
+            revert Raffle__UpkeepNotNeeded(address(this).balance, s_players.length, uint256(s_raffleState));
+        }
+
+        s_raffleState = RaffleState.CALCULATING;
+        uint256 requestId = i_vrfCoordinator.requestRandomWords(
+            i_gasLane,
+            i_subscriptionId,
+            REQUEST_CONFIRMATIONS,
+            i_callbackGasLimit,
+            NUM_WORDS
+        );
+        emit RequestedRaffleWinner(requestId);
+    }
