@@ -31,3 +31,11 @@ contract Raffle is VRFConsumerBaseV2 {
     uint32 private immutable i_callbackGasLimit;
     uint16 private constant REQUEST_CONFIRMATIONS = 3;
     uint32 private constant NUM_WORDS = 1;
+
+    // Lottery variables
+    uint256 private immutable i_raffleEntranceFee;
+    uint256 private immutable i_interval;
+    RaffleState private s_raffleState;
+    uint256 private s_lastTimeStamp;
+    address[] private s_players;
+    address private s_recentWinner;
