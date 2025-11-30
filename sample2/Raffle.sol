@@ -76,3 +76,26 @@ contract Raffle is VRFConsumerBaseV2 {
         s_players.push(payable(msg.sender));
         emit RaffleEnter(msg.sender);
     }
+
+
+
+    /**
+     * @notice This is the function that Chainlink Automation nodes call to see if it's time to pick a winner.
+     * @dev The following conditions must be met for this to return true:
+     * 1. The time interval has passed.
+     * 2. The lottery has at least one player and has ETH.
+     * 3. Our subscription is funded with LINK.
+     * 4. The lottery is in an "open" state.
+     */
+    function checkUpkeep(bytes memory /* checkData */)
+        public
+        view
+        returns (bool upkeepNeeded, bytes memory /* performData */)
+    {
+        bool isOpen = (RaffleState.OPEN == s_raffleState);
+        bool timePassed = ((block.timestamp - s_lastTimeStamp) > i_interval);
+        bool hasPlayers = (s_players.length > 0);
+        bool hasBalance = address(this).balance > 0;
+        upkeepNeeded = (isOpen && timePassed && hasPlayers && hasBalance);
+        return (upkeepNeeded, "0x0");
+    }
