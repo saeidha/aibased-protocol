@@ -120,3 +120,13 @@ contract Raffle is VRFConsumerBaseV2 {
         );
         emit RequestedRaffleWinner(requestId);
     }
+
+    /**
+     * @notice This is the callback function that the Chainlink VRF Coordinator calls after receiving a random number.
+     * @param requestId The unique ID of the VRF request.
+     * @param randomWords An array of random numbers. We only need one.
+     */
+    function fulfillRandomWords(uint256 /*requestId*/, uint256[] memory randomWords) internal override {
+        uint256 indexOfWinner = randomWords[0] % s_players.length;
+        address payable recentWinner = payable(s_players[indexOfWinner]);
+        s_recentWinner = recentWinner;
