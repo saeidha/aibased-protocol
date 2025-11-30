@@ -61,3 +61,18 @@ contract Raffle is VRFConsumerBaseV2 {
         s_raffleState = RaffleState.OPEN;
         s_lastTimeStamp = block.timestamp;
     }
+
+
+    /**
+     * @notice Allows a user to enter the raffle.
+     */
+    function enterRaffle() public payable {
+        if (s_raffleState != RaffleState.OPEN) {
+            revert Raffle__NotOpen();
+        }
+        if (msg.value < i_raffleEntranceFee) {
+            revert Raffle__SendMoreToEnterRaffle();
+        }
+        s_players.push(payable(msg.sender));
+        emit RaffleEnter(msg.sender);
+    }
