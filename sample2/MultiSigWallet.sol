@@ -190,3 +190,92 @@ contract MultiSigWallet {
         isConfirmed[_txIndex][msg.sender] = false;
         emit ConfirmationRevoked(_txIndex, msg.sender);
     }
+
+
+
+    /**
+     * @dev Allows anyone to execute a transaction once it has enough confirmations.
+     * @param _txIndex The index of the transaction to execute.
+     */
+    function executeTransaction(uint256 _txIndex)
+        public
+        onlyOwner
+        txExists(_txIndex)
+        notExecuted(_txIndex)
+    {
+        uint256 confirmationCount = getConfirmationCount(_txIndex);
+        require(
+            confirmationCount >= requiredConfirmations,
+            "MultiSigWallet: Not enough confirmations"
+        );
+
+        Transaction storage transaction = transactions[_txIndex];
+        transaction.executed = true;
+
+        (bool success, ) = transaction.destination.call{value: transaction.value}(transaction.data);
+        require(success, "MultiSigWallet: Transaction execution failed");
+
+        emit TransactionExecuted(_txIndex, msg.sender);
+    }
+
+    /**
+     * @dev Adds a new owner. This action itself must be approved via a multi-sig transaction.
+     * @param _newOwner The address of the new owner to add.
+     */
+    function addOwner(address _newOwner) public onlyOwner {
+        require(_newOwner != address(0), "MultiSigWallet: Invalid owner address");
+        require(!isOwner[_newOwner], "MultiSigWallet: Owner already exists");
+        isOwner[_newOwner] = true;
+        owners.push(_newOwner);
+        emit OwnerAdded(_newOwner);
+    }
+    
+    /**
+     * @dev Removes an existing owner. This action must be approved via a multi-sig transaction.
+     * @param _oldOwner The address of the owner to remove.
+     */
+    function removeOwner(address _oldOwner) public onlyOwner {
+        require(isOwner[_oldOwner], "MultiSigWallet: Address is not an owner");
+        require(owners.length > 1, "MultiSigWallet: Cannot remove the last owner");
+
+        isOwner[_oldOwner] = false;
+        // Find and remove the owner from the array
+        for (uint256 i = 0; i < owners.length - 1; i++) {
+            if (owners[i] == _oldOwner) {
+                owners[i] = owners[owners.length - 1];
+                break;
+            }
+        }
+        owners.pop();
+
+        if (requiredConfirmations > owners.length) {
+            changeRequiredConfirmations(owners.length);
+        }
+
+        emit OwnerRemoved(_oldOwner);
+    }
+
+    /**
+     * @dev Changes the number of required confirmations. This action must be approved via a multi-sig 
+transaction.
+     * @param _newRequiredConfirmations The new number of required confirmations.
+     */
+    function changeRequiredConfirmations(uint256 _newRequiredConfirmations) public onlyOwner {
+        require(
+            _newRequiredConfirmations > 0 && _newRequiredConfirmations <= owners.length,
+            "MultiSigWallet: Invalid number of required confirmations"
+        );
+        requiredConfirmations = _newRequiredConfirmations;
+        emit RequiredConfirmationsChanged(_newRequiredConfirmations);
+    }
+
+    //================================================================================
+    // View and Helper Functions
+    //================================================================================
+    
+    /**
+     * @dev Returns the list of all owners.
+     */
+    function getOwners() public view returns (address[] memory) {
+        return owners;
+    }
