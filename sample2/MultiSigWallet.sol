@@ -118,3 +118,17 @@ contract MultiSigWallet {
 
         requiredConfirmations = _requiredConfirmations;
     }
+
+
+    //===============================================================================
+=
+    // Fallback and Receive Functions
+    //================================================================================
+
+    receive() external payable {
+        emit Deposit(msg.sender, msg.value, address(this).balance);
+    }
+
+    //================================================================================
+    // Public and External Functions
+    //========
