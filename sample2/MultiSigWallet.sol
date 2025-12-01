@@ -160,3 +160,33 @@ contract MultiSigWallet {
 
         return txIndex;
     }
+
+
+    /**
+     * @dev Allows an owner to confirm a pending transaction.
+     * @param _txIndex The index of the transaction to confirm.
+     */
+    function confirmTransaction(uint256 _txIndex)
+        public
+        onlyOwner
+        txExists(_txIndex)
+        notExecuted(_txIndex)
+        notConfirmed(_txIndex)
+    {
+       _confirmTransaction(_txIndex);
+    }
+
+    /**
+     * @dev Allows an owner to revoke their confirmation for a pending transaction.
+     * @param _txIndex The index of the transaction to revoke confirmation for.
+     */
+    function revokeConfirmation(uint256 _txIndex)
+        public
+        onlyOwner
+        txExists(_txIndex)
+        notExecuted(_txIndex)
+    {
+        require(isConfirmed[_txIndex][msg.sender], "MultiSigWallet: You have not confirmed this transaction");
+        isConfirmed[_txIndex][msg.sender] = false;
+        emit ConfirmationRevoked(_txIndex, msg.sender);
+    }
