@@ -40,3 +40,11 @@ contract MultiSigWallet {
     //================================================================================
     // State Variables
     //================================================================================
+
+
+    struct Transaction {
+        address destination;
+        uint256 value;
+        bytes data;
+        bool executed;
+    }
