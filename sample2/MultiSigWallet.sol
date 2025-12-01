@@ -286,3 +286,18 @@ transaction.
     function getTransactionCount() public view returns (uint256) {
         return transactions.length;
     }
+
+
+
+    /**
+     * @dev Returns the details of a specific transaction.
+     * @param _txIndex The index of the transaction.
+     */
+    function getTransaction(uint256 _txIndex)
+        public
+        view
+        returns (address destination, uint256 value, bytes memory data, bool executed)
+    {
+        Transaction storage transaction = transactions[_txIndex];
+        return (transaction.destination, transaction.value, transaction.data, transaction.executed);
+    }
