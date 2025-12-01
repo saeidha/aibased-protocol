@@ -131,4 +131,32 @@ contract MultiSigWallet {
 
     //================================================================================
     // Public and External Functions
-    //========
+    //================================================================================
+
+    /**
+     * @dev Allows an owner to submit a new transaction proposal.
+     * @param _destination The target address for the transaction.
+     * @param _value The amount of Ether to send with the transaction.
+     * @param _data The calldata to be sent with the transaction.
+     * @return txIndex The index of the newly created transaction.
+     */
+    function submitTransaction(address _destination, uint256 _value, bytes memory _data)
+        public
+        onlyOwner
+        returns (uint256 txIndex)
+    {
+        txIndex = transactions.length;
+        transactions.push(Transaction({
+            destination: _destination,
+            value: _value,
+            data: _data,
+            executed: false
+        }));
+
+        emit TransactionSubmitted(txIndex, msg.sender, _destination, _value, _data);
+
+        // The submitter automatically confirms the transaction.
+        _confirmTransaction(txIndex);
+
+        return txIndex;
+    }
