@@ -90,3 +90,31 @@ contract MultiSigWallet {
         require(!isConfirmed[_txIndex][msg.sender], "MultiSigWallet: Transaction already confirmed by you");
         _;
     }
+
+
+    //================================================================================
+    // Constructor
+    //================================================================================
+
+    /**
+     * @dev Initializes the multi-sig wallet with a set of owners and a required confirmation count.
+     * @param _owners An array of initial owner addresses.
+     * @param _requiredConfirmations The number of owners required to confirm a transaction.
+     */
+    constructor(address[] memory _owners, uint256 _requiredConfirmations) {
+        require(_owners.length > 0, "MultiSigWallet: Owners required");
+        require(
+            _requiredConfirmations > 0 && _requiredConfirmations <= _owners.length,
+            "MultiSigWallet: Invalid number of required confirmations"
+        );
+
+        for (uint256 i = 0; i < _owners.length; i++) {
+            address owner = _owners[i];
+            require(owner != address(0), "MultiSigWallet: Invalid owner address");
+            require(!isOwner[owner], "MultiSigWallet: Duplicate owner");
+            isOwner[owner] = true;
+            owners.push(owner);
+        }
+
+        requiredConfirmations = _requiredConfirmations;
+    }
