@@ -113,6 +113,7 @@ contract AIBasedNFTFactory is Ownable {
     event PercentagePlatformFeeSet(uint256 indexed newPercentage);
 
     struct CollectionDetails {
+        
         address collectionAddress;
         string name;
         string description;
@@ -236,11 +237,11 @@ contract AIBasedNFTFactory is Ownable {
 
 
         collection.mint{value: msg.value}(msg.sender, 1);
-
         emit NFTMinted(collectionAddress, msg.sender, 1);
     }
 
     function mintNFT(address collectionAddress, address to, uint256 quantity) external payable {
+
         NFTCollection collection = NFTCollection(collectionAddress);
 
         uint256 initialPrice = collection.initialPrice();
@@ -266,6 +267,7 @@ contract AIBasedNFTFactory is Ownable {
     }
 
     function withdraw() external onlyOwner {
+
         address payable recipient = payable(owner());
         if (recipient == address(0)) revert InvalidRecipient();
         uint256 balance = address(this).balance;
@@ -285,6 +287,17 @@ contract AIBasedNFTFactory is Ownable {
         emit PayGenerateFee(msg.sender, msg.value);
     }
 
+        /*** @dev Sets the generation fee for a specific model.
+    * Can only be called by the contract owner or the authorizer.
+    * @param model The model identifier (e.g., "v1", "v2").
+    * @param _newFee The new fee in wei.*/
+    function setGenerationModelFee(string calldata model, uint256 _newFee) external {
+        
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        modelGenerationFee[model] = _newFee;
+        emit ModelFeeSet(model, _newFee);
+    }
+
     /*** @dev Adds a new model and sets its initial generation fee.
     * Can only be called by the contract owner.
     * @param model The new model identifier.
@@ -295,55 +308,56 @@ contract AIBasedNFTFactory is Ownable {
         emit ModelFeeSet(model, _initialFee);
     }
 
-    /*** @dev Sets the generation fee for a specific model.
-    * Can only be called by the contract owner or the authorizer.
-    * @param model The model identifier (e.g., "v1", "v2").
-    * @param _newFee The new fee in wei.*/
-    function setGenerationModelFee(string calldata model, uint256 _newFee) external {
-        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
-        modelGenerationFee[model] = _newFee;
-        emit ModelFeeSet(model, _newFee);
-    }
-
     /*** @dev Returns the generation fee for a specific model.
      * @param model The model identifier (e.g., "v1", "v2").
      * @return The fee in wei for the given model.*/
     function getGenerationFee(string calldata model) external view returns (uint256) {
+
         return modelGenerationFee[model];
     }
 
 ///// -------------------------------------------------------------////////
 
-////// ----------------- PLATFORM FEE SETTINGS ------------------///////
+    ////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////// PLATFORM FEE SETTINGS /////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
     // Add this new function
     function setBasePlatformFee(uint256 _newFee) external {
+
         if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
         basePlatformFee = _newFee;
         emit BasePlatformFeeSet(_newFee);
     }
 
+    // Add this new set Percentage PlatformFee function
+    function setPercentageBasePlatformFee(uint256 _newFee) external {
+
+        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
+        percentagePlatformFee = _newFee;
+        emit PercentagePlatformFeeSet(_newFee);
+    }
+
     // Add this new set maxBasePlatformFee function
     function setMaxBasePlatformFee(uint256 _newFee) external {
+
         if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
         maxBasePlatformFee = _newFee;
         emit MaxBasePlatformFeeSet(_newFee);
     }
 
-        // Add this new set Percentage PlatformFee function
-    function setPercentageBasePlatformFee(uint256 _newFee) external {
-        if (msg.sender != owner() && msg.sender != authorizer) revert OnlyAdminOrAuthorizer();
-        percentagePlatformFee = _newFee;
-        emit PercentagePlatformFeeSet(_newFee);
-    }
+
 
     /*** @dev Calculates the platform fee based on a collection's mint price.
     * @param _mintPrice The initial mint price of an NFT in a collection.
     * @return The calculated platform fee.*/
     function getPlatformFee(uint256 _mintPrice) public view returns (uint256) {
         if (_mintPrice > maxBasePlatformFee) {
+
             // Return percentagePlatformFee% of the mint price
             return (_mintPrice * percentagePlatformFee) / 100;
         } else {
+
             // Return the base fee
             return basePlatformFee;
         }
@@ -352,14 +366,18 @@ contract AIBasedNFTFactory is Ownable {
 ///// -------------------------------------------------------------////////
 
 
-    function getCollections() external view returns (address[] memory) {
-        return deployedCollections;
+    /// get mint collection by user
+    function getMintCollection(address user) external view returns (address[] memory) {
+
+        return _usersMint[user];
     }
 
-    ///  get minpad collections
+        ///  get minpad collections
     function getMintPadCollections() external view returns (address[] memory) {
+
         return mintPadCollections;
     }
+
 
     ///  get minpad collectio
     function getUserCollection(address user) external view returns (address[] memory) {
@@ -367,10 +385,22 @@ contract AIBasedNFTFactory is Ownable {
         return _usersCollections[user];
     }
 
-    /// get mint collection by user
-    function getMintCollection(address user) external view returns (address[] memory) {
+    ///  get all collections
+    function getCollections() external view returns (address[] memory) {
 
-        return _usersMint[user];
+        return deployedCollections;
+    }
+
+
+    /**
+     * @dev Sets the address of the LevelNFTCollection contract. Only the owner can call this.
+     * @param _collectionAddress The deployed address of the Level NFT contract.
+     */
+    function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
+
+        require(_collectionAddress != address(0), "Cannot set collection to zero address");
+        levelNFTCollection = _collectionAddress;
+        emit LevelNFTCollectionSet(_collectionAddress);
     }
 
     /**
@@ -378,21 +408,11 @@ contract AIBasedNFTFactory is Ownable {
      * @param _newAuthorizer The address of the new authorizer.
      */
     function setAuthorizer(address _newAuthorizer) external onlyOwner {
+
         require(_newAuthorizer != address(0), "Cannot set authorizer to zero address");
         authorizer = _newAuthorizer;
         emit AuthorizerSet(_newAuthorizer);
     }
-
-    /**
-     * @dev Sets the address of the LevelNFTCollection contract. Only the owner can call this.
-     * @param _collectionAddress The deployed address of the Level NFT contract.
-     */
-    function setLevelNFTCollection(address _collectionAddress) external onlyOwner {
-        require(_collectionAddress != address(0), "Cannot set collection to zero address");
-        levelNFTCollection = _collectionAddress;
-        emit LevelNFTCollectionSet(_collectionAddress);
-    }
-
 
     /**
      * @dev Mints a Level NFT for the caller (`msg.sender`).
@@ -431,15 +451,7 @@ contract AIBasedNFTFactory is Ownable {
         emit LevelNFTMinted(levelNFTCollection, msg.sender, level, newTokenId);
     }
 
-
-    /*** @dev Sets the address of the W3PASS contract. Only owner.*/
-    function setW3PassAddress(address _newAddress) external onlyOwner {
-        require(_newAddress != address(0), "Cannot be zero address");
-        w3PassAddress = _newAddress;
-        emit W3PassAddressSet(_newAddress);
-    }
-
-    /*** @dev Mints a W3PASS NFT by calling the dedicated contract.
+       /*** @dev Mints a W3PASS NFT by calling the dedicated contract.
      * It forwards the payment, signature, and Merkle proof.
      * The signature here authorizes the user to *attempt* a mint.
      * The Merkle proof authorizes the *discount*.*/
@@ -452,6 +464,7 @@ contract AIBasedNFTFactory is Ownable {
         require(authorizer != address(0), "Authorizer not set");
 
         // --- Signature Verification ---
+
         // The signature proves the user is authorized by the backend to mint.
         // We can simplify the signed message to just the user's address.
         bytes32 messageHash = keccak256(abi.encodePacked(msg.sender));
@@ -467,19 +480,32 @@ contract AIBasedNFTFactory is Ownable {
         emit W3PassMinted(msg.sender);
     }
 
+
+    /*** @dev Sets the address of the W3PASS contract. Only owner.*/
+    function setW3PassAddress(address _newAddress) external onlyOwner {
+        require(_newAddress != address(0), "Cannot be zero address");
+        w3PassAddress = _newAddress;
+        emit W3PassAddressSet(_newAddress);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////// Public for GUILD ////////////////////////////////////
-    ///  Get User Mint Count
-    function getUserMintCount(address user) external view returns (uint256) {
-        return _usersMint[user].length;
+    ////////////////////////////////////////////////////////////////////////////////////
+    ///  Get User Generate Count
+    function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
+
+        return _userGenerationFeeCount[user];
     }
 
     ///  Get User Collections Count
     function getUserCollectionsCount(address user) external view returns (uint256) {
+
         return _usersCollections[user].length;
     }
     
-    ///  Get User Generate Count
-    function getUserPayGenerateFeeCount(address user) external view returns (uint256) {
-        return _userGenerationFeeCount[user];
+    ///  Get User Mint Count
+    function getUserMintCount(address user) external view returns (uint256) {
+
+        return _usersMint[user].length;
     }
 }
